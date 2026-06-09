@@ -135,7 +135,7 @@ export function FeedbackSheet() {
       <SheetContent className="w-full sm:max-w-[520px] p-0 flex flex-col gap-0 overflow-hidden">
 
         {/* ── Header ────────────────────────────────────────────────── */}
-        <div className="px-6 pt-7 pb-5 border-b border-border/50 shrink-0 bg-gradient-to-br from-primary/5 via-background to-background">
+        <div className="px-6 pt-7 pb-5 border-b border-border/50 shrink-0 bg-gradient-to-br from-primary/[0.03] via-background/75 to-background/60 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
           <div className="flex items-start gap-3.5">
             <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-primary/10 ring-1 ring-primary/20 shrink-0 mt-0.5">
               <Sparkles className="h-5 w-5 text-primary" />
