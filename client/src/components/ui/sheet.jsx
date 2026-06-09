@@ -30,7 +30,7 @@ function SheetPortal({
 }
 
 function SheetOverlay({
-  className,
+  className = "",
   ...props
 }) {
   return (
@@ -45,7 +45,7 @@ function SheetOverlay({
 }
 
 function SheetContent({
-  className,
+  className = "",
   children,
   side = "right",
   showCloseButton = true,
@@ -80,7 +80,7 @@ function SheetContent({
 }
 
 function SheetHeader({
-  className,
+  className = "",
   ...props
 }) {
   return (
@@ -92,7 +92,7 @@ function SheetHeader({
 }
 
 function SheetFooter({
-  className,
+  className = "",
   ...props
 }) {
   return (
@@ -104,7 +104,7 @@ function SheetFooter({
 }
 
 function SheetTitle({
-  className,
+  className = "",
   ...props
 }) {
   return (
@@ -116,7 +116,7 @@ function SheetTitle({
 }
 
 function SheetDescription({
-  className,
+  className = "",
   ...props
 }) {
   return (

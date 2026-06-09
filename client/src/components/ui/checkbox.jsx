@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { IconCheck } from "@tabler/icons-react"
 
 function Checkbox({
-  className,
+  className = "",
   ...props
 }) {
   return (

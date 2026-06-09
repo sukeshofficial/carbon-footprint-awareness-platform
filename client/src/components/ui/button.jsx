@@ -1,11 +1,11 @@
 import * as React from "react"
 import { cva } from "class-variance-authority";
 import { Slot } from "radix-ui"
+
 import { cn } from "@/lib/utils"
-import { useRipple } from "@/hooks/use-ripple"
 
 const buttonVariants = cva(
-  "group/button relative overflow-hidden inline-flex shrink-0 items-center justify-center rounded-4xl border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 items-center justify-center rounded-4xl border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -39,58 +39,37 @@ const buttonVariants = cva(
   }
 )
 
+/**
+ * @typedef {import("class-variance-authority").VariantProps<typeof buttonVariants>} ButtonVariants
+ */
+
+/**
+ * @param {React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonVariants & { asChild?: boolean }} props
+ */
+/**
+ * @param {{
+ *   className?: string,
+ *   variant?: "default" | "outline" | "secondary" | "ghost" | "destructive" | "link",
+ *   size?: "default" | "xs" | "sm" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg",
+ *   asChild?: boolean
+ * } & React.ButtonHTMLAttributes<HTMLButtonElement>} props
+ */
 function Button({
-  className,
+  className = "",
   variant = "default",
   size = "default",
   asChild = false,
-  onClick,
   ...props
 }) {
   const Comp = asChild ? Slot.Root : "button"
-  const { ripples, addRipple } = useRipple()
-
-  const handleClick = (e) => {
-    addRipple(e)
-    if (onClick) onClick(e)
-  }
-
-  // Determine ripple color based on variant
-  const rippleColor = (variant === "outline" || variant === "ghost" || variant === "link")
-    ? "rgba(139, 92, 246, 0.2)" // Purple tint for light/outline buttons
-    : "rgba(255, 255, 255, 0.35)" // White for dark/solid buttons
 
   return (
     <Comp
       data-slot="button"
       data-variant={variant}
       data-size={size}
-      className={cn(buttonVariants({
-        variant: /** @type {any} */ (variant),
-        size: /** @type {any} */ (size),
-        className
-      }))}
-      onClick={handleClick}
-      {...props}
-    >
-      {props.children}
-      {ripples.map((ripple) => (
-        <span
-          key={ripple.key}
-          className="ripple"
-          style={
-            /** @type {import("react").CSSProperties} */
-            ({
-              left: ripple.x,
-              top: ripple.y,
-              width: ripple.size,
-              height: ripple.size,
-              "--ripple-color": rippleColor,
-            })
-          }
-        />
-      ))}
-    </Comp>
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props} />
   );
 }
 

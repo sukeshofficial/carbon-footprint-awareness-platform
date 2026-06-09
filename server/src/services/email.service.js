@@ -84,4 +84,84 @@ export const sendFeedbackEmail = async ({ name, email, message, anonymous = fals
   }
 
   await createTransporter().sendMail(mailOptions);
+};
+
+/**
+ * Sends a password reset email.
+ * @param {string} email 
+ * @param {string} resetToken 
+ */
+export const sendPasswordResetEmail = async (email, resetToken) => {
+  const resetUrl = `${process.env.FRONTEND_URL}/auth/reset-password/${resetToken}`;
+
+  const html = `
+    <div style="font-family:'Google Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#f9f9f9;border-radius:8px;overflow:hidden;">
+      <div style="background:#6d28d9;padding:24px 32px;">
+        <h1 style="color:#fff;margin:0;font-size:20px;font-weight:600;">Reset your password</h1>
+      </div>
+      <div style="padding:32px;background:#fff;">
+        <p style="margin:0 0 24px;color:#374151;font-size:16px;line-height:1.6;">
+          You requested a password reset for your ACo₂ account. Click the button below to set a new password:
+        </p>
+        <div style="text-align:center;margin-bottom:32px;">
+          <a href="${resetUrl}" style="display:inline-block;padding:12px 32px;background-color:#6d28d9;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:600;font-size:14px;">
+            Reset Password
+          </a>
+        </div>
+        <p style="margin:0 0 16px;color:#6b7280;font-size:14px;line-height:1.5;">
+          This link will expire in 1 hour. If you didn't request this, you can safely ignore this email.
+        </p>
+        <hr style="border:0;border-top:1px solid #e5e7eb;margin:24px 0;">
+        <p style="margin:0;color:#9ca3af;font-size:12px;">
+          If the button doesn't work, copy and paste this link into your browser:<br>
+          <a href="${resetUrl}" style="color:#6d28d9;">${resetUrl}</a>
+        </p>
+      </div>
+    </div>
+  `;
+
+  const mailOptions = {
+    from: `"ACo₂ Support" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: 'Reset your password - ACo₂',
+    html,
+  };
+
+  await createTransporter().sendMail(mailOptions);
+};
+
+/**
+ * Sends a welcome email after signup.
+ * @param {string} email 
+ * @param {string} name 
+ */
+export const sendWelcomeEmail = async (email, name) => {
+  const html = `
+    <div style="font-family:'Google Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#f9f9f9;border-radius:8px;overflow:hidden;">
+      <div style="background:#6d28d9;padding:24px 32px;">
+        <h1 style="color:#fff;margin:0;font-size:20px;font-weight:600;">Welcome to ACo₂!</h1>
+      </div>
+      <div style="padding:32px;background:#fff;">
+        <h2 style="color:#111827;font-size:18px;margin-bottom:16px;">Hello ${name},</h2>
+        <p style="margin:0 0 16px;color:#374151;font-size:16px;line-height:1.6;">
+          We're excited to have you join our community dedicated to carbon footprint awareness. 
+          Start exploring your impact today!
+        </p>
+        <div style="text-align:center;margin:32px 0;">
+          <a href="${process.env.FRONTEND_URL}" style="display:inline-block;padding:12px 32px;background-color:#6d28d9;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:600;font-size:14px;">
+            Go to Dashboard
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const mailOptions = {
+    from: `"ACo₂" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: 'Welcome to ACo₂!',
+    html,
+  };
+
+  await createTransporter().sendMail(mailOptions);
 }; 

@@ -27,8 +27,15 @@ const badgeVariants = cva(
   }
 )
 
+/**
+ * @param {{
+ *   className?: string,
+ *   variant?: "default" | "secondary" | "destructive" | "outline" | "ghost" | "link",
+ *   asChild?: boolean
+ * } & React.HTMLAttributes<HTMLSpanElement>} props
+ */
 function Badge({
-  className,
+  className = "",
   variant = "default",
   asChild = false,
   ...props

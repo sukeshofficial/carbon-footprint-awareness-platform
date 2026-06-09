@@ -1,31 +1,63 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import axios from 'axios';
 
-export const fetchHealth = async () => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/health`);
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1',
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Request interceptor to add Authorization header
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-    return await response.json();
-  } catch (error) {
-    console.error("Failed to fetch health:", error);
-    throw error;
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Response interceptor to handle token refresh
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    // If error is 401 and we haven't retried yet
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const response = await axios.post(
+          `${api.defaults.baseURL}/auth/refresh`,
+          {},
+          { withCredentials: true }
+        );
+
+        const { accessToken } = response.data.data;
+        localStorage.setItem('accessToken', accessToken);
+
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        return api(originalRequest);
+      } catch (refreshError) {
+        // Refresh token failed, logout user
+        localStorage.removeItem('accessToken');
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
   }
+);
+
+export const submitFeedback = async (feedbackData) => {
+  const response = await api.post('/feedback', feedbackData);
+  return response.data;
 };
 
-export const submitFeedback = async ({ name, email, message, anonymous = false }) => {
-  const response = await fetch(`${API_BASE_URL}/feedback`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, email, message, anonymous }),
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.error || "Failed to send feedback.");
-  }
-
-  return data;
-};
-
+export { api };
+export default api;
