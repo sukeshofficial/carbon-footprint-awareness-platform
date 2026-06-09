@@ -12,3 +12,20 @@ export const fetchHealth = async () => {
     throw error;
   }
 };
+
+export const submitFeedback = async ({ name, email, message, anonymous = false }) => {
+  const response = await fetch(`${API_BASE_URL}/feedback`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, message, anonymous }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Failed to send feedback.");
+  }
+
+  return data;
+};
+
