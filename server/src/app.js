@@ -5,15 +5,11 @@ import rateLimit from "express-rate-limit";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import dotenv from "dotenv";
-import connectDB from "./config/db.js";
 import apiRoutes from "./routes/index.js";
 
-dotenv.config();
+// Configuration is handled in index.js via import 'dotenv/config'
 
 const app = express();
-
-// Connect to MongoDB
-connectDB();
 
 // Global Middlewares
 

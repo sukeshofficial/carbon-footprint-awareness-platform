@@ -5,7 +5,7 @@ import { IconCircleCheck, IconInfoCircle, IconAlertTriangle, IconAlertOctagon, I
 const Toaster = ({
   ...props
 }) => {
-  const { theme = "system" } = useTheme()
+  const { theme = "light" } = useTheme()
 
   return (
     <Sonner

@@ -4,11 +4,18 @@ import authService from '../services/AuthService.js';
 import sessionRepository from '../repositories/SessionRepository.js';
 import tokenService from '../security/TokenService.js';
 
-const client = new OAuth2Client(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_CALLBACK_URL
-);
+let oauth2Client;
+
+const getOAuth2Client = () => {
+  if (!oauth2Client) {
+    oauth2Client = new OAuth2Client(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      process.env.GOOGLE_CALLBACK_URL
+    );
+  }
+  return oauth2Client;
+};
 
 /**
  * Helper to set HTTP-only refresh token cookie
@@ -27,6 +34,7 @@ class GoogleController {
    * Redirect to Google Consent Screen
    */
   async googleAuth(req, res) {
+    const client = getOAuth2Client();
     const url = client.generateAuthUrl({
       access_type: 'offline',
       scope: ['profile', 'email'],
@@ -40,6 +48,7 @@ class GoogleController {
    */
   async googleCallback(req, res) {
     const { code } = req.query;
+    const client = getOAuth2Client();
 
     try {
       const { tokens: googleTokens } = await client.getToken(code);

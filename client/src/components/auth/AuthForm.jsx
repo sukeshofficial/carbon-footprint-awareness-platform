@@ -13,7 +13,13 @@ import { motion } from 'framer-motion';
 const signupSchema = z.object({
   name: z.string().min(2, 'Name is too short'),
   email: z.string().email('Invalid email'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .regex(/[0-9]/, 'Password must contain at least one number')
+    .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
 });
 
 const loginSchema = z.object({
@@ -21,15 +27,28 @@ const loginSchema = z.object({
   password: z.string().min(1, 'Password is required'),
 });
 
+/**
+ * @typedef {Object} AuthFormValues
+ * @property {string} [name]
+ * @property {string} email
+ * @property {string} password
+ */
+
 export const AuthForm = ({ type = 'login', onSubmit, isLoading }) => {
   const schema = type === 'signup' ? signupSchema : loginSchema;
 
+  /** @type {import('react-hook-form').UseFormReturn<AuthFormValues>} */
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
+    defaultValues: /** @type {AuthFormValues} */ ({
+      name: '',
+      email: '',
+      password: '',
+    }),
   });
 
   return (
