@@ -71,10 +71,7 @@ function App() {
               classNames: {
                 toast: "rounded-xl border border-border bg-background/80 backdrop-blur-md",
                 title: "!text-foreground font-semibold",
-                description: "!text-muted-foreground",
-              },
-              style: {
-                color: 'black',
+                description: "!text-muted-foreground !opacity-100",
               },
             }}
           />
