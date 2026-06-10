@@ -14,6 +14,7 @@ const app = express();
 // Global Middlewares
 
 // CORS — must be BEFORE helmet and other middleware
+// CORS — must be BEFORE helmet and other middleware
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   "http://localhost:5173",
@@ -22,13 +23,7 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error(`CORS: origin ${origin} not allowed`));
-      }
-    },
+    origin: allowedOrigins,
     credentials: true,
   })
 );
