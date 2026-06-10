@@ -13,6 +13,28 @@ const app = express();
 
 // Global Middlewares
 
+// CORS — must be BEFORE helmet and other middleware
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "http://localhost:5173",
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`CORS: origin ${origin} not allowed`));
+      }
+    },
+    credentials: true,
+  })
+);
+
+// Handle preflight OPTIONS requests explicitly
+app.options("*", cors());
+
 // Security headers
 app.use(helmet());
 
@@ -31,26 +53,6 @@ const limiter = rateLimit({
   },
 });
 app.use("/api", limiter);
-
-// CORS
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  "http://localhost:5173",
-  "https://aco2.forgegrid.in",
-].filter(Boolean);
-
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error(`CORS: origin ${origin} not allowed`));
-      }
-    },
-    credentials: true,
-  })
-);
 
 // Body parser
 app.use(express.json({ limit: "10kb" }));
