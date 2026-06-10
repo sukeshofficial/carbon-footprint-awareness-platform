@@ -13,10 +13,10 @@ export default async function handler(req, res) {
     "https://aco2.forgegrid.in",
   ].filter(Boolean);
 
-  if (allowedOrigins.includes(origin)) {
+  if (origin && allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
-  } else if (!origin) {
-    // For non-browser requests
+  } else if (!origin && process.env.NODE_ENV !== 'production') {
+    // allow cross-origin for non-browser dev tools
     res.setHeader("Access-Control-Allow-Origin", "*");
   }
 
