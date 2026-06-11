@@ -31,7 +31,10 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV === "development") {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin) || process.env.NODE_ENV === "development") {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
@@ -49,8 +52,12 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
+// 1. Enable CORS for all routes
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+
+// 2. Explicitly handle preflight OPTIONS for all paths
+// NOTE: In Express 5, '*' is not supported. '*splat' is the correct catch-all syntax.
+app.options("*splat", cors(corsOptions));
 
 // Security headers - AFTER CORS
 app.use(helmet());
