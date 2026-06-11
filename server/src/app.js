@@ -6,39 +6,51 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import apiRoutes from "./routes/index.js";
-
-// Configuration is handled in index.js via import 'dotenv/config'
+import connectDB from "./config/db.js";
 
 const app = express();
 
 // Global Middlewares
 
-// Ensure CORS is the VERY FIRST middleware to run
+// Database connection middleware (Required for simplified Vercel entry point)
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Refined CORS configuration per USER instructions
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   "http://localhost:5173",
   "https://aco2.forgegrid.in",
 ].filter(Boolean);
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps or curl)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === "development") {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
-  })
-);
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV === "development") {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "Accept",
+    "X-CSRF-Token",
+  ],
+  optionsSuccessStatus: 200,
+};
 
-// Handle preflight OPTIONS requests explicitly for all routes
-app.options("*", cors());
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 // Security headers - AFTER CORS
 app.use(helmet());
