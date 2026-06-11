@@ -10,31 +10,26 @@ import connectDB from "./config/db.js";
 
 const app = express();
 
+// 1. Trust proxy for Vercel/proxies (Essential for cookies and protocol detection)
+app.set('trust proxy', 1);
+
 // Global Middlewares
 
-// Database connection middleware (Required for simplified Vercel entry point)
-app.use(async (req, res, next) => {
-  try {
-    await connectDB();
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
-
-// Refined CORS configuration per USER instructions
+// 2. Refined CORS configuration (Migrated from production-hardened Seyal patterns)
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   "http://localhost:5173",
   "https://aco2.forgegrid.in",
-].filter(Boolean);
+  "https://www.aco2.forgegrid.in",
+].filter(Boolean).map(origin => origin.replace(/\/$/, "")); // Normalize trailing slashes
 
 const corsOptions = {
   origin: (origin, callback) => {
     // Allow requests with no origin (like mobile apps or curl)
     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.includes(origin) || process.env.NODE_ENV === "development") {
+    const normalizedOrigin = origin.replace(/\/$/, "");
+    if (allowedOrigins.includes(normalizedOrigin) || process.env.NODE_ENV === "development") {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
@@ -48,19 +43,31 @@ const corsOptions = {
     "X-Requested-With",
     "Accept",
     "X-CSRF-Token",
+    "Origin", // Added for compatibility
   ],
-  optionsSuccessStatus: 200,
+  optionsSuccessStatus: 204,
 };
 
-// 1. Enable CORS for all routes
+// 2. IMMEDIATE CORS HANDLING (MUST be before any async or DB middleware)
 app.use(cors(corsOptions));
 
-// 2. Explicitly handle preflight OPTIONS for all paths
-// NOTE: In Express 5, '*' is not supported. '*splat' is the correct catch-all syntax.
+// 5. Handle explicit preflight for Express 5
 app.options("*splat", cors(corsOptions));
 
-// Security headers - AFTER CORS
-app.use(helmet());
+// 6. Security headers (Migrated from Seyal: explicitly allowing cross-origin resources)
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
+
+// 5. Database connection middleware (Moved after CORS to prevent preflight timeouts)
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 // Logging
 if (process.env.NODE_ENV === "development") {
