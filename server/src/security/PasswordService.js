@@ -1,4 +1,4 @@
-import argon2 from 'argon2';
+import bcrypt from 'bcryptjs';
 
 class PasswordService {
   /**
@@ -8,12 +8,8 @@ class PasswordService {
    */
   async hash(password) {
     try {
-      return await argon2.hash(password, {
-        type: argon2.argon2id,
-        memoryCost: 2 ** 16, // 64 MB
-        timeCost: 3,
-        parallelism: 1,
-      });
+      const salt = await bcrypt.genSalt(10);
+      return await bcrypt.hash(password, salt);
     } catch (error) {
       throw new Error('Error hashing password');
     }
@@ -27,7 +23,7 @@ class PasswordService {
    */
   async verify(hash, password) {
     try {
-      return await argon2.verify(hash, password);
+      return await bcrypt.compare(password, hash);
     } catch (error) {
       throw new Error('Error verifying password');
     }
