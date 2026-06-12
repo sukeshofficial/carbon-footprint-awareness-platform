@@ -92,7 +92,7 @@ export const sendFeedbackEmail = async ({ name, email, message, anonymous = fals
  * @param {string} resetToken 
  */
 export const sendPasswordResetEmail = async (email, resetToken) => {
-  const resetUrl = `${process.env.FRONTEND_URL}/auth/reset-password/${resetToken}`;
+  const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
   const html = `
     <div style="font-family:'Google Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#f9f9f9;border-radius:8px;overflow:hidden;">
