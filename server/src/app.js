@@ -61,6 +61,11 @@ app.use(helmet({
 
 // 5. Database connection middleware (Moved after CORS to prevent preflight timeouts)
 app.use(async (req, res, next) => {
+  // Skip DB connection check for health route
+  if (req.path === '/api/v1/health' || req.path === '/api/v1/health/') {
+    return next();
+  }
+
   try {
     await connectDB();
     next();

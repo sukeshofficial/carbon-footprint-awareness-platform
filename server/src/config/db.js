@@ -16,11 +16,24 @@ const connectDB = async () => {
     const opts = {
       bufferCommands: false,
     };
+
+    const uri = process.env.MONGO_URI;
+    if (!uri) {
+      const error = new Error('MONGO_URI is not defined in environment variables');
+      error.statusCode = 500;
+      throw error;
+    }
+
+    if (process.env.NODE_ENV === 'production' && uri.includes('localhost')) {
+      console.warn('WARNING: MONGO_URI is pointing to localhost in production!');
+    }
+
     cached.promise = mongoose
-      .connect(process.env.MONGO_URI, opts)
+      .connect(uri, opts)
       .then((m) => m)
       .catch((err) => {
         cached.promise = null;
+        console.error(`Mongoose connection promise rejected: ${err.message}`);
         throw err;
       });
   }
