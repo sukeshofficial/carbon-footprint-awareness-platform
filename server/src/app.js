@@ -105,10 +105,17 @@ app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const status = err.status || "error";
 
+  // Log error for server-side debugging
+  console.error(`[Error] ${req.method} ${req.url}:`, err);
+
   res.status(statusCode).json({
     status,
     message: err.message || "Internal server error",
-    ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
+    // Include stack trace only in development or if DEBUG is enabled
+    ...((process.env.NODE_ENV === "development" || process.env.DEBUG === "true") && {
+      stack: err.stack,
+      details: err.toString()
+    }),
   });
 });
 

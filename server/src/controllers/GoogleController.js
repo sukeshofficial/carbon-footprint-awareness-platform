@@ -34,13 +34,32 @@ class GoogleController {
    * Redirect to Google Consent Screen
    */
   async googleAuth(req, res) {
-    const client = getOAuth2Client();
-    const url = client.generateAuthUrl({
-      access_type: 'offline',
-      scope: ['profile', 'email'],
-      prompt: 'consent',
-    });
-    res.json({ url });
+    try {
+      const client = getOAuth2Client();
+      
+      // Basic validation of credentials
+      if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+        console.error('Missing Google OAuth credentials in environment variables');
+        return res.status(500).json({
+          status: 'error',
+          message: 'Google OAuth is not properly configured on the server.'
+        });
+      }
+
+      const url = client.generateAuthUrl({
+        access_type: 'offline',
+        scope: ['profile', 'email'],
+        prompt: 'consent',
+      });
+      res.json({ url });
+    } catch (error) {
+      console.error('Google Auth Initialization Error:', error);
+      res.status(500).json({
+        status: 'error',
+        message: 'Failed to initialize Google authentication.',
+        ...(process.env.NODE_ENV === 'development' && { error: error.message })
+      });
+    }
   }
 
   /**
