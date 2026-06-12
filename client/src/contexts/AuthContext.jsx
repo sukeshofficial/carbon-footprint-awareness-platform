@@ -29,8 +29,8 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  const login = async (email, password) => {
-    const response = await api.post('/auth/login', { email, password });
+  const login = async (email, password, rememberMe = false) => {
+    const response = await api.post('/auth/login', { email, password, rememberMe });
     const { user, accessToken } = response.data.data;
     localStorage.setItem('accessToken', accessToken);
     setUser(user);
@@ -58,6 +58,18 @@ export const AuthProvider = ({ children }) => {
     await api.post(`/auth/reset-password/${token}`, { password });
   };
 
+  const loginWithGoogle = async () => {
+    try {
+      const response = await api.get('/auth/google');
+      if (response.data.url) {
+        window.location.href = response.data.url;
+      }
+    } catch (error) {
+      console.error('Google login initialization failed:', error);
+      throw error;
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -66,6 +78,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     forgotPassword,
     resetPassword,
+    loginWithGoogle,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

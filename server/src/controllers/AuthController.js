@@ -5,12 +5,16 @@ import userRepository from '../repositories/UserRepository.js';
 /**
  * Helper to set HTTP-only refresh token cookie
  */
-const setRefreshTokenCookie = (res, token) => {
+const setRefreshTokenCookie = (res, token, rememberMe = false) => {
+  const maxAge = rememberMe
+    ? 30 * 24 * 60 * 60 * 1000 // 30 days
+    : 7 * 24 * 60 * 60 * 1000;  // 7 days
+
   res.cookie('refreshToken', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    maxAge: maxAge,
   });
 };
 
@@ -31,7 +35,16 @@ class AuthController {
         },
       });
     } catch (error) {
-      res.status(400).json({ status: 'error', message: error.message });
+      let message = error.message;
+      try {
+        const parsed = JSON.parse(error.message);
+        if (Array.isArray(parsed)) {
+          message = parsed[0]?.message || 'Validation failed';
+        }
+      } catch (e) {
+        // Not a JSON string
+      }
+      res.status(400).json({ status: 'error', message });
     }
   }
 
@@ -48,7 +61,8 @@ class AuthController {
         ipAddress
       );
 
-      setRefreshTokenCookie(res, refreshToken);
+      const rememberMe = req.body.rememberMe === true;
+      setRefreshTokenCookie(res, refreshToken, rememberMe);
 
       res.status(200).json({
         status: 'success',
@@ -63,7 +77,16 @@ class AuthController {
         },
       });
     } catch (error) {
-      res.status(401).json({ status: 'error', message: error.message });
+      let message = error.message;
+      try {
+        const parsed = JSON.parse(error.message);
+        if (Array.isArray(parsed)) {
+          message = parsed[0]?.message || 'Invalid credentials';
+        }
+      } catch (e) {
+        // Not a JSON string
+      }
+      res.status(401).json({ status: 'error', message });
     }
   }
 
@@ -90,7 +113,19 @@ class AuthController {
         data: { accessToken },
       });
     } catch (error) {
-      res.status(401).json({ status: 'error', message: error.message });
+      res.status(400).json({ status: 'error', message: error.message });
+    }
+  }
+
+  async verifyEmail(req, res) {
+    try {
+      await authService.verifyEmail(req.params.token);
+      res.status(200).json({
+        status: 'success',
+        message: 'Email verified successfully. You can now log in.',
+      });
+    } catch (error) {
+      res.status(400).json({ status: 'error', message: error.message });
     }
   }
 
@@ -145,7 +180,16 @@ class AuthController {
         message: 'If an account exists with that email, a password reset link has been sent.',
       });
     } catch (error) {
-      res.status(400).json({ status: 'error', message: error.message });
+      let message = error.message;
+      try {
+        const parsed = JSON.parse(error.message);
+        if (Array.isArray(parsed)) {
+          message = parsed[0]?.message || 'Request failed';
+        }
+      } catch (e) {
+        // Not a JSON string
+      }
+      res.status(400).json({ status: 'error', message });
     }
   }
 
@@ -157,7 +201,16 @@ class AuthController {
         message: 'Password reset successful. You can now log in with your new password.',
       });
     } catch (error) {
-      res.status(400).json({ status: 'error', message: error.message });
+      let message = error.message;
+      try {
+        const parsed = JSON.parse(error.message);
+        if (Array.isArray(parsed)) {
+          message = parsed[0]?.message || 'Reset failed';
+        }
+      } catch (e) {
+        // Not JSON
+      }
+      res.status(400).json({ status: 'error', message });
     }
   }
 }

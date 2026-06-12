@@ -10,6 +10,7 @@ const router = express.Router();
 // Email Auth
 router.post('/signup', validate(signupSchema), authController.signup);
 router.post('/login', validate(loginSchema), authController.login);
+router.get('/verify-email/:token', authController.verifyEmail);
 router.post('/refresh', authController.refresh);
 router.post('/logout', authController.logout);
 router.post('/logout-all', protect, authController.logoutAll);

@@ -8,7 +8,7 @@ export const validate = (schema) => (req, res, next) => {
   } catch (error) {
     return res.status(400).json({
       status: 'error',
-      message: 'Validation failed',
+      message: error.errors?.[0]?.message || 'Validation failed',
       errors: error.errors?.map((err) => ({
         path: err.path.join('.'),
         message: err.message,

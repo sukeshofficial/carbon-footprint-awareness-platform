@@ -37,11 +37,11 @@ export const sendFeedbackEmail = async ({ name, email, message, anonymous = fals
   // Email row for the sender's address — hidden link when not anonymous
   const emailCell = anonymous
     ? `<td style="padding:8px 0;color:#111827;font-size:14px;">Hidden</td>`
-    : `<td style="padding:8px 0;color:#111827;font-size:14px;"><a href="mailto:${email}" style="color:#6d28d9;text-decoration:none;">${email}</a></td>`;
+    : `<td style="padding:8px 0;color:#111827;font-size:14px;"><a href="mailto:${email}" style="color:#16a34a;text-decoration:none;">${email}</a></td>`;
 
   const html = `
     <div style="font-family:'Google Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#f9f9f9;border-radius:8px;overflow:hidden;">
-      <div style="background:#6d28d9;padding:24px 32px;">
+      <div style="background:#16a34a;padding:24px 32px;">
         <h1 style="color:#fff;margin:0;font-size:20px;font-weight:600;">
           New Feedback - ACo₂ ${anonymousBadge}
         </h1>
@@ -61,7 +61,7 @@ export const sendFeedbackEmail = async ({ name, email, message, anonymous = fals
             <td style="padding:8px 0;color:#111827;font-size:14px;">${timestamp}</td>
           </tr>
         </table>
-        <div style="background:#f3f4f6;border-left:4px solid #6d28d9;border-radius:4px;padding:16px 20px;">
+        <div style="background:#f3f4f6;border-left:4px solid #16a34a;border-radius:4px;padding:16px 20px;">
           <p style="margin:0;color:#374151;font-size:14px;line-height:1.6;white-space:pre-wrap;">${message}</p>
         </div>
       </div>
@@ -96,7 +96,7 @@ export const sendPasswordResetEmail = async (email, resetToken) => {
 
   const html = `
     <div style="font-family:'Google Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#f9f9f9;border-radius:8px;overflow:hidden;">
-      <div style="background:#6d28d9;padding:24px 32px;">
+      <div style="background:#16a34a;padding:24px 32px;">
         <h1 style="color:#fff;margin:0;font-size:20px;font-weight:600;">Reset your password</h1>
       </div>
       <div style="padding:32px;background:#fff;">
@@ -104,7 +104,7 @@ export const sendPasswordResetEmail = async (email, resetToken) => {
           You requested a password reset for your ACo₂ account. Click the button below to set a new password:
         </p>
         <div style="text-align:center;margin-bottom:32px;">
-          <a href="${resetUrl}" style="display:inline-block;padding:12px 32px;background-color:#6d28d9;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:600;font-size:14px;">
+          <a href="${resetUrl}" style="display:inline-block;padding:12px 32px;background-color:#16a34a;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:600;font-size:14px;">
             Reset Password
           </a>
         </div>
@@ -114,7 +114,7 @@ export const sendPasswordResetEmail = async (email, resetToken) => {
         <hr style="border:0;border-top:1px solid #e5e7eb;margin:24px 0;">
         <p style="margin:0;color:#9ca3af;font-size:12px;">
           If the button doesn't work, copy and paste this link into your browser:<br>
-          <a href="${resetUrl}" style="color:#6d28d9;">${resetUrl}</a>
+          <a href="${resetUrl}" style="color:#16a34a;">${resetUrl}</a>
         </p>
       </div>
     </div>
@@ -131,6 +131,52 @@ export const sendPasswordResetEmail = async (email, resetToken) => {
 };
 
 /**
+ * Sends a verification email after signup.
+ * @param {string} email 
+ * @param {string} name 
+ * @param {string} verificationToken 
+ */
+export const sendVerificationEmail = async (email, name, verificationToken) => {
+  const verifyUrl = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
+
+  const html = `
+    <div style="font-family:'Google Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#f9f9f9;border-radius:8px;overflow:hidden;">
+      <div style="background:#16a34a;padding:24px 32px;">
+        <h1 style="color:#fff;margin:0;font-size:20px;font-weight:600;">Verify your account</h1>
+      </div>
+      <div style="padding:32px;background:#fff;">
+        <h2 style="color:#111827;font-size:18px;margin-bottom:16px;">Hello ${name},</h2>
+        <p style="margin:0 0 24px;color:#374151;font-size:16px;line-height:1.6;">
+          Thank you for joining ACo₂! Please verify your email address to activate your account and start tracking your impact.
+        </p>
+        <div style="text-align:center;margin-bottom:32px;">
+          <a href="${verifyUrl}" style="display:inline-block;padding:12px 32px;background-color:#16a34a;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:600;font-size:14px;">
+            Verify Email
+          </a>
+        </div>
+        <p style="margin:0 0 16px;color:#6b7280;font-size:14px;line-height:1.5;">
+          This link will expire in 24 hours. If you didn't create an account, you can safely ignore this email.
+        </p>
+        <hr style="border:0;border-top:1px solid #e5e7eb;margin:24px 0;">
+        <p style="margin:0;color:#9ca3af;font-size:12px;">
+          If the button doesn't work, copy and paste this link into your browser:<br>
+          <a href="${verifyUrl}" style="color:#16a34a;">${verifyUrl}</a>
+        </p>
+      </div>
+    </div>
+  `;
+
+  const mailOptions = {
+    from: `"ACo₂ Support" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: 'Verify your account - ACo₂',
+    html,
+  };
+
+  await createTransporter().sendMail(mailOptions);
+};
+
+/**
  * Sends a welcome email after signup.
  * @param {string} email 
  * @param {string} name 
@@ -138,7 +184,7 @@ export const sendPasswordResetEmail = async (email, resetToken) => {
 export const sendWelcomeEmail = async (email, name) => {
   const html = `
     <div style="font-family:'Google Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#f9f9f9;border-radius:8px;overflow:hidden;">
-      <div style="background:#6d28d9;padding:24px 32px;">
+      <div style="background:#16a34a;padding:24px 32px;">
         <h1 style="color:#fff;margin:0;font-size:20px;font-weight:600;">Welcome to ACo₂!</h1>
       </div>
       <div style="padding:32px;background:#fff;">
@@ -148,7 +194,7 @@ export const sendWelcomeEmail = async (email, name) => {
           Start exploring your impact today!
         </p>
         <div style="text-align:center;margin:32px 0;">
-          <a href="${process.env.FRONTEND_URL}" style="display:inline-block;padding:12px 32px;background-color:#6d28d9;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:600;font-size:14px;">
+          <a href="${process.env.FRONTEND_URL}" style="display:inline-block;padding:12px 32px;background-color:#16a34a;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:600;font-size:14px;">
             Go to Dashboard
           </a>
         </div>

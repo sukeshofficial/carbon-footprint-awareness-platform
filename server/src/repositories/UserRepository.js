@@ -5,6 +5,10 @@ class UserRepository {
     return await User.findOne({ email }).select('+password');
   }
 
+  async findByUsername(username) {
+    return await User.findOne({ username });
+  }
+
   async findById(id) {
     return await User.findById(id);
   }
@@ -28,7 +32,14 @@ class UserRepository {
     return await User.findOne({
       passwordResetToken: token,
       passwordResetExpires: { $gt: Date.now() },
-    }).select('+password');
+    }).select('+password +passwordHistory');
+  }
+
+  async findByVerificationToken(token) {
+    return await User.findOne({
+      verificationToken: token,
+      verificationTokenExpires: { $gt: Date.now() },
+    });
   }
 }
 

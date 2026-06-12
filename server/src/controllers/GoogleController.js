@@ -25,7 +25,7 @@ const setRefreshTokenCookie = (res, token) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
   });
 };
 
@@ -36,7 +36,7 @@ class GoogleController {
   async googleAuth(req, res) {
     try {
       const client = getOAuth2Client();
-      
+
       // Basic validation of credentials
       if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
         console.error('Missing Google OAuth credentials in environment variables');
@@ -88,8 +88,14 @@ class GoogleController {
         if (user) {
           user = await userRepository.update(user._id, { googleId, avatar });
         } else {
+          // Create new user with generated username
+          const baseUsername = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+          const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+          const username = `${baseUsername}${randomSuffix}`;
+
           user = await userRepository.create({
             name,
+            username,
             email,
             googleId,
             avatar,

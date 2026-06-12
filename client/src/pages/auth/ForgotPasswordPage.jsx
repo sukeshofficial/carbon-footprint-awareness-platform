@@ -2,16 +2,20 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { toast } from 'sonner';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../../components/ui/card';
-import { toast } from 'sonner';
+import { AuthLayout } from '../../components/auth/AuthLayout';
+import { FormError } from '../../components/auth/FormMessages';
+import { Loader2, ArrowLeft, Mail, ArrowRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
-const schema = z.object({
-  email: z.string().email('Invalid email address'),
+const forgotPasswordSchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
 });
 
 const ForgotPasswordPage = () => {
@@ -24,7 +28,10 @@ const ForgotPasswordPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: {
+      email: '',
+    },
   });
 
   const onSubmit = async (data) => {
@@ -36,9 +43,9 @@ const ForgotPasswordPage = () => {
         description: 'If an account exists, we have sent a reset link.',
       });
     } catch (error) {
-      const serverError = error.response?.data;
-      const errorMessage = serverError?.errors?.[0]?.message || serverError?.message || 'Could not process request. Please try again.';
-
+      console.error('Forgot password error:', error);
+      const serverErr = error.response?.data;
+      const errorMessage = serverErr?.errors?.[0]?.message || serverErr?.message || 'Could not process request.';
       toast.error('Error', {
         description: errorMessage,
       });
@@ -48,54 +55,90 @@ const ForgotPasswordPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-80px)] px-4">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-md"
-      >
-        <Card className="border-none shadow-2xl bg-background/50 backdrop-blur-xl">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center">Forgot Password</CardTitle>
-            <CardDescription className="text-center">
-              {isSent
-                ? "Check your inbox for a reset link."
-                : "Enter your email address and we'll send you a link to reset your password."}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {!isSent ? (
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    placeholder="m@example.com"
-                    {...register('email')}
-                    className={errors.email ? 'border-destructive' : ''}
-                  />
-                  {errors.email && (
-                    <p className="text-xs text-destructive mt-1">{errors.email.message}</p>
+    <AuthLayout
+      title={isSent ? "Check your email" : "Reset password"}
+      subtitle={isSent
+        ? "Recovery instructions sent successfully"
+        : "Get back into the ACo2 ecosystem"}
+    >
+      <div className="space-y-6">
+        {!isSent ? (
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="font-mono-tight text-[10px] text-zinc-400 font-bold ml-1">Email address</Label>
+              <div className="relative">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  {...register('email')}
+                  className={cn(
+                    "h-12 pl-11 rounded-full bg-zinc-50 border-zinc-100 transition-all font-medium text-base",
+                    "focus:bg-white focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
+                    errors.email && "border-destructive/30 bg-destructive/5"
                   )}
+                  disabled={isLoading}
+                />
+              </div>
+              {errors.email && <FormError message={errors.email.message} className="ml-1" />}
+            </div>
+
+            <Button
+              type="submit"
+              className="h-12 w-full rounded-full bg-green-600 hover:bg-green-700 text-white font-bold text-sm shadow-md transition-all active:scale-[0.98]"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                <div className="flex items-center gap-2">
+                  <span>SEND RESET LINK</span>
+                  <ArrowRight className="h-5 w-5" />
                 </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? 'Sending...' : 'Send Reset Link'}
-                </Button>
-              </form>
-            ) : (
-              <Button variant="outline" className="w-full" onClick={() => setIsSent(false)}>
-                Back to Forgot Password
+              )}
+            </Button>
+
+            <div className="text-center pt-2">
+              <Link
+                to="/login"
+                className="inline-flex items-center gap-2 font-mono-tight text-[10px] font-bold text-zinc-400 hover:text-green-600 transition-colors group"
+              >
+                <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+                Back to Sign in
+              </Link>
+            </div>
+          </form>
+        ) : (
+          <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
+            <div className="bg-green-50 p-6 rounded-[2rem] border border-green-100 flex flex-col items-center text-center">
+              <div className="h-16 w-16 rounded-2xl bg-white shadow-lg shadow-green-500/10 border border-green-100 flex items-center justify-center mb-4">
+                <Mail className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-extrabold text-green-950 mb-2">Link Sent!</h3>
+              <p className="text-xs font-medium text-green-700/60 leading-relaxed max-w-xs">
+                We've sent a recovery link to your inbox. Please check your spam if you don't see it.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Button
+                variant="outline"
+                className="w-full h-12 rounded-full font-bold border-zinc-200 text-zinc-600 hover:bg-zinc-50"
+                onClick={() => setIsSent(false)}
+              >
+                RESEND LINK
               </Button>
-            )}
-          </CardContent>
-          <CardFooter className="justify-center">
-            <a href="/login" className="text-sm text-primary hover:underline">
-              Back to Sign in
-            </a>
-          </CardFooter>
-        </Card>
-      </motion.div>
-    </div>
+              <Link to="/login" className="block text-center">
+                <span className="font-mono-tight text-[10px] font-bold text-zinc-400 hover:text-green-600 transition-colors">
+                  Back to Sign in
+                </span>
+              </Link>
+            </div>
+          </div>
+        )}
+      </div>
+    </AuthLayout>
   );
 };
 

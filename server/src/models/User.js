@@ -7,6 +7,14 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Please provide your name'],
       trim: true,
     },
+    username: {
+      type: String,
+      required: [true, 'Please provide a username'],
+      unique: true,
+      lowercase: true,
+      trim: true,
+      minlength: [3, 'Username must be at least 3 characters'],
+    },
     email: {
       type: String,
       required: [true, 'Please provide your email'],
@@ -16,7 +24,7 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: function() { return !this.googleId; }, // Password not required if Google Auth is used
+      required: function () { return !this.googleId; }, // Password not required if Google Auth is used
       select: false,
     },
     googleId: {
@@ -38,6 +46,17 @@ const userSchema = new mongoose.Schema(
     },
     passwordResetToken: String,
     passwordResetExpires: Date,
+    verificationToken: String,
+    verificationTokenExpires: Date,
+    passwordHistory: {
+      type: [
+        {
+          password: { type: String, required: true },
+          changedAt: { type: Date, default: Date.now },
+        },
+      ],
+      select: false, // Don't include history by default
+    },
   },
   {
     timestamps: true,
