@@ -143,84 +143,84 @@ const AccountTab = () => {
       {/* ── 1. Avatar ── */}
       <section>
         <SectionHeader icon={Camera} title="Profile Photo" />
-        <div className='bg-zinc-100/50 p-4 rounded-4xl'>
-        <div
-          className={cn(
-            "flex items-center gap-6 p-4 rounded-2xl border-dashed border-2 transition-all cursor-pointer group",
-            isDragging ? "border-primary/20 bg-primary/5" : "border-transparent hover:bg-muted/0",
-            uploading && "opacity-80 cursor-wait"
-          )}
-          onClick={() => !uploading && fileRef.current?.click()}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-        >
-          <div className="relative">
-            <div className={cn(
-              "w-20 h-20 rounded-2xl bg-primary/10 overflow-hidden flex items-center justify-center transition-colors",
-              isDragging ? "border-primary/20" : "border-primary/20"
-            )}>
-              {avatarPreview ? (
-                <img src={avatarPreview} alt="avatar" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-              ) : (
-                <User className="w-8 h-8 text-primary/40" />
-              )}
-              {uploading && (
-                <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-2xl">
-                  <Loader2 className="w-5 h-5 text-white animate-spin" />
-                </div>
-              )}
+        <div className='bg-zinc-100 p-4 rounded-4xl'>
+          <div
+            className={cn(
+              "flex items-center gap-6 p-4 rounded-2xl border-dashed border-2 transition-all cursor-pointer group",
+              isDragging ? "border-primary/20 bg-primary/5" : "border-transparent hover:bg-muted/0",
+              uploading && "opacity-80 cursor-wait"
+            )}
+            onClick={() => !uploading && fileRef.current?.click()}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
+            <div className="relative">
+              <div className={cn(
+                "w-20 h-20 rounded-2xl bg-primary/10 overflow-hidden flex items-center justify-center transition-colors",
+                isDragging ? "border-primary/20" : "border-primary/20"
+              )}>
+                {avatarPreview ? (
+                  <img src={avatarPreview} alt="avatar" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                ) : (
+                  <User className="w-8 h-8 text-primary/40" />
+                )}
+                {uploading && (
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-2xl">
+                    <Loader2 className="w-5 h-5 text-white animate-spin" />
+                  </div>
+                )}
+              </div>
+              <div
+                className="absolute -bottom-1.5 -right-1.5 w-7 h-7 bg-primary rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform"
+              >
+                <Camera className="w-3.5 h-3.5 text-white" />
+              </div>
+              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
             </div>
-            <div
-              className="absolute -bottom-1.5 -right-1.5 w-7 h-7 bg-primary rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform"
-            >
-              <Camera className="w-3.5 h-3.5 text-white" />
-            </div>
-            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-foreground">
-              {uploading ? 'Uploading photo…' : isDragging ? 'Drop to upload' : 'Upload a new photo'}
-            </p>
-            <p className="text-xs text-muted-foreground mt-0.5">JPG, PNG or WebP · max 5 MB</p>
-            <div className="flex items-center gap-3 mt-1">
-              {avatarUrl && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setAvatarUrl(null);
-                    setAvatarPreview(user?.avatar || null);
-                  }}
-                  className="text-xs text-destructive font-semibold hover:underline"
-                >
-                  Remove
-                </button>
-              )}
-              {isGoogleUser && user?.googleAvatar && avatarPreview !== user.googleAvatar && (
-                <button
-                  onClick={async (e) => {
-                    e.stopPropagation();
-                    setUploading(true);
-                    try {
-                      const res = await api.patch('/auth/me', { avatar: user.googleAvatar });
-                      setAvatarUrl(null); // Clear pending upload since we just saved
-                      setAvatarPreview(res.data.data.user.avatar);
-                      toast.success('Synced with Google Photo!');
-                    } catch (err) {
-                      toast.error('Failed to sync Google photo');
-                    } finally {
-                      setUploading(false);
-                    }
-                  }}
-                  className="text-xs text-primary font-semibold hover:underline"
-                >
-                  Use Google Photo
-                </button>
-              )}
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-foreground">
+                {uploading ? 'Uploading photo…' : isDragging ? 'Drop to upload' : 'Upload a new photo'}
+              </p>
+              <p className="text-xs text-muted-foreground mt-0.5">JPG, PNG or WebP · max 5 MB</p>
+              <div className="flex items-center gap-3 mt-1">
+                {avatarUrl && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setAvatarUrl(null);
+                      setAvatarPreview(user?.avatar || null);
+                    }}
+                    className="text-xs text-destructive font-semibold hover:underline"
+                  >
+                    Remove
+                  </button>
+                )}
+                {isGoogleUser && user?.googleAvatar && avatarPreview !== user.googleAvatar && (
+                  <button
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      setUploading(true);
+                      try {
+                        const res = await api.patch('/auth/me', { avatar: user.googleAvatar });
+                        setAvatarUrl(null); // Clear pending upload since we just saved
+                        setAvatarPreview(res.data.data.user.avatar);
+                        toast.success('Synced with Google Photo!');
+                      } catch (err) {
+                        toast.error('Failed to sync Google photo');
+                      } finally {
+                        setUploading(false);
+                      }
+                    }}
+                    className="text-xs text-primary font-semibold hover:underline"
+                  >
+                    Use Google Photo
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
-                  </div>
       </section>
 
       <div className="border-t" />
@@ -228,41 +228,43 @@ const AccountTab = () => {
       {/* ── 2. Identity ── */}
       <section>
         <SectionHeader icon={User} title="Identity" />
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <div className="grid gap-1.5">
-            <Label htmlFor="account-name">Full Name <span className="text-destructive">*</span></Label>
-            <Input
-              id="account-name"
-              value={formData.name}
-              onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
-              placeholder="Your display name"
-              className="h-10"
-            />
-          </div>
-          <div className="grid gap-1.5">
-            <Label htmlFor="account-username">Username <span className="text-destructive">*</span></Label>
-            <div className="relative">
-              <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+        <div className='bg-zinc-100 p-4 rounded-4xl'>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 p-4">
+            <div className="grid gap-1.5">
+              <Label htmlFor="account-name">Full Name <span className="text-destructive">*</span></Label>
               <Input
-                id="account-username"
-                value={formData.username}
-                onChange={e => setFormData(p => ({ ...p, username: e.target.value.toLowerCase().replace(/\s/g, '') }))}
-                placeholder="yourhandle"
-                className="h-10 pl-8"
+                id="account-name"
+                value={formData.name}
+                onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
+                placeholder="Your display name"
+                className="h-10 border border-input bg-background"
               />
             </div>
-          </div>
-          <div className="grid gap-1.5 sm:col-span-2">
-            <Label htmlFor="account-bio">Bio <span className="text-muted-foreground text-[10px] font-normal">(optional)</span></Label>
-            <textarea
-              id="account-bio"
-              value={formData.bio}
-              onChange={e => setFormData(p => ({ ...p, bio: e.target.value.slice(0, 280) }))}
-              placeholder="A short line about yourself…"
-              rows={3}
-              className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 placeholder:text-muted-foreground"
-            />
-            <p className="text-[10px] text-muted-foreground text-right">{formData.bio.length}/280</p>
+            <div className="grid gap-1.5">
+              <Label htmlFor="account-username">Username <span className="text-destructive">*</span></Label>
+              <div className="relative">
+                <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+                <Input
+                  id="account-username"
+                  value={formData.username}
+                  onChange={e => setFormData(p => ({ ...p, username: e.target.value.toLowerCase().replace(/\s/g, '') }))}
+                  placeholder="yourhandle"
+                  className="h-10 pl-8 border border-input bg-background"
+                />
+              </div>
+            </div>
+            <div className="grid gap-1.5 sm:col-span-2">
+              <Label htmlFor="account-bio">Bio <span className="text-muted-foreground text-[10px] font-normal">(optional)</span></Label>
+              <textarea
+                id="account-bio"
+                value={formData.bio}
+                onChange={e => setFormData(p => ({ ...p, bio: e.target.value.slice(0, 280) }))}
+                placeholder="A short line about yourself…"
+                rows={3}
+                className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 placeholder:text-muted-foreground"
+              />
+              <p className="text-[10px] text-muted-foreground text-right">{formData.bio.length}/280</p>
+            </div>
           </div>
         </div>
       </section>
@@ -272,18 +274,20 @@ const AccountTab = () => {
       {/* ── 3. Email ── */}
       <section>
         <SectionHeader icon={Mail} title="Email Address" />
-        <div className="grid gap-1.5">
-          <Label>Email</Label>
-          <div className="relative">
-            <Input value={user?.email || ''} readOnly className="h-10 pr-24 bg-muted/40 cursor-not-allowed text-muted-foreground" />
-            <span className={cn(
-              'absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full',
-              user?.isVerified ? 'bg-emerald-100 text-emerald-700' : 'bg-yellow-100 text-yellow-700'
-            )}>
-              {user?.isVerified ? 'Verified' : 'Unverified'}
-            </span>
+        <div className='bg-zinc-100 p-8 rounded-4xl'>
+          <div className="grid gap-1.5">
+            <Label>Email</Label>
+            <div className="relative">
+              <Input value={user?.email || ''} readOnly className="h-10 pr-24 bg-background cursor-not-allowed text-muted-foreground" />
+              <span className={cn(
+                'absolute right-1 top-1/2 -translate-y-1/2 text-[9px] font-black uppercase tracking-widest px-4 py-2.5 rounded-full',
+                user?.isVerified ? 'bg-emerald-100 text-emerald-700' : 'bg-yellow-100 text-yellow-700'
+              )}>
+                {user?.isVerified ? 'Verified' : 'Unverified'}
+              </span>
+            </div>
+            <p className="text-[11px] text-muted-foreground">Email cannot be changed here. Contact support if needed.</p>
           </div>
-          <p className="text-[11px] text-muted-foreground">Email cannot be changed here. Contact support if needed.</p>
         </div>
       </section>
 

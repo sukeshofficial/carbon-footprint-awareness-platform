@@ -84,7 +84,7 @@ const Dashboard = () => {
             <Button
               variant="outline"
               onClick={() => logout()}
-              className="flex-1 rounded-full h-10 font-bold border-destructive/20 text-destructive hover:bg-destructive/10"
+              className="flex-1 rounded-full h-10 font-bold border-destructive/20 text-destructive hover:bg-destructive/10 hover:text-destructive"
             >
               Sign Out
             </Button>
