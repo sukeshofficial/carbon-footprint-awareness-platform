@@ -15,22 +15,43 @@ import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
 import GoogleCallback from "./pages/auth/GoogleCallback";
 
+import CurrentDevelopmentCard from "./components/ui/CurrentDevelopmentCard";
+
 const Dashboard = () => {
   const { logout, user } = useAuth();
 
+  const devData = {
+    title: "🚧 In Development",
+    description: "Building a profile system to personalize carbon insights, benchmarks, coaching tone, and recommendations based on user lifestyle and preferences.",
+    phase: "Phase 1 / 6",
+    status: "Active Development",
+    nextMilestone: "Profile API + Setup UI",
+    updatedAt: "2 hours ago",
+    checklist: [
+      { label: "Identity details (display name, city/region)", completed: true },
+      { label: "User type selection", completed: false },
+      { label: "Household type setup", completed: false },
+      { label: "Tone preference setup", completed: false },
+      { label: "Profile editing support", completed: false },
+      { label: "Personalized carbon recommendations", completed: false },
+    ]
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-6">
-      <div className="text-center space-y-2">
-        <h1 className="text-4xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground text-lg">
+    <div className="flex flex-col items-center min-h-[100dvh] lg:h-screen px-4 py-8 sm:px-6 lg:justify-center gap-6 lg:overflow-hidden">
+      <div className="text-center space-y-1 w-full max-w-lg">
+        <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-zinc-950 leading-tight">Dashboard</h1>
+        <p className="text-muted-foreground text-base">
           Welcome back, <span className="text-foreground font-medium">{user?.name || 'User'}</span>!
         </p>
       </div>
 
+      <CurrentDevelopmentCard {...devData} />
+
       <Button
         variant="outline"
         onClick={() => logout()}
-        className="w-full max-w-[200px]"
+        className="w-full max-w-[180px] rounded-full h-10 font-bold"
       >
         Sign Out
       </Button>
