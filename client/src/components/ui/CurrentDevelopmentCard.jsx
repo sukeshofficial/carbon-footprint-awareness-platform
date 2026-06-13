@@ -70,12 +70,12 @@ const CurrentDevelopmentCard = ({
           <h3 className="text-xs sm:text-sm font-black tracking-tight text-zinc-950 flex items-center gap-2">
             {title}
           </h3>
-          <p className={cn(
+          {/* <p className={cn(
             "font-bold text-zinc-900 leading-tight",
             isCompact ? "text-sm sm:text-base" : "text-lg sm:text-xl lg:text-2xl"
           )}>
             {isCompact ? description.split('.')[0] : description}
-          </p>
+          </p> */}
         </div>
         {!isCompact && (
           <div
@@ -90,7 +90,7 @@ const CurrentDevelopmentCard = ({
 
       {/* Description (Non-compact only or brief) */}
       {!isCompact && (
-        <p className="text-zinc-500 text-[13px] font-medium leading-relaxed mb-4 max-w-lg">
+        <p className="text-zinc-900 text-[13px] font-medium leading-relaxed mb-4 max-w-lg">
           {description}
         </p>
       )}
