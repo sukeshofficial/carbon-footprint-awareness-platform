@@ -70,6 +70,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateMe = async (data) => {
+    const response = await api.patch('/auth/me', data);
+    const updatedUser = response.data.data.user;
+    setUser(updatedUser);
+    return updatedUser;
+  };
+
   const value = {
     user,
     loading,
@@ -79,6 +86,7 @@ export const AuthProvider = ({ children }) => {
     forgotPassword,
     resetPassword,
     loginWithGoogle,
+    updateMe,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

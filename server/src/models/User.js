@@ -35,6 +35,14 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
     },
+    googleAvatar: {
+      type: String,
+    },
+    bio: {
+      type: String,
+      maxlength: [280, 'Bio cannot exceed 280 characters'],
+      trim: true,
+    },
     role: {
       type: String,
       enum: ['user', 'admin'],

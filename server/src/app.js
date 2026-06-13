@@ -81,17 +81,18 @@ if (process.env.NODE_ENV === "development") {
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per window
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: process.env.NODE_ENV === "development" ? 1000 : 100, // much higher limit in dev
   message: {
     status: "error",
-    message: "Too many requests from this IP, please try again after 15 minutes",
+    message: "Too many requests from this IP, please try again after 1 minute",
   },
 });
 app.use("/api", limiter);
 
-// Body parser
-app.use(express.json({ limit: "10kb" }));
+// Body parser — global small limit; larger only for avatar upload
+app.use('/api/v1/auth/me', express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '50kb' }));
 app.use(cookieParser());
 
 // Routes

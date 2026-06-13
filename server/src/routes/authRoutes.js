@@ -15,6 +15,7 @@ router.post('/refresh', authController.refresh);
 router.post('/logout', authController.logout);
 router.post('/logout-all', protect, authController.logoutAll);
 router.get('/me', protect, authController.getMe);
+router.patch('/me', protect, authController.updateMe);
 
 // Forgot/Reset Password
 router.post('/forgot-password', validate(forgotPasswordSchema), authController.forgotPassword);

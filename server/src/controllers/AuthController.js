@@ -1,6 +1,7 @@
 import authService from '../services/AuthService.js';
 import tokenService from '../security/TokenService.js';
 import userRepository from '../repositories/UserRepository.js';
+import { uploadAvatar } from '../services/cloudinary.service.js';
 
 /**
  * Helper to set HTTP-only refresh token cookie
@@ -70,7 +71,12 @@ class AuthController {
           user: {
             id: user._id,
             name: user.name,
+            username: user.username,
             email: user.email,
+            avatar: user.avatar,
+            googleAvatar: user.googleAvatar,
+            googleId: user.googleId,
+            bio: user.bio,
             role: user.role,
           },
           accessToken,
@@ -161,14 +167,68 @@ class AuthController {
           user: {
             id: user._id,
             name: user.name,
+            username: user.username,
             email: user.email,
-            role: user.role,
             avatar: user.avatar,
+            googleAvatar: user.googleAvatar,
+            googleId: user.googleId,
+            bio: user.bio,
+            role: user.role,
           },
         },
       });
     } catch (error) {
       res.status(500).json({ status: 'error', message: error.message });
+    }
+  }
+
+  async updateMe(req, res) {
+    try {
+      const ALLOWED = ['name', 'username', 'bio', 'avatar'];
+      const update = {};
+
+      for (const field of ALLOWED) {
+        if (req.body[field] !== undefined) {
+          update[field] = req.body[field];
+        }
+      }
+
+      // If avatar is a base64 data URI, upload to Cloudinary
+      if (update.avatar && update.avatar.startsWith('data:image')) {
+        const publicId = `user_${req.user.id}`;
+        update.avatar = await uploadAvatar(update.avatar, publicId);
+      }
+
+      if (!update.username && update.username !== undefined) {
+        return res.status(400).json({ status: 'error', message: 'Username cannot be empty.' });
+      }
+
+      const user = await userRepository.update(req.user.id, update);
+
+      res.status(200).json({
+        status: 'success',
+        message: 'Account updated successfully.',
+        data: {
+          user: {
+            id: user._id,
+            name: user.name,
+            username: user.username,
+            email: user.email,
+            avatar: user.avatar,
+            googleAvatar: user.googleAvatar,
+            googleId: user.googleId,
+            bio: user.bio,
+            role: user.role,
+          },
+        },
+      });
+    } catch (error) {
+      const isDuplicate = error.code === 11000;
+      const field = isDuplicate ? Object.keys(error.keyPattern || {})[0] : null;
+      const message = isDuplicate
+        ? `That ${field} is already taken.`
+        : error.message;
+      res.status(isDuplicate ? 409 : 400).json({ status: 'error', message });
     }
   }
 

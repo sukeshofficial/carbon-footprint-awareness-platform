@@ -86,7 +86,11 @@ class GoogleController {
         // Match existing account by email or create new
         user = await userRepository.findByEmail(email);
         if (user) {
-          user = await userRepository.update(user._id, { googleId, avatar });
+          user = await userRepository.update(user._id, {
+            googleId,
+            googleAvatar: avatar,
+            avatar: user.avatar || avatar
+          });
         } else {
           // Create new user with generated username
           const baseUsername = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -98,6 +102,7 @@ class GoogleController {
             username,
             email,
             googleId,
+            googleAvatar: avatar,
             avatar,
             isVerified: true, // Google accounts are verified
           });
