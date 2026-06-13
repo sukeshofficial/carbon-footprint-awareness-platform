@@ -157,7 +157,7 @@ const AccountTab = () => {
           >
             <div className="relative">
               <div className={cn(
-                "w-20 h-20 rounded-2xl bg-primary/10 overflow-hidden flex items-center justify-center transition-colors",
+                "w-20 h-20 rounded-full bg-primary/10 overflow-hidden flex items-center justify-center transition-colors",
                 isDragging ? "border-primary/20" : "border-primary/20"
               )}>
                 {avatarPreview ? (
