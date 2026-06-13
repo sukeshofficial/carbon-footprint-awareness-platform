@@ -61,12 +61,12 @@ const EditProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-zinc-950 pb-20">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 pb-20">
       {/* Premium Modern Header */}
-      <div className="relative bg-[#064e3b] pt-10 pb-16 sm:pt-14 sm:pb-4 px-4 overflow-hidden">
+      <div className="relative bg-[#064e3b] dark:bg-zinc-900 pt-10 pb-16 sm:pt-14 sm:pb-4 px-4 overflow-hidden border-b dark:border-zinc-800">
         {/* Animated Background Decor */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 animate-pulse" />
-        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-seyal-green-dark/30 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 dark:bg-primary/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-primary/30 dark:bg-primary/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4" />
         <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
 
         <div className="container max-w-6xl relative z-10">
@@ -152,8 +152,8 @@ const EditProfile = () => {
                 className={cn(
                   'px-5 py-2 rounded-full text-sm font-bold transition-all duration-200',
                   activeTab === tab.id
-                    ? 'bg-white text-[#064e3b] shadow-sm'
-                    : 'text-white/60 hover:text-white hover:bg-white/10'
+                    ? 'bg-white dark:bg-primary text-[#064e3b] dark:text-primary-foreground shadow-lg scale-105'
+                    : 'text-white/60 dark:text-zinc-400 hover:text-white dark:hover:text-zinc-200 hover:bg-white/10 dark:hover:bg-zinc-800/50'
                 )}
               >
                 {tab.label}
@@ -195,12 +195,10 @@ const EditProfile = () => {
 
           {/* Form Content */}
           <div className={cn(activeTab === 'account' ? 'col-span-1 lg:col-start-6 lg:col-span-8' : 'lg:col-span-8')}>
-            <Card className="mt-4 sm:mt-10 border-none shadow-2xl shadow-slate-200/50 dark:shadow-black/50 overflow-hidden">
-              <div className="bg-white dark:bg-zinc-900 px-6 py-8 md:px-10 md:py-12">
+            <Card className="py-0 mt-4 sm:mt-10 shadow-2xl shadow-zinc-200/50 dark:shadow-black/50 overflow-hidden bg-transparent">
+              <div className="bg-white dark:bg-zinc-900 px-6 py-8 md:px-10 md:py-12 rounded-3xl">
                 {activeTab === 'account' ? (
-                  <div className=''>
-                    <AccountTab />
-                  </div>
+                  <AccountTab />
                 ) : profile ? (
                   <ProfileForm
                     initialData={profile}

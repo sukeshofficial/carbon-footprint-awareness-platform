@@ -130,12 +130,12 @@ const SignupPage = () => {
     >
       {isSuccess ? (
         <div className="flex flex-col items-center justify-center space-y-6 py-8 text-center animate-in fade-in slide-in-from-bottom-4">
-          <div className="h-20 w-20 bg-green-50 rounded-full flex items-center justify-center mx-auto border-2 border-green-100">
-            <Mail className="h-10 w-10 text-green-600" />
+          <div className="h-20 w-20 bg-green-50 dark:bg-green-500/10 rounded-full flex items-center justify-center mx-auto border-2 border-green-100 dark:border-green-500/20">
+            <Mail className="h-10 w-10 text-green-600 dark:text-green-400" />
           </div>
           <div className="space-y-1.5">
-            <h3 className="text-xl font-bold text-zinc-900">Check your email</h3>
-            <p className="text-zinc-600 font-small">
+            <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">Check your email</h3>
+            <p className="text-zinc-600 dark:text-zinc-400 font-small">
               We've sent a verification link to your email address. Please click the link to activate your account.
             </p>
           </div>
@@ -165,9 +165,9 @@ const SignupPage = () => {
                   placeholder="John Doe"
                   {...register('name')}
                   className={cn(
-                    "h-12 pl-11 rounded-full bg-zinc-50 border-zinc-100 transition-all font-medium",
-                    "focus:bg-white focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
-                    errors.name && "border-destructive/30 bg-destructive/5"
+                    "h-12 pl-11 rounded-full bg-zinc-50 dark:bg-zinc-800/50 border-zinc-100 dark:border-zinc-800 transition-all font-medium",
+                    "focus:bg-white dark:focus:bg-zinc-800 focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
+                    errors.name && "border-destructive/30 bg-destructive/5 dark:bg-destructive/10"
                   )}
                   disabled={isLoading}
                 />
@@ -186,9 +186,9 @@ const SignupPage = () => {
                     placeholder="johndoe"
                     {...register('username')}
                     className={cn(
-                      "h-12 pl-11 rounded-full bg-zinc-50 border-zinc-100 transition-all font-medium",
-                      "focus:bg-white focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
-                      errors.username && "border-destructive/30 bg-destructive/5"
+                      "h-12 pl-11 rounded-full bg-zinc-50 dark:bg-zinc-800/50 border-zinc-100 dark:border-zinc-800 transition-all font-medium",
+                      "focus:bg-white dark:focus:bg-zinc-800 focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
+                      errors.username && "border-destructive/30 bg-destructive/5 dark:bg-destructive/10"
                     )}
                     disabled={isLoading}
                   />
@@ -207,9 +207,9 @@ const SignupPage = () => {
                     placeholder="name@example.com"
                     {...register('email')}
                     className={cn(
-                      "h-12 pl-11 rounded-full bg-zinc-50 border-zinc-100 transition-all font-medium",
-                      "focus:bg-white focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
-                      errors.email && "border-destructive/30 bg-destructive/5"
+                      "h-12 pl-11 rounded-full bg-zinc-50 dark:bg-zinc-800/50 border-zinc-100 dark:border-zinc-800 transition-all font-medium",
+                      "focus:bg-white dark:focus:bg-zinc-800 focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
+                      errors.email && "border-destructive/30 bg-destructive/5 dark:bg-destructive/10"
                     )}
                     disabled={isLoading}
                   />
@@ -227,8 +227,8 @@ const SignupPage = () => {
                   placeholder="••••••••"
                   {...register('password')}
                   className={cn(
-                    "h-12 rounded-full bg-zinc-50 border-zinc-100 focus:bg-white focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
-                    errors.password && "border-destructive/30 bg-destructive/5"
+                    "h-12 rounded-full bg-zinc-50 dark:bg-zinc-800/50 border-zinc-100 dark:border-zinc-800 focus:bg-white dark:focus:bg-zinc-800 focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
+                    errors.password && "border-destructive/30 bg-destructive/5 dark:bg-destructive/10"
                   )}
                   disabled={isLoading}
                 />
@@ -241,8 +241,8 @@ const SignupPage = () => {
                   placeholder="••••••••"
                   {...register('confirmPassword')}
                   className={cn(
-                    "h-12 rounded-full bg-zinc-50 border-zinc-100 focus:bg-white focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
-                    errors.confirmPassword && "border-destructive/30 bg-destructive/5"
+                    "h-12 rounded-full bg-zinc-50 dark:bg-zinc-800/50 border-zinc-100 dark:border-zinc-800 focus:bg-white dark:focus:bg-zinc-800 focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
+                    errors.confirmPassword && "border-destructive/30 bg-destructive/5 dark:bg-destructive/10"
                   )}
                   disabled={isLoading}
                 />
@@ -261,10 +261,10 @@ const SignupPage = () => {
 
             <div className="relative py-1">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-zinc-100" />
+                <div className="w-full border-t border-zinc-100 dark:border-zinc-800" />
               </div>
               <div className="relative flex justify-center">
-                <span className="px-4 bg-white font-mono-tight text-[9px] text-zinc-300 font-bold">OR CONTINUE WITH</span>
+                <span className="px-4 bg-white dark:bg-[#131315] font-mono-tight text-[9px] text-zinc-300 dark:text-zinc-500 font-bold">OR CONTINUE WITH</span>
               </div>
             </div>
 

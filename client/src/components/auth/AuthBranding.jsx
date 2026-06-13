@@ -23,7 +23,7 @@ const BrandingData = {
 };
 
 const STYLES = {
-  container: "relative h-full w-full bg-green-50/20 flex flex-col p-8 lg:p-10 xl:p-14 overflow-hidden",
+  container: "relative h-full w-full bg-green-50/20 dark:bg-zinc-950 flex flex-col p-8 lg:p-10 xl:p-14 overflow-hidden",
 
   // High-End Background System
   background: {
@@ -39,26 +39,26 @@ const STYLES = {
   footer: "relative z-10 mt-auto shrink-0",
 
   // Typography
-  badge: "inline-flex items-center px-2 py-1 rounded-md bg-green-600/5 border border-green-600/10 text-[9px] font-mono-tight font-bold text-green-600 uppercase tracking-widest mb-6",
-  heroTitle: "text-5xl lg:text-6xl xl:text-6xl font-black tracking-tighter leading-[0.85] text-zinc-950 space-y-0.5 mb-4 lg:mb-6",
-  heroDesc: "text-sm lg:text-base text-zinc-500 font-medium max-w-sm leading-relaxed",
+  badge: "inline-flex items-center px-2 py-1 rounded-md bg-green-600/5 dark:bg-green-500/10 border border-green-600/10 dark:border-green-500/20 text-[9px] font-mono-tight font-bold text-green-600 dark:text-green-400 uppercase tracking-widest mb-6",
+  heroTitle: "text-5xl lg:text-6xl xl:text-6xl font-black tracking-tighter leading-[0.85] text-zinc-950 dark:text-zinc-50 space-y-0.5 mb-4 lg:mb-6",
+  heroDesc: "text-sm lg:text-base text-zinc-500 dark:text-zinc-400 font-medium max-w-sm leading-relaxed",
 
   // Stats Grid
-  statsGrid: "grid grid-cols-2 gap-x-12 gap-y-4 mt-8 pt-8 border-t border-zinc-200/50",
+  statsGrid: "grid grid-cols-2 gap-x-12 gap-y-4 mt-8 pt-8 border-t border-zinc-200/50 dark:border-zinc-800/50",
   statItem: "flex flex-col gap-0.5",
-  statLabel: "font-mono-tight text-[8px] text-zinc-400 font-bold uppercase tracking-wider",
-  statValue: "text-[12px] font-bold text-zinc-900 flex items-center gap-1.5",
+  statLabel: "font-mono-tight text-[8px] text-zinc-400 dark:text-zinc-500 font-bold uppercase tracking-wider",
+  statValue: "text-[12px] font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5",
 
   // Testimonial Area
-  testimonialCard: "mt-8 bg-white shadow-sm ring-1 ring-zinc-100/50 rounded-4xl flex overflow-hidden max-w-md w-full",
+  testimonialCard: "mt-8 bg-white dark:bg-zinc-900/50 backdrop-blur-xl shadow-sm ring-1 ring-zinc-100/50 dark:ring-zinc-800 rounded-4xl flex overflow-hidden max-w-md w-full",
   testimonialImage: "w-1/3 object-cover min-h-full",
   testimonialContent: "p-4 w-2/3 flex flex-col justify-center",
   stars: "flex gap-0.5 text-[#ff6a00] mb-2",
-  quoteTitle: "text-[11px] font-bold text-zinc-950 leading-snug mb-1.5",
-  quoteText: "text-[10px] text-zinc-600 font-medium leading-relaxed mb-3",
+  quoteTitle: "text-[11px] font-bold text-zinc-950 dark:text-zinc-50 leading-snug mb-1.5",
+  quoteText: "text-[10px] text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed mb-3",
   authorStack: "flex flex-col mt-auto",
-  authorName: "text-[11px] font-bold text-zinc-950",
-  authorRole: "text-[10px] text-zinc-500"
+  authorName: "text-[11px] font-bold text-zinc-950 dark:text-zinc-50",
+  authorRole: "text-[10px] text-zinc-500 dark:text-zinc-500"
 };
 
 const AuthBranding = () => {
@@ -77,10 +77,10 @@ const AuthBranding = () => {
           animate={{ opacity: 1, x: 0 }}
           className={STYLES.logo}
         >
-          <div className="h-8 w-8 bg-white rounded-lg shadow-lg shadow-green-500/5 ring-1 ring-zinc-950/5 flex items-center justify-center">
+          <div className="h-8 w-8 bg-white dark:bg-zinc-900 rounded-lg shadow-lg shadow-green-500/5 ring-1 ring-zinc-950/5 dark:ring-zinc-800 flex items-center justify-center">
             <Leaf className="h-5 w-5 text-green-600" />
           </div>
-          <span className="text-xl font-black tracking-tighter text-zinc-950">ACo2</span>
+          <span className="text-xl font-black tracking-tighter text-zinc-950 dark:text-zinc-50">ACo2</span>
         </motion.div>
       </div>
 

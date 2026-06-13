@@ -11,6 +11,9 @@ import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Settings, User as UserIcon, ChevronRight } from "lucide-react";
 
+import { ThemeProvider } from "next-themes";
+import { useThemeShortcut } from "./hooks/useThemeShortcut";
+
 // Pages
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
@@ -70,11 +73,11 @@ const Dashboard = () => {
 
           <CurrentDevelopmentCard {...devData} />
 
-          <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm lg:ml-0">
+          <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm lg:mx-auto">
             <Link to="/profile/edit" className="flex-1">
               <Button
                 variant="outline"
-                className="w-full rounded-full h-10 font-bold gap-2"
+                className="w-full rounded-full h-10 font-medium gap-2"
               >
                 <Settings className="w-4 h-4" />
                 Profile Settings
@@ -84,7 +87,7 @@ const Dashboard = () => {
             <Button
               variant="outline"
               onClick={() => logout()}
-              className="flex-1 rounded-full h-10 font-bold border-destructive/20 text-destructive hover:bg-destructive/10 hover:text-destructive"
+              className="flex-1 rounded-full h-10 font-medium border-destructive/20 text-destructive hover:bg-destructive/10! hover:text-destructive"
             >
               Sign Out
             </Button>
@@ -145,52 +148,59 @@ const OnboardingRedirect = () => {
   );
 };
 
+const ThemeShortcut = () => {
+  useThemeShortcut();
+  return null;
+};
+
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <ProfileProvider>
-          <div className="min-h-screen bg-background font-sans antialiased">
-            <UnderDevelopmentBadge />
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <ThemeShortcut />
+        <AuthProvider>
+          <ProfileProvider>
+            <div className="min-h-screen bg-background font-sans antialiased text-foreground">
+              <UnderDevelopmentBadge />
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignupPage />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+                <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
+                <Route path="/auth/callback" element={<GoogleCallback />} />
 
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} />
-              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-              <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
-              <Route path="/auth/callback" element={<GoogleCallback />} />
-
-              {/* Protected Routes */}
-              <Route element={<ProtectedRoute />}>
-                <Route element={<OnboardingRedirect />}>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/dashboard" element={<Navigate to="/" replace />} />
-                  <Route path="/profile/edit" element={<EditProfile />} />
+                {/* Protected Routes */}
+                <Route element={<ProtectedRoute />}>
+                  <Route element={<OnboardingRedirect />}>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/dashboard" element={<Navigate to="/" replace />} />
+                    <Route path="/profile/edit" element={<EditProfile />} />
+                  </Route>
                 </Route>
-              </Route>
 
-              {/* Fallback */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
+                {/* Fallback */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
 
-            <FeedbackSheet />
-            <Toaster
-              position="bottom-right"
-              closeButton
-              richColors={false}
-              toastOptions={{
-                classNames: {
-                  toast: "rounded-xl border border-border bg-background/80 backdrop-blur-md",
-                  title: "!text-foreground font-semibold",
-                  description: "!text-muted-foreground !opacity-100",
-                },
-              }}
-            />
-          </div>
-        </ProfileProvider>
-      </AuthProvider>
+              <FeedbackSheet />
+              <Toaster
+                position="bottom-right"
+                closeButton
+                richColors={false}
+                toastOptions={{
+                  classNames: {
+                    toast: "rounded-xl border border-border bg-background/80 backdrop-blur-md",
+                    title: "!text-foreground font-semibold",
+                    description: "!text-muted-foreground !opacity-100",
+                  },
+                }}
+              />
+            </div>
+          </ProfileProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </Router>
   );
 }

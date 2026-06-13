@@ -74,9 +74,9 @@ const ForgotPasswordPage = () => {
                   placeholder="name@example.com"
                   {...register('email')}
                   className={cn(
-                    "h-12 pl-11 rounded-full bg-zinc-50 border-zinc-100 transition-all font-medium text-base",
-                    "focus:bg-white focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
-                    errors.email && "border-destructive/30 bg-destructive/5"
+                    "h-12 pl-11 rounded-full bg-zinc-50 dark:bg-zinc-800/50 border-zinc-100 dark:border-zinc-800 transition-all font-medium text-base",
+                    "focus:bg-white dark:focus:bg-zinc-800 focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
+                    errors.email && "border-destructive/30 bg-destructive/5 dark:bg-destructive/10"
                   )}
                   disabled={isLoading}
                 />
@@ -111,12 +111,12 @@ const ForgotPasswordPage = () => {
           </form>
         ) : (
           <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
-            <div className="bg-green-50 p-6 rounded-[2rem] border border-green-100 flex flex-col items-center text-center">
-              <div className="h-16 w-16 rounded-2xl bg-white shadow-lg shadow-green-500/10 border border-green-100 flex items-center justify-center mb-4">
-                <Mail className="h-8 w-8 text-green-600" />
+            <div className="bg-green-50 dark:bg-green-500/10 p-6 rounded-[2rem] border border-green-100 dark:border-green-500/20 flex flex-col items-center text-center">
+              <div className="h-16 w-16 rounded-2xl bg-white dark:bg-zinc-900 shadow-lg shadow-green-500/10 border border-green-100 dark:border-zinc-800 flex items-center justify-center mb-4">
+                <Mail className="h-8 w-8 text-green-600 dark:text-green-400" />
               </div>
-              <h3 className="text-xl font-extrabold text-green-950 mb-2">Link Sent!</h3>
-              <p className="text-xs font-medium text-green-700/60 leading-relaxed max-w-xs">
+              <h3 className="text-xl font-extrabold text-green-950 dark:text-zinc-50 mb-2">Link Sent!</h3>
+              <p className="text-xs font-medium text-green-700/60 dark:text-green-400/80 leading-relaxed max-w-xs">
                 We've sent a recovery link to your inbox. Please check your spam if you don't see it.
               </p>
             </div>
@@ -124,7 +124,7 @@ const ForgotPasswordPage = () => {
             <div className="space-y-3">
               <Button
                 variant="outline"
-                className="w-full h-12 rounded-full font-bold border-zinc-200 text-zinc-600 hover:bg-zinc-50"
+                className="w-full h-12 rounded-full font-bold border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
                 onClick={() => setIsSent(false)}
               >
                 RESEND LINK

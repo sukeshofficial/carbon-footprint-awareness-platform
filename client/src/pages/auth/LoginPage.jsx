@@ -121,10 +121,10 @@ const LoginPage = () => {
         {/* Divider */}
         <div className="relative py-1">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-zinc-100" />
+            <div className="w-full border-t border-zinc-100 dark:border-zinc-800" />
           </div>
           <div className="relative flex justify-center">
-            <span className="px-4 bg-white font-mono-tight text-[9px] text-zinc-300 font-bold">OR CONTINUE WITH</span>
+            <span className="px-4 bg-white dark:bg-[#131315] font-mono-tight text-[9px] text-zinc-300 dark:text-zinc-500 font-bold">OR CONTINUE WITH</span>
           </div>
         </div>
 
@@ -139,9 +139,9 @@ const LoginPage = () => {
                 placeholder="sukes_h2006_dev"
                 {...register('email')}
                 className={cn(
-                  "h-12 pl-11 rounded-full bg-zinc-50 border-zinc-100 transition-all font-medium text-base",
-                  "focus:bg-white focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
-                  errors.email && "border-destructive/30 bg-destructive/5"
+                  "h-12 pl-11 rounded-full bg-zinc-50 dark:bg-zinc-800/50 border-zinc-100 dark:border-zinc-800 transition-all font-medium text-base",
+                  "focus:bg-white dark:focus:bg-zinc-800 focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
+                  errors.email && "border-destructive/30 bg-destructive/5 dark:bg-destructive/10"
                 )}
                 disabled={isLoading}
               />
@@ -164,9 +164,9 @@ const LoginPage = () => {
               placeholder="••••••••"
               {...register('password')}
               className={cn(
-                "h-12 rounded-full bg-zinc-50 border-zinc-100 transition-all",
-                "focus:bg-white focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
-                errors.password && "border-destructive/30 bg-destructive/5"
+                "h-12 rounded-full bg-zinc-50 dark:bg-zinc-800/50 border-zinc-100 dark:border-zinc-800 transition-all",
+                "focus:bg-white dark:focus:bg-zinc-800 focus:ring-4 focus:ring-green-500/5 focus:border-green-500/30",
+                errors.password && "border-destructive/30 bg-destructive/5 dark:bg-destructive/10"
               )}
               disabled={isLoading}
             />

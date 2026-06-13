@@ -35,10 +35,10 @@ export const GoogleButton = ({ disabled }) => {
       variant="outline"
       onClick={handleGoogleLogin}
       disabled={disabled}
-      className="h-12 w-full rounded-full bg-white border-zinc-200 hover:bg-zinc-50 flex items-center justify-center gap-3 shadow-sm transition-all hover:shadow-md group"
+      className="h-12 w-full rounded-full bg-white border-zinc-200 dark:border-zinc-200/20 hover:bg-zinc-50 flex items-center justify-center gap-3 shadow-sm transition-all hover:shadow-md group"
     >
       <GoogleIcon />
-      <span className="text-sm font-bold text-zinc-700">Google</span>
+      <span className="text-sm font-bold text-zinc-700 dark:text-zinc-200">Google</span>
     </Button>
   );
 };

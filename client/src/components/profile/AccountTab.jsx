@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'sonner';
-import { Camera, User, AtSign, Mail, Lock, ShieldCheck, Loader2, CheckCircle2 } from 'lucide-react';
+import { Camera, User, AtSign, Mail, Lock, ShieldCheck, Loader2, CheckCircle2, Moon, Sun, Monitor, Palette } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
@@ -10,6 +11,7 @@ import api from '../../services/api';
 
 const AccountTab = () => {
   const { user, updateMe, forgotPassword } = useAuth();
+  const { theme, setTheme } = useTheme();
 
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -89,6 +91,21 @@ const AccountTab = () => {
     }
   };
 
+  const handleRemoveAvatar = async () => {
+    setUploading(true);
+    try {
+      const res = await api.patch('/auth/me', { avatar: null });
+      setAvatarUrl(null);
+      setAvatarPreview(null);
+      toast.success('Photo removed!');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to remove photo.');
+      setAvatarPreview(user?.avatar || null);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSave = async () => {
     if (!formData.name.trim()) {
       toast.error('Full name is required.');
@@ -130,10 +147,10 @@ const AccountTab = () => {
 
   const SectionHeader = ({ icon: Icon, title }) => (
     <div className="flex items-center gap-2.5 mb-5">
-      <div className="p-1.5 bg-primary/8 rounded-full text-primary">
+      <div className="p-2 bg-primary/10 dark:bg-primary/20 rounded-xl text-primary shadow-sm shadow-primary/5">
         <Icon className="w-4 h-4" />
       </div>
-      <h3 className="text-sm font-bold text-foreground tracking-tight">{title}</h3>
+      <h3 className="text-sm font-black text-foreground dark:text-zinc-50 tracking-tight uppercase leading-none">{title}</h3>
     </div>
   );
 
@@ -143,11 +160,11 @@ const AccountTab = () => {
       {/* ── 1. Avatar ── */}
       <section>
         <SectionHeader icon={Camera} title="Profile Photo" />
-        <div className='bg-zinc-100 p-4 rounded-4xl'>
+        <div className='bg-zinc-50 dark:bg-zinc-950/40 p-4 rounded-4xl border border-zinc-100 dark:border-zinc-800/50 shadow-sm'>
           <div
             className={cn(
               "flex items-center gap-6 p-4 rounded-2xl border-dashed border-2 transition-all cursor-pointer group",
-              isDragging ? "border-primary/20 bg-primary/5" : "border-transparent hover:bg-muted/0",
+              isDragging ? "border-primary/20 bg-primary/5 dark:bg-primary/10" : "border-transparent hover:bg-zinc-100/50 dark:hover:bg-zinc-800/30",
               uploading && "opacity-80 cursor-wait"
             )}
             onClick={() => !uploading && fileRef.current?.click()}
@@ -184,12 +201,19 @@ const AccountTab = () => {
               </p>
               <p className="text-xs text-muted-foreground mt-0.5">JPG, PNG or WebP · max 5 MB</p>
               <div className="flex items-center gap-3 mt-1">
-                {avatarUrl && (
+                {avatarPreview && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      setAvatarUrl(null);
-                      setAvatarPreview(user?.avatar || null);
+                      if (avatarUrl) {
+                        // If we just uploaded but haven't saved other changes yet, 
+                        // or it was a local preview, just revert to current saved avatar
+                        setAvatarUrl(null);
+                        setAvatarPreview(user?.avatar || null);
+                      } else {
+                        // If it's the already saved avatar, remove it from DB
+                        handleRemoveAvatar();
+                      }
                     }}
                     className="text-xs text-destructive font-semibold hover:underline"
                   >
@@ -223,12 +247,12 @@ const AccountTab = () => {
         </div>
       </section>
 
-      <div className="border-t" />
+      <div className="border-t border-zinc-100 dark:border-zinc-800/50" />
 
       {/* ── 2. Identity ── */}
       <section>
         <SectionHeader icon={User} title="Identity" />
-        <div className='bg-zinc-100 p-4 rounded-4xl'>
+        <div className='bg-zinc-50 dark:bg-zinc-950/40 p-4 rounded-4xl border border-zinc-100 dark:border-zinc-800/50 shadow-sm'>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 p-4">
             <div className="grid gap-1.5">
               <Label htmlFor="account-name">Full Name <span className="text-destructive">*</span></Label>
@@ -237,7 +261,7 @@ const AccountTab = () => {
                 value={formData.name}
                 onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
                 placeholder="Your display name"
-                className="h-10 border border-input bg-background"
+                className="h-10 border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 focus:ring-primary/20 transition-all font-medium"
               />
             </div>
             <div className="grid gap-1.5">
@@ -249,7 +273,7 @@ const AccountTab = () => {
                   value={formData.username}
                   onChange={e => setFormData(p => ({ ...p, username: e.target.value.toLowerCase().replace(/\s/g, '') }))}
                   placeholder="yourhandle"
-                  className="h-10 pl-8 border border-input bg-background"
+                  className="h-10 pl-8 border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 focus:ring-primary/20 transition-all font-medium"
                 />
               </div>
             </div>
@@ -261,7 +285,7 @@ const AccountTab = () => {
                 onChange={e => setFormData(p => ({ ...p, bio: e.target.value.slice(0, 280) }))}
                 placeholder="A short line about yourself…"
                 rows={3}
-                className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 placeholder:text-muted-foreground"
+                className="flex w-full rounded-2xl border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 px-3 py-2 text-sm resize-none focus-visible:outline-none focus:ring-2 focus:ring-primary transition-all placeholder:text-muted-foreground font-medium"
               />
               <p className="text-[10px] text-muted-foreground text-right">{formData.bio.length}/280</p>
             </div>
@@ -269,19 +293,21 @@ const AccountTab = () => {
         </div>
       </section>
 
-      <div className="border-t" />
+      <div className="border-t border-zinc-100 dark:border-zinc-800/50" />
 
       {/* ── 3. Email ── */}
       <section>
         <SectionHeader icon={Mail} title="Email Address" />
-        <div className='bg-zinc-100 p-8 rounded-4xl'>
+        <div className='bg-zinc-50 dark:bg-zinc-950/40 p-8 rounded-4xl border border-zinc-100 dark:border-zinc-800/50 shadow-sm'>
           <div className="grid gap-1.5">
             <Label>Email</Label>
             <div className="relative">
-              <Input value={user?.email || ''} readOnly className="h-10 pr-24 bg-background cursor-not-allowed text-muted-foreground" />
+              <Input value={user?.email || ''} readOnly className="h-10 pr-24 bg-zinc-100 dark:bg-zinc-800/50 border-zinc-200 dark:border-zinc-800 cursor-not-allowed text-muted-foreground font-medium" />
               <span className={cn(
                 'absolute right-1 top-1/2 -translate-y-1/2 text-[9px] font-black uppercase tracking-widest px-4 py-2.5 rounded-full',
-                user?.isVerified ? 'bg-emerald-100 text-emerald-700' : 'bg-yellow-100 text-yellow-700'
+                user?.isVerified
+                  ? 'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400'
+                  : 'bg-yellow-100 dark:bg-yellow-500/10 text-yellow-700 dark:text-yellow-400'
               )}>
                 {user?.isVerified ? 'Verified' : 'Unverified'}
               </span>
@@ -291,13 +317,13 @@ const AccountTab = () => {
         </div>
       </section>
 
-      <div className="border-t" />
+      <div className="border-t border-zinc-100 dark:border-zinc-800/50" />
 
       {/* ── 4. Security ── */}
       <section>
         <SectionHeader icon={Lock} title="Password & Security" />
         {isGoogleUser ? (
-          <div className="flex items-start gap-3 p-4 rounded-xl bg-muted/50 border">
+          <div className="flex items-start gap-4 p-5 rounded-[2rem] bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-100 dark:border-zinc-800/50 shadow-sm">
             <ShieldCheck className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
             <div>
               <p className="text-sm font-semibold">Google account linked</p>
@@ -313,10 +339,10 @@ const AccountTab = () => {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl border bg-muted/20">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-5 rounded-[2rem] border border-zinc-100 dark:border-zinc-800/50 bg-zinc-50 dark:bg-zinc-950/40 shadow-sm">
             <div>
-              <p className="text-sm font-semibold">Change your password</p>
-              <p className="text-xs text-muted-foreground mt-0.5">We'll send a secure reset link to <strong>{user?.email}</strong>.</p>
+              <p className="text-sm font-black text-foreground dark:text-zinc-50 italic">Change your password</p>
+              <p className="text-[11px] text-muted-foreground mt-1 font-medium italic">We'll send a secure reset link to <strong>{user?.email}</strong>.</p>
             </div>
             <Button
               type="button"
@@ -331,6 +357,49 @@ const AccountTab = () => {
             </Button>
           </div>
         )}
+      </section>
+
+      <div className="border-t border-zinc-100 dark:border-zinc-800/50" />
+
+      {/* ── 5. Appearance ── */}
+      <section>
+        <SectionHeader icon={Palette} title="Appearance" />
+        <div className='bg-zinc-50 dark:bg-zinc-950/40 p-6 rounded-4xl border border-zinc-100 dark:border-zinc-800/50 shadow-sm'>
+          <div className="grid grid-cols-3 gap-4">
+            {[
+              { id: 'light', label: 'Light', icon: Sun },
+              { id: 'dark', label: 'Dark', icon: Moon },
+              { id: 'system', label: 'System', icon: Monitor },
+            ].map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setTheme(t.id)}
+                className={cn(
+                  "flex flex-col items-center justify-center gap-3 p-4 rounded-3xl border-2 transition-all relative overflow-hidden",
+                  theme === t.id
+                    ? "border-primary bg-white dark:bg-zinc-900 shadow-xl shadow-primary/10"
+                    : "border-transparent bg-zinc-100 dark:bg-zinc-900/50 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-muted-foreground"
+                )}
+              >
+                {theme === t.id && (
+                  <div className="absolute top-0 right-0 p-1.5 bg-primary text-white rounded-bl-xl">
+                    <CheckCircle2 className="w-2.5 h-2.5" />
+                  </div>
+                )}
+                <div className={cn(
+                  "p-2.5 rounded-xl transition-all",
+                  theme === t.id ? "bg-primary/20 text-primary scale-110" : "bg-zinc-200/50 dark:bg-zinc-800/50"
+                )}>
+                  <t.icon className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-bold tracking-tight">{t.label}</span>
+              </button>
+            ))}
+          </div>
+          <p className="text-[11px] text-muted-foreground mt-4 text-center">
+            Choose how you'd like your carbon dashboard to look.
+          </p>
+        </div>
       </section>
 
       {/* ── Save ── */}

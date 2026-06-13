@@ -7,14 +7,14 @@ import { cn } from '@/lib/utils';
 const STYLES = {
   // Main Layout Grid - Fluid and Responsive
   layoutContainer: cn(
-    "relative w-full overflow-x-hidden bg-green-50/5",
+    "relative w-full overflow-x-hidden bg-green-50/5 dark:bg-zinc-950",
     "min-h-[100dvh] overflow-y-auto", // Mobile behavior
     "lg:h-screen lg:w-screen lg:min-h-0 lg:overflow-hidden", // Desktop behavior lock
     "flex flex-col lg:grid lg:grid-cols-[4.5fr_5.5fr] xl:grid-cols-[4fr_6fr]"
   ),
 
   // Branding Side (Hidden on Mobile, Visible on Desktop)
-  brandingSidebar: "hidden lg:block relative z-10 h-full overflow-hidden border-r-2 border-dashed border-zinc-200/50",
+  brandingSidebar: "hidden lg:block relative z-10 h-full overflow-hidden border-r-2 border-dashed border-zinc-200/50 dark:border-zinc-800/50",
 
   // Form Side (Adapts from Mobile to Desktop)
   formArea: cn(
@@ -25,21 +25,21 @@ const STYLES = {
   // Mobile Top Bar
   mobileHeader: "mt-4 mb-8 flex w-full max-w-[420px] shrink-0 items-center justify-center gap-3 lg:hidden",
   logoContainer: cn(
-    "h-10 w-10 overflow-hidden rounded-xl bg-white p-2 flex items-center justify-center",
-    "shadow-lg shadow-green-500/10 ring-1 ring-zinc-950/5"
+    "h-10 w-10 overflow-hidden rounded-xl bg-white dark:bg-zinc-900 p-2 flex items-center justify-center",
+    "shadow-lg shadow-green-500/10 ring-1 ring-zinc-950/5 dark:ring-zinc-800"
   ),
   logoImage: "h-full w-full object-contain text-green-600",
-  brandTitle: "text-2xl font-black tracking-tighter text-zinc-950",
+  brandTitle: "text-2xl font-black tracking-tighter text-zinc-950 dark:text-zinc-50",
 
   // Header Typography
   headerSection: "mb-6 lg:mb-8 text-center shrink-0 w-full max-w-[420px]",
-  titleText: "text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tighter text-zinc-950 mb-2 leading-tight",
-  subtitleText: "font-mono-tight text-[10px] text-zinc-400 font-bold tracking-[0.1em] uppercase",
+  titleText: "text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tighter text-zinc-950 dark:text-zinc-50 mb-2 leading-tight",
+  subtitleText: "font-mono-tight text-[10px] text-zinc-400 dark:text-zinc-500 font-bold tracking-[0.1em] uppercase",
 
   // Structural Form Card
   formCard: cn(
     "w-full max-w-[420px] px-6 py-8 sm:p-8 lg:p-10 rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem]",
-    "bg-white border border-zinc-100",
+    "bg-white dark:bg-zinc-900/50 backdrop-blur-xl border border-zinc-100 dark:border-zinc-800",
     "shadow-xl shadow-green-900/5 lg:shadow-[0_30px_60px_-12px_rgba(0,0,0,0.04)]",
     "animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out"
   ),
@@ -48,8 +48,8 @@ const STYLES = {
   footer: "mt-8 shrink-0 flex justify-center w-full pb-8 lg:pb-0",
   badge: cn(
     "flex items-center gap-2 px-3 py-1.5 rounded-full",
-    "bg-green-100 border border-green-300/50",
-    "font-mono-tight text-[9px] font-bold text-green-600 tracking-[0.1em]",
+    "bg-green-100 dark:bg-green-500/10 border border-green-300/50 dark:border-green-500/20",
+    "font-mono-tight text-[9px] font-bold text-green-600 dark:text-green-400 tracking-[0.1em]",
     "shadow-sm shadow-green-500/5"
   ),
   badgeIcon: "h-3.5 w-3.5 text-green-500"
