@@ -175,7 +175,7 @@ const SignupPage = () => {
               {errors.name && <FormError message={errors.name.message} className="ml-1" />}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Username Field */}
               <div className="space-y-1.5">
                 <Label htmlFor="username" className="font-mono-tight text-[10px] text-zinc-400 font-bold ml-1">Username</Label>
@@ -219,7 +219,7 @@ const SignupPage = () => {
             </div>
 
             {/* Password Fields Row */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="password" className="font-mono-tight text-[10px] text-zinc-400 font-bold ml-1">Password</Label>
                 <PasswordInput

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Leaf, Users, Globe2, ArrowUpRight } from 'lucide-react';
+import { Leaf, Users, Globe2, ArrowUpRight, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const BrandingData = {
@@ -14,14 +14,16 @@ const BrandingData = {
     { label: "Impact", value: "2.4M Tons Offset", icon: Globe2 }
   ],
   testimonial: {
-    quote: "The best way to save the planet is to build the tools that empower everyone to do it. ACo2 is that platform.",
+    headline: '"The Best Platform I’ve Ever Worked With"',
+    quote: "The tools we developed were not only visually stunning but resonated perfectly. My commitment to excellence truly sets them apart.",
     author: "Sukesh D",
-    role: "Founder of ACo2"
+    role: "CEO @ ACo2",
+    image: "https://res.cloudinary.com/dbaeuihz7/image/upload/v1781320491/SUKESH_AT_RESTAURANT_wzq03u.png"
   }
 };
 
 const STYLES = {
-  container: "relative h-full w-full bg-green-50/20 flex flex-col p-8 lg:p-12 overflow-hidden",
+  container: "relative h-full w-full bg-green-50/20 flex flex-col p-8 lg:p-10 xl:p-14 overflow-hidden",
 
   // High-End Background System
   background: {
@@ -38,7 +40,7 @@ const STYLES = {
 
   // Typography
   badge: "inline-flex items-center px-2 py-1 rounded-md bg-green-600/5 border border-green-600/10 text-[9px] font-mono-tight font-bold text-green-600 uppercase tracking-widest mb-6",
-  heroTitle: "text-6xl lg:text-6xl font-black tracking-tighter leading-[0.85] text-zinc-950 space-y-0.5 mb-4",
+  heroTitle: "text-5xl lg:text-6xl xl:text-6xl font-black tracking-tighter leading-[0.85] text-zinc-950 space-y-0.5 mb-4 lg:mb-6",
   heroDesc: "text-sm lg:text-base text-zinc-500 font-medium max-w-sm leading-relaxed",
 
   // Stats Grid
@@ -48,11 +50,15 @@ const STYLES = {
   statValue: "text-[12px] font-bold text-zinc-900 flex items-center gap-1.5",
 
   // Testimonial Area
-  testimonialCard: "mt-8",
-  quoteText: "text-xs italic text-zinc-400 font-medium leading-relaxed max-w-xs mb-3",
-  authorStack: "flex flex-col",
-  authorName: "text-[10px] font-bold text-zinc-900 tracking-wide",
-  authorRole: "text-[9px] font-mono-tight text-zinc-400 uppercase font-medium"
+  testimonialCard: "mt-8 bg-white shadow-sm ring-1 ring-zinc-100/50 rounded-4xl flex overflow-hidden max-w-md w-full",
+  testimonialImage: "w-1/3 object-cover min-h-full",
+  testimonialContent: "p-4 w-2/3 flex flex-col justify-center",
+  stars: "flex gap-0.5 text-[#ff6a00] mb-2",
+  quoteTitle: "text-[11px] font-bold text-zinc-950 leading-snug mb-1.5",
+  quoteText: "text-[10px] text-zinc-600 font-medium leading-relaxed mb-3",
+  authorStack: "flex flex-col mt-auto",
+  authorName: "text-[11px] font-bold text-zinc-950",
+  authorRole: "text-[10px] text-zinc-500"
 };
 
 const AuthBranding = () => {
@@ -138,10 +144,23 @@ const AuthBranding = () => {
             transition={{ delay: 0.6 }}
             className={STYLES.testimonialCard}
           >
-            <p className={STYLES.quoteText}>“{BrandingData.testimonial.quote}”</p>
-            <div className={STYLES.authorStack}>
-              <span className={STYLES.authorName}>— {BrandingData.testimonial.author}</span>
-              <span className={STYLES.authorRole}>{BrandingData.testimonial.role}</span>
+            <img
+              src={BrandingData.testimonial.image}
+              alt={BrandingData.testimonial.author}
+              className={STYLES.testimonialImage}
+            />
+            <div className={STYLES.testimonialContent}>
+              <div className={STYLES.stars}>
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 fill-current" />
+                ))}
+              </div>
+              <h4 className={STYLES.quoteTitle}>{BrandingData.testimonial.headline}</h4>
+              <p className={STYLES.quoteText}>{BrandingData.testimonial.quote}</p>
+              <div className={STYLES.authorStack}>
+                <span className={STYLES.authorName}>{BrandingData.testimonial.author}</span>
+                <span className={STYLES.authorRole}>{BrandingData.testimonial.role}</span>
+              </div>
             </div>
           </motion.div>
         </div>

@@ -259,16 +259,16 @@ export function FeedbackSheet() {
               <div className={[
                 "flex items-center justify-between gap-4 px-4 py-3.5 rounded-xl border transition-all duration-200",
                 anonymous
-                  ? "border-violet-400/40 bg-violet-500/8"
+                  ? "border-green-400/40 bg-green-500/8"
                   : "border-border/50 bg-muted/20",
               ].join(" ")}>
                 <div className="flex items-center gap-2.5">
                   <EyeOff className={[
                     "h-4 w-4 shrink-0 transition-colors duration-200",
-                    anonymous ? "text-violet-500" : "text-muted-foreground",
+                    anonymous ? "text-green-500" : "text-muted-foreground",
                   ].join(" ")} />
                   <div>
-                    <p className={["text-[13px] font-medium leading-none transition-colors duration-200", anonymous ? "text-violet-600 dark:text-violet-400" : "text-foreground"].join(" ")}>
+                    <p className={["text-[13px] font-medium leading-none transition-colors duration-200", anonymous ? "text-green-600 dark:text-green-400" : "text-foreground"].join(" ")}>
                       Send anonymously
                     </p>
                     <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug">

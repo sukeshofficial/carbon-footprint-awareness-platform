@@ -5,50 +5,54 @@ import AuthBranding from './AuthBranding';
 import { cn } from '@/lib/utils';
 
 const STYLES = {
-  // Main Layout Grid - Strict 100vh/100vw, no scroll
+  // Main Layout Grid - Fluid and Responsive
   layoutContainer: cn(
-    "relative grid h-screen w-screen overflow-hidden bg-green-50/5",
-    "lg:grid-cols-[4.5fr_5.5fr]"
+    "relative w-full overflow-x-hidden bg-green-50/5",
+    "min-h-[100dvh] overflow-y-auto", // Mobile behavior
+    "lg:h-screen lg:w-screen lg:min-h-0 lg:overflow-hidden", // Desktop behavior lock
+    "flex flex-col lg:grid lg:grid-cols-[4.5fr_5.5fr] xl:grid-cols-[4fr_6fr]"
   ),
 
-  // Branding Side (45%)
-  brandingSidebar: "relative z-10 h-full overflow-hidden",
+  // Branding Side (Hidden on Mobile, Visible on Desktop)
+  brandingSidebar: "hidden lg:block relative z-10 h-full overflow-hidden border-r-2 border-dashed border-zinc-200/50",
 
-  // Form Side (55%)
-  formArea: "relative z-10 flex flex-col items-center justify-center p-4 lg:p-8 h-full min-h-0",
+  // Form Side (Adapts from Mobile to Desktop)
+  formArea: cn(
+    "relative z-10 flex w-full flex-col items-center justify-center p-4 sm:p-8 md:p-12",
+    "flex-1 min-h-[100dvh] lg:min-h-0 lg:h-full lg:overflow-hidden"
+  ),
 
   // Mobile Top Bar
-  mobileHeader: "mt-2 mb-6 flex shrink-0 items-center gap-3 lg:hidden",
+  mobileHeader: "mt-4 mb-8 flex w-full max-w-[420px] shrink-0 items-center justify-center gap-3 lg:hidden",
   logoContainer: cn(
-    "h-8 w-8 overflow-hidden rounded-lg bg-white p-1.5",
-    "shadow-lg shadow-green-500/5 ring-1 ring-zinc-950/5"
+    "h-10 w-10 overflow-hidden rounded-xl bg-white p-2 flex items-center justify-center",
+    "shadow-lg shadow-green-500/10 ring-1 ring-zinc-950/5"
   ),
   logoImage: "h-full w-full object-contain text-green-600",
-  brandTitle: "text-xl font-black tracking-tighter text-zinc-950",
+  brandTitle: "text-2xl font-black tracking-tighter text-zinc-950",
 
-  // Header Typography (Tighter for 100vh)
-  headerSection: "mb-6 text-center shrink-0",
-  titleText: "text-3xl lg:text-4xl font-extrabold tracking-tighter text-zinc-950 mb-2",
-  subtitleText: "font-mono-tight text-[9px] text-zinc-400 font-bold tracking-[0.15em] uppercase",
+  // Header Typography
+  headerSection: "mb-6 lg:mb-8 text-center shrink-0 w-full max-w-[420px]",
+  titleText: "text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tighter text-zinc-950 mb-2 leading-tight",
+  subtitleText: "font-mono-tight text-[10px] text-zinc-400 font-bold tracking-[0.1em] uppercase",
 
   // Structural Form Card
   formCard: cn(
-    "w-full max-w-[480px] p-6 lg:p-8 rounded-[2.5rem]",
+    "w-full max-w-[420px] px-6 py-8 sm:p-8 lg:p-10 rounded-[1.5rem] sm:rounded-[2rem] lg:rounded-[2.5rem]",
     "bg-white border border-zinc-100",
-    "shadow-[0_30px_60px_-12px_rgba(0,0,0,0.04)]",
-    "animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out",
-    "max-h-full overflow-y-auto no-scrollbar"
+    "shadow-xl shadow-green-900/5 lg:shadow-[0_30px_60px_-12px_rgba(0,0,0,0.04)]",
+    "animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out"
   ),
 
   // Footer Badge (Green Technical Chip)
-  footer: "mt-8 shrink-0 flex justify-center",
+  footer: "mt-8 shrink-0 flex justify-center w-full pb-8 lg:pb-0",
   badge: cn(
     "flex items-center gap-2 px-3 py-1.5 rounded-full",
     "bg-green-100 border border-green-300/50",
-    "font-mono-tight text-[8px] font-bold text-green-600 tracking-[0.1em]",
+    "font-mono-tight text-[9px] font-bold text-green-600 tracking-[0.1em]",
     "shadow-sm shadow-green-500/5"
   ),
-  badgeIcon: "h-3 w-3 text-green-500"
+  badgeIcon: "h-3.5 w-3.5 text-green-500"
 };
 
 export const AuthLayout = ({ children, title, subtitle }) => {
