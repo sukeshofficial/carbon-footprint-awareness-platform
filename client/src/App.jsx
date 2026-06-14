@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { CarbonContextProvider } from "./store/carbonContextStore";
 import { Toaster } from "./components/ui/sonner";
 import { UnderDevelopmentBadge } from "./components/ui/underDevelopmentBadge/under-development-badge";
 import { FeedbackSheet } from "./components/ui/feedbackSheet/feedback-sheet";
@@ -24,6 +25,8 @@ import GoogleCallback from "./pages/auth/GoogleCallback";
 
 import EditProfile from "./pages/EditProfile";
 import OnboardingModal from "./components/profile/OnboardingModal";
+import CarbonContextOnboarding from "./components/onboarding/CarbonContextOnboarding";
+import { useCarbonContext } from "./store/carbonContextStore";
 
 import CurrentDevelopmentCard from "./components/ui/CurrentDevelopmentCard";
 
@@ -34,7 +37,7 @@ const Dashboard = () => {
   const devData = {
     title: "🚧 In Development",
     description: "Building a profile system to personalize carbon insights, benchmarks, coaching tone, and recommendations based on user lifestyle and preferences.",
-    phase: "Phase 1 / 6",
+    phase: "Phase 1 / 7",
     status: "Active Development",
     nextMilestone: "Profile API + Setup UI",
     updatedAt: "2 hours ago",
@@ -43,7 +46,8 @@ const Dashboard = () => {
       { label: "User type selection", completed: true },
       { label: "Household setup", completed: true },
       { label: "Tone preference setup", completed: true },
-      { label: "Progressive Onboarding (8 steps)", completed: true },
+      { label: "Profile Onboarding (8 steps)", completed: true },
+      { label: "Carbon Context Onboarding (7 steps)", completed: true },
       { label: "Personalized carbon recommendations", completed: false },
     ]
   };
@@ -130,20 +134,32 @@ const Dashboard = () => {
 
 const OnboardingRedirect = () => {
   const { user } = useAuth();
-  const { profile, fetchProfile, loading, isFetched, isProfileComplete } = useProfile();
+  const { profile, fetchProfile, loading: profileLoading, isFetched: profileFetched, isProfileComplete } = useProfile();
+  const { responses, fetchResponses, loading: carbonLoading, isComplete: isCarbonComplete } = useCarbonContext();
 
   useEffect(() => {
-    if (user && !isFetched && !loading) {
+    if (user && !profileFetched && !profileLoading) {
       fetchProfile();
     }
-  }, [user, isFetched, loading, fetchProfile]);
+  }, [user, profileFetched, profileLoading, fetchProfile]);
 
-  const showModal = user && isFetched && !isProfileComplete;
+  useEffect(() => {
+    if (user && isProfileComplete && responses === null && !carbonLoading) {
+      fetchResponses();
+    }
+  }, [user, isProfileComplete, responses, carbonLoading, fetchResponses]);
+
+  const showProfileModal = user && profileFetched && !isProfileComplete;
+  const showCarbonModal = user && isProfileComplete && responses !== null && !isCarbonComplete;
 
   return (
     <>
       <Outlet />
-      <OnboardingModal isOpen={showModal} />
+      <OnboardingModal isOpen={showProfileModal} />
+      <CarbonContextOnboarding
+        isOpen={showCarbonModal}
+        onOpenChange={() => fetchResponses()}
+      />
     </>
   );
 };
@@ -159,46 +175,48 @@ function App() {
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
         <ThemeShortcut />
         <AuthProvider>
-          <ProfileProvider>
-            <div className="min-h-screen bg-background font-sans antialiased text-foreground">
-              <UnderDevelopmentBadge />
-              <Routes>
-                {/* Public Routes */}
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/signup" element={<SignupPage />} />
-                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-                <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
-                <Route path="/auth/callback" element={<GoogleCallback />} />
+          <CarbonContextProvider>
+            <ProfileProvider>
+              <div className="min-h-screen bg-background font-sans antialiased text-foreground">
+                <UnderDevelopmentBadge />
+                <Routes>
+                  {/* Public Routes */}
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/signup" element={<SignupPage />} />
+                  <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                  <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+                  <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
+                  <Route path="/auth/callback" element={<GoogleCallback />} />
 
-                {/* Protected Routes */}
-                <Route element={<ProtectedRoute />}>
-                  <Route element={<OnboardingRedirect />}>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/dashboard" element={<Navigate to="/" replace />} />
-                    <Route path="/profile/edit" element={<EditProfile />} />
+                  {/* Protected Routes */}
+                  <Route element={<ProtectedRoute />}>
+                    <Route element={<OnboardingRedirect />}>
+                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/dashboard" element={<Navigate to="/" replace />} />
+                      <Route path="/profile/edit" element={<EditProfile />} />
+                    </Route>
                   </Route>
-                </Route>
 
-                {/* Fallback */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
+                  {/* Fallback */}
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
 
-              <FeedbackSheet />
-              <Toaster
-                position="bottom-right"
-                closeButton
-                richColors={false}
-                toastOptions={{
-                  classNames: {
-                    toast: "rounded-xl border border-border bg-background/80 backdrop-blur-md",
-                    title: "!text-foreground font-semibold",
-                    description: "!text-muted-foreground !opacity-100",
-                  },
-                }}
-              />
-            </div>
-          </ProfileProvider>
+                <FeedbackSheet />
+                <Toaster
+                  position="bottom-right"
+                  closeButton
+                  richColors={false}
+                  toastOptions={{
+                    classNames: {
+                      toast: "rounded-xl border border-border bg-background/80 backdrop-blur-md",
+                      title: "!text-foreground font-semibold",
+                      description: "!text-muted-foreground !opacity-100",
+                    },
+                  }}
+                />
+              </div>
+            </ProfileProvider>
+          </CarbonContextProvider>
         </AuthProvider>
       </ThemeProvider>
     </Router>

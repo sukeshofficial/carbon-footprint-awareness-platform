@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -106,6 +107,7 @@ const ProfileForm = ({ initialData, onSubmit, isLoading, buttonText = 'Save Prof
     },
   });
 
+
   const SectionHeader = ({ icon: Icon, title }) => (
     <div className="flex items-center gap-2 border-b pb-2 mb-4 sm:mb-6">
       <div className="p-1.5 sm:p-2 bg-primary/10 rounded-lg text-primary">
@@ -115,10 +117,58 @@ const ProfileForm = ({ initialData, onSubmit, isLoading, buttonText = 'Save Prof
     </div>
   );
 
+  const CustomSelect = ({ label, register, options, disabled }) => {
+    const [subIsOpen, setSubIsOpen] = useState(false);
+
+    return (
+      <div className="grid gap-2">
+        {label && <Label>{label}</Label>}
+        <div className="relative">
+          <select
+            {...register}
+            className="flex appearance-none h-10 sm:h-11 w-full rounded-full border border-input bg-background px-4 py-2 pr-10 text-sm ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+            disabled={disabled}
+            onBlur={() => setSubIsOpen(false)}
+            onFocus={() => setSubIsOpen(true)}
+          >
+            {options.map((opt) => (
+              <option key={opt.id} value={opt.id}>
+                {opt.title}
+              </option>
+            ))}
+          </select>
+
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-muted-foreground/60 transition-transform duration-300"
+            style={{
+              perspective: "1000px",
+              transform: subIsOpen ? "rotateX(-180deg)" : "rotateY(0deg)",
+            }}
+          >
+            <svg
+              className="h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
       {/* Identity Section */}
-      <div id="identity" className="space-y-6 scroll-mt-24">
+      <div id="identity" className="space-y-6 scroll-mt-24 p-5 rounded-[2rem] bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-100 dark:border-zinc-800/50">
         <SectionHeader icon={User} title="Basic Identity" />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="grid gap-2">
@@ -167,23 +217,16 @@ const ProfileForm = ({ initialData, onSubmit, isLoading, buttonText = 'Save Prof
           </div>
         </div>
       </div>
-
       {/* Transport Section */}
-      <div id="transport" className="space-y-6 scroll-mt-24">
+      <div id="transport" className="space-y-6 scroll-mt-24 p-5 rounded-[2rem] bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-100 dark:border-zinc-800/50">
         <SectionHeader icon={Car} title="Transport & Mobility" />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="grid gap-2">
-            <Label>Primary Transport Mode</Label>
-            <select
-              {...register('transportProfile.primaryTransportMode')}
-              className="flex h-10 sm:h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background disabled:opacity-50"
-              disabled={isLoading}
-            >
-              {TRANSPORT_MODES.map(mode => (
-                <option key={mode.id} value={mode.id}>{mode.title}</option>
-              ))}
-            </select>
-          </div>
+          <CustomSelect
+            label="Primary Transport Mode"
+            register={register("transportProfile.primaryTransportMode")}
+            options={TRANSPORT_MODES}
+            disabled={isLoading}
+          />
           <div className="grid gap-2">
             <Label>Daily Commute (km)</Label>
             <Input
@@ -204,38 +247,26 @@ const ProfileForm = ({ initialData, onSubmit, isLoading, buttonText = 'Save Prof
       </div>
 
       {/* Food Section */}
-      <div id="food" className="space-y-6 scroll-mt-24">
+      <div id="food" className="space-y-6 scroll-mt-24 p-5 rounded-[2rem] bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-100 dark:border-zinc-800/50">
         <SectionHeader icon={Utensils} title="Food & Diet" />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="grid gap-2">
-            <Label>Diet Type</Label>
-            <select
-              {...register('foodProfile.dietType')}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background disabled:opacity-50"
-              disabled={isLoading}
-            >
-              {DIET_TYPES.map(type => (
-                <option key={type.id} value={type.id}>{type.title}</option>
-              ))}
-            </select>
-          </div>
-          <div className="grid gap-2">
-            <Label>Ordering Frequency</Label>
-            <select
-              {...register('foodProfile.foodOrderingFrequency')}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background disabled:opacity-50"
-              disabled={isLoading}
-            >
-              {FREQUENCY_OPTIONS.map(opt => (
-                <option key={opt.id} value={opt.id}>{opt.title}</option>
-              ))}
-            </select>
-          </div>
+          <CustomSelect
+            label="Diet Type"
+            register={register('foodProfile.dietType')}
+            options={DIET_TYPES}
+            disabled={isLoading}
+          />
+          <CustomSelect
+            label="Ordering Frequency"
+            register={register('foodProfile.foodOrderingFrequency')}
+            options={FREQUENCY_OPTIONS}
+            disabled={isLoading}
+          />
         </div>
       </div>
 
       {/* Energy Section */}
-      <div id="energy" className="space-y-6 scroll-mt-24">
+      <div id="energy" className="space-y-6 scroll-mt-24 p-5 rounded-[2rem] bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-100 dark:border-zinc-800/50">
         <SectionHeader icon={Zap} title="Home Energy" />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="grid gap-2">
@@ -247,54 +278,36 @@ const ProfileForm = ({ initialData, onSubmit, isLoading, buttonText = 'Save Prof
               disabled={isLoading}
             />
           </div>
-          <div className="grid gap-2">
-            <Label>AC Usage</Label>
-            <select
-              {...register('energyProfile.acUsage')}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background disabled:opacity-50"
-              disabled={isLoading}
-            >
-              {AC_USAGE_OPTIONS.map(opt => (
-                <option key={opt.id} value={opt.id}>{opt.title}</option>
-              ))}
-            </select>
-          </div>
+          <CustomSelect
+            label="AC Usage"
+            register={register('energyProfile.acUsage')}
+            options={AC_USAGE_OPTIONS}
+            disabled={isLoading}
+          />
         </div>
       </div>
 
       {/* Shopping & Waste Section */}
-      <div id="habits" className="space-y-6 scroll-mt-24">
+      <div id="habits" className="space-y-6 scroll-mt-24 p-5 rounded-[2rem] bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-100 dark:border-zinc-800/50">
         <SectionHeader icon={ShoppingBag} title="Shopping & Waste" />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="grid gap-2">
-            <Label>Online Shopping</Label>
-            <select
-              {...register('shoppingProfile.onlineShoppingFrequency')}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background disabled:opacity-50"
-              disabled={isLoading}
-            >
-              {FREQUENCY_OPTIONS.map(opt => (
-                <option key={opt.id} value={opt.id}>{opt.title}</option>
-              ))}
-            </select>
-          </div>
-          <div className="grid gap-2">
-            <Label>Waste Segregation Habit</Label>
-            <select
-              {...register('wasteProfile.wasteSegregation')}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background disabled:opacity-50"
-              disabled={isLoading}
-            >
-              {WASTE_HABIT_OPTIONS.map(opt => (
-                <option key={opt.id} value={opt.id}>{opt.title}</option>
-              ))}
-            </select>
-          </div>
+          <CustomSelect
+            label="Online Shopping"
+            register={register('shoppingProfile.onlineShoppingFrequency')}
+            options={FREQUENCY_OPTIONS}
+            disabled={isLoading}
+          />
+          <CustomSelect
+            label="Waste Segregation Habit"
+            register={register('wasteProfile.wasteSegregation')}
+            options={WASTE_HABIT_OPTIONS}
+            disabled={isLoading}
+          />
         </div>
       </div>
 
       {/* Lifestyle & Tone Section */}
-      <div id="lifestyle" className="space-y-8 scroll-mt-24">
+      <div id="lifestyle" className="space-y-8 scroll-mt-24 p-5 rounded-[2rem] bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-100 dark:border-zinc-800/50">
         <SectionHeader icon={Palette} title="Lifestyle & Tone" />
 
         <div className="space-y-4">

@@ -1,4 +1,5 @@
 import profileRepository from '../repositories/profile.repository.js';
+import carbonContextService from './carbonContext.service.js';
 
 class ProfileService {
   normalizeProfileData(data) {
@@ -20,7 +21,12 @@ class ProfileService {
     normalizedData.userId = userId;
 
     // Use upsert to handle draft saves during progressive onboarding
-    return await profileRepository.upsertProfile(userId, normalizedData);
+    const profile = await profileRepository.upsertProfile(userId, normalizedData);
+
+    // Sync to Carbon Context
+    await carbonContextService.syncFromProfile(userId, profile);
+
+    return profile;
   }
 
   async getProfile(userId) {
@@ -39,6 +45,9 @@ class ProfileService {
       throw new Error('Profile not found');
     }
 
+    // Sync to Carbon Context
+    await carbonContextService.syncFromProfile(userId, updatedProfile);
+
     return updatedProfile;
   }
 
@@ -48,6 +57,9 @@ class ProfileService {
     if (!updatedProfile) {
       throw new Error('Profile not found');
     }
+
+    // Sync to Carbon Context
+    await carbonContextService.syncFromProfile(userId, updatedProfile);
 
     return updatedProfile;
   }

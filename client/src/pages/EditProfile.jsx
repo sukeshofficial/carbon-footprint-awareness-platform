@@ -181,7 +181,16 @@ const EditProfile = () => {
                   <button
                     key={item.id}
                     onClick={() => {
-                      document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      const el = document.getElementById(item.id);
+                      if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        // Add highlight class
+                        el.classList.add('highlight-section');
+                        // Remove highlight class after animation finishes (2s)
+                        setTimeout(() => {
+                          el.classList.remove('highlight-section');
+                        }, 2000);
+                      }
                     }}
                     className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-full transition-all group"
                   >
@@ -194,7 +203,7 @@ const EditProfile = () => {
           </div>
 
           {/* Form Content */}
-          <div className={cn(activeTab === 'account' ? 'col-span-1 lg:col-start-6 lg:col-span-8' : 'lg:col-span-8')}>
+          <div className={cn(activeTab === 'account' ? 'col-span-1 lg:col-span-10 lg:col-start-2' : 'lg:col-span-8')}>
             <Card className="py-0 mt-4 sm:mt-10 shadow-2xl shadow-zinc-200/50 dark:shadow-black/50 overflow-hidden bg-transparent">
               <div className="bg-white dark:bg-zinc-900 px-6 py-8 md:px-10 md:py-12 rounded-3xl">
                 {activeTab === 'account' ? (

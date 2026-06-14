@@ -214,4 +214,23 @@
   .auth-card-light {
     /* @apply bg-white/80 backdrop-blur-3xl border border-zinc-200/50 shadow-[0_32px_64px_-16px_rgba(0, 0, 0, 0.08)]; */
   }
+
+  .highlight-section {
+    position: relative;
+    border-radius: 16px;
+    background: linear-gradient(180deg,
+        rgb(217, 255, 231) 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0.1) 100%);
+    transition: all 220ms ease-in-out;
+  }
+
+  .dark .highlight-section {
+    background: linear-gradient(180deg,
+        rgba(16, 185, 129, 0.15) 0%,
+        rgba(24, 24, 27, 0.05) 50%,
+        rgba(24, 24, 27, 0.05) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.5);
+  }
 }
