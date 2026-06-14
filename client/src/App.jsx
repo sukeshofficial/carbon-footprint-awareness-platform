@@ -1,14 +1,15 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CarbonContextProvider } from "./store/carbonContextStore";
+import { CarbonEstimationProvider } from "./store/carbonEstimationStore";
+import { ProfileProvider, useProfile } from "./store/profileStore";
 import { Toaster } from "./components/ui/sonner";
 import { UnderDevelopmentBadge } from "./components/ui/underDevelopmentBadge/under-development-badge";
 import { FeedbackSheet } from "./components/ui/feedbackSheet/feedback-sheet";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { Button } from "./components/ui/button";
 import { useAuth } from "./contexts/AuthContext";
-import { ProfileProvider, useProfile } from "./store/profileStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Settings, User as UserIcon, ChevronRight } from "lucide-react";
 
@@ -28,11 +29,14 @@ import OnboardingModal from "./components/profile/OnboardingModal";
 import CarbonContextOnboarding from "./components/onboarding/CarbonContextOnboarding";
 import { useCarbonContext } from "./store/carbonContextStore";
 
+// Components
+import CarbonDashboardCard from "./components/carbon/CarbonDashboardCard";
 import CurrentDevelopmentCard from "./components/ui/CurrentDevelopmentCard";
 
 const Dashboard = () => {
   const { logout, user } = useAuth();
   const { profile } = useProfile();
+  const { isComplete: isCarbonComplete } = useCarbonContext();
 
   const devData = {
     title: "🚧 In Development",
@@ -64,7 +68,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-[100dvh] lg:h-screen px-4 py-8 sm:px-6 lg:overflow-hidden overflow-y-auto w-full">
+    <div className="flex flex-col items-center min-h-[100dvh] lg:min-h-screen px-4 py-8 sm:px-6 overflow-y-auto w-full">
       <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-10 items-start justify-center lg:py-12">
         {/* Main Column */}
         <div className="flex-1 flex flex-col items-center lg:items-start space-y-8 w-full max-w-3xl">
@@ -73,6 +77,10 @@ const Dashboard = () => {
             <p className="text-muted-foreground text-base">
               Welcome back, <span className="text-foreground font-medium">{user?.name || 'User'}</span>!
             </p>
+          </div>
+
+          <div className="w-full">
+            <CarbonDashboardCard />
           </div>
 
           <CurrentDevelopmentCard {...devData} />
@@ -135,7 +143,8 @@ const Dashboard = () => {
 const OnboardingRedirect = () => {
   const { user } = useAuth();
   const { profile, fetchProfile, loading: profileLoading, isFetched: profileFetched, isProfileComplete } = useProfile();
-  const { responses, fetchResponses, loading: carbonLoading, isComplete: isCarbonComplete } = useCarbonContext();
+  const { responses, fetchResponses, loading: carbonLoading } = useCarbonContext();
+  const [hasFetchedResponses, setHasFetchedResponses] = useState(false);
 
   useEffect(() => {
     if (user && !profileFetched && !profileLoading) {
@@ -144,11 +153,12 @@ const OnboardingRedirect = () => {
   }, [user, profileFetched, profileLoading, fetchProfile]);
 
   useEffect(() => {
-    if (user && isProfileComplete && responses === null && !carbonLoading) {
-      fetchResponses();
+    if (user && isProfileComplete && !responses && !carbonLoading && !hasFetchedResponses) {
+      fetchResponses().then(() => setHasFetchedResponses(true));
     }
-  }, [user, isProfileComplete, responses, carbonLoading, fetchResponses]);
+  }, [user, isProfileComplete, responses, carbonLoading, fetchResponses, hasFetchedResponses]);
 
+  const isCarbonComplete = responses?.draftStatus === 'completed';
   const showProfileModal = user && profileFetched && !isProfileComplete;
   const showCarbonModal = user && isProfileComplete && responses !== null && !isCarbonComplete;
 
@@ -177,44 +187,46 @@ function App() {
         <AuthProvider>
           <CarbonContextProvider>
             <ProfileProvider>
-              <div className="min-h-screen bg-background font-sans antialiased text-foreground">
-                <UnderDevelopmentBadge />
-                <Routes>
-                  {/* Public Routes */}
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/signup" element={<SignupPage />} />
-                  <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                  <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-                  <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
-                  <Route path="/auth/callback" element={<GoogleCallback />} />
+              <CarbonEstimationProvider>
+                <div className="min-h-screen bg-background font-sans antialiased text-foreground">
+                  <UnderDevelopmentBadge />
+                  <Routes>
+                    {/* Public Routes */}
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<SignupPage />} />
+                    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                    <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+                    <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
+                    <Route path="/auth/callback" element={<GoogleCallback />} />
 
-                  {/* Protected Routes */}
-                  <Route element={<ProtectedRoute />}>
-                    <Route element={<OnboardingRedirect />}>
-                      <Route path="/" element={<Dashboard />} />
-                      <Route path="/dashboard" element={<Navigate to="/" replace />} />
-                      <Route path="/profile/edit" element={<EditProfile />} />
+                    {/* Protected Routes */}
+                    <Route element={<ProtectedRoute />}>
+                      <Route element={<OnboardingRedirect />}>
+                        <Route path="/" element={<Dashboard />} />
+                        <Route path="/dashboard" element={<Navigate to="/" replace />} />
+                        <Route path="/profile/edit" element={<EditProfile />} />
+                      </Route>
                     </Route>
-                  </Route>
 
-                  {/* Fallback */}
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
+                    {/* Fallback */}
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Routes>
 
-                <FeedbackSheet />
-                <Toaster
-                  position="bottom-right"
-                  closeButton
-                  richColors={false}
-                  toastOptions={{
-                    classNames: {
-                      toast: "rounded-xl border border-border bg-background/80 backdrop-blur-md",
-                      title: "!text-foreground font-semibold",
-                      description: "!text-muted-foreground !opacity-100",
-                    },
-                  }}
-                />
-              </div>
+                  <FeedbackSheet />
+                  <Toaster
+                    position="bottom-right"
+                    closeButton
+                    richColors={false}
+                    toastOptions={{
+                      classNames: {
+                        toast: "rounded-xl border border-border bg-background/80 backdrop-blur-md",
+                        title: "!text-foreground font-semibold",
+                        description: "!text-muted-foreground !opacity-100",
+                      },
+                    }}
+                  />
+                </div>
+              </CarbonEstimationProvider>
             </ProfileProvider>
           </CarbonContextProvider>
         </AuthProvider>

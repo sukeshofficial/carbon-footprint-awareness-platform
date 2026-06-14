@@ -1,5 +1,6 @@
 import profileRepository from '../repositories/profile.repository.js';
 import carbonContextService from './carbonContext.service.js';
+import carbonEstimationService from './carbonEstimation.service.js';
 
 class ProfileService {
   normalizeProfileData(data) {
@@ -25,6 +26,13 @@ class ProfileService {
 
     // Sync to Carbon Context
     await carbonContextService.syncFromProfile(userId, profile);
+
+    // Trigger Carbon Recalculation
+    try {
+      await carbonEstimationService.calculateForUser(userId);
+    } catch (e) {
+      console.warn(`[ProfileService] Automatic carbon recalculation failed: ${e.message}`);
+    }
 
     return profile;
   }
