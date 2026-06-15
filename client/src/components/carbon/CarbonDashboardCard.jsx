@@ -105,6 +105,19 @@ const CarbonDashboardCard = () => {
     return () => controller.abort();
   }, [estimation]); // eslint-disable-line
 
+  // ── Handlers ──
+  const handleRecalculate = async () => {
+    try {
+      setStreamedInsights(null);
+      setStreamedToken('');
+      setStreamingDone(false);
+      setStreamError(false);
+      await recalculate();
+    } catch (err) {
+      console.error('Recalculate failed:', err);
+    }
+  };
+
   // ── Empty state ──
   if (!estimation && !loading) {
     return (
@@ -115,7 +128,7 @@ const CarbonDashboardCard = () => {
           <p className="text-sm text-slate-500 mt-2 mb-6 max-w-[300px]">
             Complete your profile and carbon onboarding to see your footprint breakdown and AI-powered coaching tips.
           </p>
-          <Button onClick={recalculate} className="rounded-full px-8 bg-green-600 hover:bg-green-700">
+          <Button onClick={handleRecalculate} className="rounded-full px-8 bg-green-600 hover:bg-green-700">
             Analyze My Footprint
           </Button>
         </CardContent>
@@ -262,7 +275,7 @@ const CarbonDashboardCard = () => {
                 ))}
               </div>
             ) : streamedInsights?.tips?.length > 0 ? (
-              <div className="space-y-3">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
                 {streamedInsights.tips.map((tip, idx) => (
                   <div key={idx} className="bg-white border border-slate-100 rounded-2xl p-4 flex gap-4 group hover:border-green-200 hover:shadow-sm transition-all">
                     <div className="w-7 h-7 rounded-xl bg-green-50 flex items-center justify-center text-green-600 text-[10px] font-black shrink-0 mt-0.5">
@@ -302,7 +315,7 @@ const CarbonDashboardCard = () => {
           Model v2 · Calculation Engine 2.0 · Powered by OpenRouter
         </p>
         <Button
-          onClick={recalculate}
+          onClick={handleRecalculate}
           disabled={loading}
           size="sm"
           className="bg-green-500 hover:bg-green-600 text-white font-bold text-[11px] rounded-full px-6 h-8"

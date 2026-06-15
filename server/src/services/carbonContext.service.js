@@ -149,7 +149,8 @@ class CarbonContextService {
       updates.transportProfile = {
         ...context.transportProfile,
         primaryMode: this.mappings.transport[pMode] || pMode,
-        weeklyCommuteDistance: weeklyDist,
+        secondaryMode: this.mappings.transport[profileData.transportProfile.secondaryTransportMode] || profileData.transportProfile.secondaryTransportMode,
+        weeklyCommuteDistance: profileData.transportProfile.weeklyCommuteDistance || weeklyDist,
         yearlyFlightFrequency: profileData.transportProfile.flightFrequency
       };
     }
@@ -168,7 +169,10 @@ class CarbonContextService {
       const acVal = profileData.energyProfile.acUsage;
       updates.energyProfile = {
         ...context.energyProfile,
-        acUsage: this.mappings.ac[acVal] || acVal
+        acUsage: this.mappings.ac[acVal] || acVal,
+        fanUsage: this.mappings.ac[profileData.energyProfile.fanUsage] || profileData.energyProfile.fanUsage,
+        homeType: profileData.householdType, // Sync homeType from householdType
+        billAwareness: profileData.energyProfile.billAwareness
       };
     }
 
@@ -190,15 +194,24 @@ class CarbonContextService {
         ...context.wasteProfile,
         wasteSegregation: this.mappings.segregation[w.wasteSegregation] || w.wasteSegregation,
         recyclingHabit: this.mappings.recycling[w.recyclingHabit] || w.recyclingHabit,
-        plasticUsage: w.plasticUsage // Direct match based on current observation
+        plasticUsage: w.plasticUsage
       };
     }
 
     // 8. Map Lifestyle/Household
-    if (profileData.householdSize) {
+    if (profileData.householdSize || profileData.lifestyleContext?.cityType) {
       updates.lifestyleContext = {
         ...context.lifestyleContext,
-        householdSize: profileData.householdSize
+        householdSize: profileData.householdSize || context.lifestyleContext?.householdSize,
+        cityType: profileData.lifestyleContext?.cityType
+      };
+    }
+
+    // 9. Map Work/Routine
+    if (profileData.workRoutine?.type) {
+      updates.workRoutine = {
+        ...context.workRoutine,
+        type: profileData.workRoutine.type
       };
     }
 
@@ -209,6 +222,141 @@ class CarbonContextService {
         lastAnsweredAt: new Date()
       });
     }
+  }
+
+  async syncToProfile(userId, existingProfile) {
+    // 1. Fetch current context
+    const context = await carbonContextRepository.findByUserId(userId);
+    if (!context) return existingProfile;
+
+    const profileUpdates = { ...existingProfile.toObject?.() || existingProfile };
+    let changed = false;
+
+    // Helper for inverse mapping
+    const getInverse = (mapping, value) => {
+      return Object.keys(mapping).find(key => mapping[key] === value) || value;
+    };
+
+    // 2. Map Transport
+    if (context.transportProfile) {
+      if (!profileUpdates.transportProfile) profileUpdates.transportProfile = {};
+      const t = context.transportProfile;
+      const p = profileUpdates.transportProfile;
+
+      if (!p.primaryTransportMode && t.primaryMode) {
+        p.primaryTransportMode = getInverse(this.mappings.transport, t.primaryMode);
+        changed = true;
+      }
+      if (!p.secondaryTransportMode && t.secondaryMode) {
+        p.secondaryTransportMode = getInverse(this.mappings.transport, t.secondaryMode);
+        changed = true;
+      }
+      if (!p.weeklyCommuteDistance && t.weeklyCommuteDistance) {
+        p.weeklyCommuteDistance = t.weeklyCommuteDistance;
+        changed = true;
+      }
+      if (!p.flightFrequency && t.yearlyFlightFrequency) {
+        p.flightFrequency = t.yearlyFlightFrequency;
+        changed = true;
+      }
+    }
+
+    // 3. Map Food
+    if (context.foodProfile) {
+      if (!profileUpdates.foodProfile) profileUpdates.foodProfile = {};
+      const f = context.foodProfile;
+      const p = profileUpdates.foodProfile;
+
+      if (!p.dietType && f.dietStyle) {
+        p.dietType = getInverse(this.mappings.diet, f.dietStyle);
+        changed = true;
+      }
+    }
+
+    // 4. Map Energy
+    if (context.energyProfile) {
+      if (!profileUpdates.energyProfile) profileUpdates.energyProfile = {};
+      const e = context.energyProfile;
+      const p = profileUpdates.energyProfile;
+
+      if (!p.acUsage && e.acUsage) {
+        p.acUsage = getInverse(this.mappings.ac, e.acUsage);
+        changed = true;
+      }
+      if (!p.fanUsage && e.fanUsage) {
+        p.fanUsage = getInverse(this.mappings.ac, e.fanUsage);
+        changed = true;
+      }
+      if (p.billAwareness === undefined && e.billAwareness !== undefined) {
+        p.billAwareness = e.billAwareness;
+        changed = true;
+      }
+      if (!profileUpdates.householdType && e.homeType) {
+        profileUpdates.householdType = e.homeType;
+        changed = true;
+      }
+    }
+
+    // 5. Map Shopping
+    if (context.shoppingProfile) {
+      if (!profileUpdates.shoppingProfile) profileUpdates.shoppingProfile = {};
+      const s = context.shoppingProfile;
+      const p = profileUpdates.shoppingProfile;
+
+      if (!p.onlineShoppingFrequency && s.onlineShoppingFrequency) {
+        p.onlineShoppingFrequency = getInverse(this.mappings.shoppingFreq, s.onlineShoppingFrequency);
+        changed = true;
+      }
+      if (!p.fashionPurchaseFrequency && s.fashionPurchaseFrequency) {
+        p.fashionPurchaseFrequency = getInverse(this.mappings.fashion, s.fashionPurchaseFrequency);
+        changed = true;
+      }
+      if (!p.gadgetUpgradeCycle && s.gadgetUpgradeCycle) {
+        p.gadgetUpgradeCycle = getInverse(this.mappings.gadgets, s.gadgetUpgradeCycle);
+        changed = true;
+      }
+    }
+
+    // 6. Map Waste
+    if (context.wasteProfile) {
+      if (!profileUpdates.wasteProfile) profileUpdates.wasteProfile = {};
+      const w = context.wasteProfile;
+      const p = profileUpdates.wasteProfile;
+
+      if (!p.wasteSegregation && w.wasteSegregation) {
+        p.wasteSegregation = getInverse(this.mappings.segregation, w.wasteSegregation);
+        changed = true;
+      }
+      if (!p.recyclingHabit && w.recyclingHabit) {
+        p.recyclingHabit = getInverse(this.mappings.recycling, w.recyclingHabit);
+        changed = true;
+      }
+      if (!p.plasticUsage && w.plasticUsage) {
+        p.plasticUsage = w.plasticUsage;
+        changed = true;
+      }
+    }
+
+    // 7. Map Lifestyle/Routine
+    if (context.lifestyleContext) {
+      if (context.lifestyleContext.householdSize && !profileUpdates.householdSize) {
+        profileUpdates.householdSize = context.lifestyleContext.householdSize;
+        changed = true;
+      }
+      if (context.lifestyleContext.cityType && (!profileUpdates.lifestyleContext || !profileUpdates.lifestyleContext.cityType)) {
+        if (!profileUpdates.lifestyleContext) profileUpdates.lifestyleContext = {};
+        profileUpdates.lifestyleContext.cityType = context.lifestyleContext.cityType;
+        changed = true;
+      }
+    }
+
+    if (context.workRoutine?.type && (!profileUpdates.workRoutine || !profileUpdates.workRoutine.type)) {
+      if (!profileUpdates.workRoutine) profileUpdates.workRoutine = {};
+      profileUpdates.workRoutine.type = context.workRoutine.type;
+      changed = true;
+    }
+
+    return { data: profileUpdates, changed };
   }
 
   getQuestionnaireConfig() {

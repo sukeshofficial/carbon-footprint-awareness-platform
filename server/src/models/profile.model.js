@@ -41,7 +41,9 @@ const profileSchema = new mongoose.Schema(
     // New Category Fields (Optional/Partial)
     transportProfile: {
       primaryTransportMode: String,
-      commuteDistance: Number,
+      secondaryTransportMode: String,
+      commuteDistance: Number, // Daily
+      weeklyCommuteDistance: Number,
       travelFrequency: String,
       flightFrequency: Number,
     },
@@ -53,7 +55,9 @@ const profileSchema = new mongoose.Schema(
     energyProfile: {
       electricityUsage: Number,
       acUsage: String,
+      fanUsage: String,
       applianceCount: Number,
+      billAwareness: Boolean,
     },
     shoppingProfile: {
       onlineShoppingFrequency: String,
@@ -64,6 +68,12 @@ const profileSchema = new mongoose.Schema(
       wasteSegregation: String,
       recyclingHabit: String,
       plasticUsage: String,
+    },
+    workRoutine: {
+      type: { type: String },
+    },
+    lifestyleContext: {
+      cityType: String,
     },
     // Tracking & Progressive Onboarding Fields
     skippedSections: {

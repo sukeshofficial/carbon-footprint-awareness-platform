@@ -69,9 +69,9 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col items-center min-h-[100dvh] lg:min-h-screen px-4 py-8 sm:px-6 overflow-y-auto w-full">
-      <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-10 items-start justify-center lg:py-12">
+      <div className="w-full max-w-[80vw] flex flex-col lg:flex-row gap-10 items-start justify-center lg:py-12">
         {/* Main Column */}
-        <div className="flex-1 flex flex-col items-center lg:items-start space-y-8 w-full max-w-3xl">
+        <div className="flex-1 flex flex-col items-center lg:items-start space-y-8 w-full">
           <div className="text-center lg:text-left space-y-1 w-full">
             <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-zinc-950 dark:text-zinc-50 leading-tight">Dashboard</h1>
             <p className="text-muted-foreground text-base">

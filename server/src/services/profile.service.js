@@ -38,7 +38,20 @@ class ProfileService {
   }
 
   async getProfile(userId) {
-    const profile = await profileRepository.getProfileByUserId(userId);
+    let profile = await profileRepository.getProfileByUserId(userId);
+
+    // Try to sync from Carbon Context if profile is missing fields
+    try {
+      const syncResult = await carbonContextService.syncToProfile(userId, profile || { userId });
+      if (syncResult.changed) {
+        // If profile didn't exist, we return a virtual object that the form can use
+        // If it did exist, we return the merged data
+        return syncResult.data;
+      }
+    } catch (e) {
+      console.warn(`[ProfileService] Failed to sync from context: ${e.message}`);
+    }
+
     if (!profile) {
       return null;
     }
@@ -56,6 +69,13 @@ class ProfileService {
     // Sync to Carbon Context
     await carbonContextService.syncFromProfile(userId, updatedProfile);
 
+    // Trigger Carbon Recalculation
+    try {
+      await carbonEstimationService.calculateForUser(userId);
+    } catch (e) {
+      console.warn(`[ProfileService] Automatic carbon recalculation failed: ${e.message}`);
+    }
+
     return updatedProfile;
   }
 
@@ -68,6 +88,13 @@ class ProfileService {
 
     // Sync to Carbon Context
     await carbonContextService.syncFromProfile(userId, updatedProfile);
+
+    // Trigger Carbon Recalculation
+    try {
+      await carbonEstimationService.calculateForUser(userId);
+    } catch (e) {
+      console.warn(`[ProfileService] Automatic carbon recalculation failed: ${e.message}`);
+    }
 
     return updatedProfile;
   }

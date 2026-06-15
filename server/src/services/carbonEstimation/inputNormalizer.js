@@ -9,8 +9,8 @@ export const normalizeInputs = (profile, carbonContext) => {
   return {
     // Transport
     primaryMode: cc.transportProfile?.primaryMode || pr.transportProfile?.primaryTransportMode || 'walking',
-    secondaryMode: cc.transportProfile?.secondaryMode || null,
-    weeklyCommuteDistance: cc.transportProfile?.weeklyCommuteDistance || pr.transportProfile?.commuteDistance || 0,
+    secondaryMode: cc.transportProfile?.secondaryMode || pr.transportProfile?.secondaryTransportMode || null,
+    weeklyCommuteDistance: cc.transportProfile?.weeklyCommuteDistance || pr.transportProfile?.weeklyCommuteDistance || (pr.transportProfile?.commuteDistance ? pr.transportProfile.commuteDistance * 5 : 0),
     weeklyTravelFrequency: cc.transportProfile?.weeklyTravelFrequency || pr.transportProfile?.travelFrequency || '0_times_a_week',
     yearlyFlightFrequency: cc.transportProfile?.yearlyFlightFrequency || pr.transportProfile?.flightFrequency || 0,
 
@@ -19,7 +19,7 @@ export const normalizeInputs = (profile, carbonContext) => {
 
     // Energy
     acUsage: cc.energyProfile?.acUsage || pr.energyProfile?.acUsage || 'none',
-    fanUsage: cc.energyProfile?.fanUsage || 'none',
+    fanUsage: cc.energyProfile?.fanUsage || pr.energyProfile?.fanUsage || 'none',
     homeType: cc.energyProfile?.homeType || pr.householdType || 'apartment',
     householdSize: cc.lifestyleContext?.householdSize || pr.householdSize || 1,
 
@@ -29,7 +29,7 @@ export const normalizeInputs = (profile, carbonContext) => {
     gadgetUpgradeCycle: cc.shoppingProfile?.gadgetUpgradeCycle || pr.shoppingProfile?.gadgetUpgradeCycle || 'more_than_5_years',
 
     // Other
-    cityType: cc.lifestyleContext?.cityType || pr.cityRegion || 'tier_1',
-    workRoutine: cc.workRoutine?.type || 'offline_commute',
+    cityType: cc.lifestyleContext?.cityType || pr.lifestyleContext?.cityType || pr.cityRegion || 'tier_1',
+    workRoutine: cc.workRoutine?.type || pr.workRoutine?.type || 'offline_commute',
   };
 };

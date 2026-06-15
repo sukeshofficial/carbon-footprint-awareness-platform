@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { Switch } from '../ui/switch';
 import UserTypeCards from './UserTypeCards';
 import ToneSelector from './ToneSelector';
 import HouseholdSelector from './HouseholdSelector';
@@ -23,7 +24,15 @@ import {
   DIET_TYPES,
   FREQUENCY_OPTIONS,
   AC_USAGE_OPTIONS,
-  WASTE_HABIT_OPTIONS
+  WASTE_HABIT_OPTIONS,
+  RECYCLING_HABITS,
+  WASTE_SEGREGATION_LEVELS,
+  PLASTIC_USAGE_LEVELS,
+  FASHION_PURCHASE_FREQUENCIES,
+  GADGET_UPGRADE_CYCLES,
+  WORK_ROUTINES,
+  CITY_TYPES,
+  USAGE_LEVELS
 } from './constants';
 
 const profileSchema = z.object({
@@ -36,7 +45,9 @@ const profileSchema = z.object({
   householdSize: z.coerce.number().int().positive().optional(),
   transportProfile: z.object({
     primaryTransportMode: z.string().optional(),
+    secondaryTransportMode: z.string().optional(),
     commuteDistance: z.coerce.number().optional(),
+    weeklyCommuteDistance: z.coerce.number().optional(),
     travelFrequency: z.string().optional(),
     flightFrequency: z.coerce.number().optional(),
   }).optional(),
@@ -48,7 +59,9 @@ const profileSchema = z.object({
   energyProfile: z.object({
     electricityUsage: z.coerce.number().optional(),
     acUsage: z.string().optional(),
+    fanUsage: z.string().optional(),
     applianceCount: z.coerce.number().optional(),
+    billAwareness: z.boolean().optional(),
   }).optional(),
   shoppingProfile: z.object({
     onlineShoppingFrequency: z.string().optional(),
@@ -59,6 +72,12 @@ const profileSchema = z.object({
     wasteSegregation: z.string().optional(),
     recyclingHabit: z.string().optional(),
     plasticUsage: z.string().optional(),
+  }).optional(),
+  workRoutine: z.object({
+    type: z.string().optional(),
+  }).optional(),
+  lifestyleContext: z.object({
+    cityType: z.string().optional(),
   }).optional(),
 });
 
@@ -80,7 +99,9 @@ const ProfileForm = ({ initialData, onSubmit, isLoading, buttonText = 'Save Prof
       householdSize: 1,
       transportProfile: {
         primaryTransportMode: 'mixed',
+        secondaryTransportMode: 'none',
         commuteDistance: 0,
+        weeklyCommuteDistance: 0,
         travelFrequency: 'moderate',
         flightFrequency: 0,
       },
@@ -92,7 +113,9 @@ const ProfileForm = ({ initialData, onSubmit, isLoading, buttonText = 'Save Prof
       energyProfile: {
         electricityUsage: 0,
         acUsage: 'moderate',
+        fanUsage: 'none',
         applianceCount: 0,
+        billAwareness: false,
       },
       shoppingProfile: {
         onlineShoppingFrequency: 'moderate',
@@ -101,8 +124,14 @@ const ProfileForm = ({ initialData, onSubmit, isLoading, buttonText = 'Save Prof
       },
       wasteProfile: {
         wasteSegregation: 'sometimes',
-        recyclingHabit: 'sometimes',
+        recyclingHabit: 'occasionally',
         plasticUsage: 'moderate',
+      },
+      workRoutine: {
+        type: 'offline_commute',
+      },
+      lifestyleContext: {
+        cityType: 'metropolitan',
       },
     },
   });
@@ -196,6 +225,12 @@ const ProfileForm = ({ initialData, onSubmit, isLoading, buttonText = 'Save Prof
               <p className="text-sm text-destructive">{String(errors.cityRegion.message)}</p>
             )}
           </div>
+          <CustomSelect
+            label="City Type"
+            register={register('lifestyleContext.cityType')}
+            options={CITY_TYPES}
+            disabled={isLoading}
+          />
           <div className="grid gap-2">
             <Label htmlFor="ageGroup">Age Group (Optional)</Label>
             <Input
@@ -227,11 +262,25 @@ const ProfileForm = ({ initialData, onSubmit, isLoading, buttonText = 'Save Prof
             options={TRANSPORT_MODES}
             disabled={isLoading}
           />
+          <CustomSelect
+            label="Secondary Transport Mode"
+            register={register("transportProfile.secondaryTransportMode")}
+            options={TRANSPORT_MODES}
+            disabled={isLoading}
+          />
           <div className="grid gap-2">
             <Label>Daily Commute (km)</Label>
             <Input
               type="number"
               {...register('transportProfile.commuteDistance')}
+              disabled={isLoading}
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label>Weekly Commute (km)</Label>
+            <Input
+              type="number"
+              {...register('transportProfile.weeklyCommuteDistance')}
               disabled={isLoading}
             />
           </div>
@@ -284,6 +333,29 @@ const ProfileForm = ({ initialData, onSubmit, isLoading, buttonText = 'Save Prof
             options={AC_USAGE_OPTIONS}
             disabled={isLoading}
           />
+          <CustomSelect
+            label="Fan Usage"
+            register={register('energyProfile.fanUsage')}
+            options={USAGE_LEVELS}
+            disabled={isLoading}
+          />
+          <div className="flex items-center justify-between p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+            <div className="space-y-0.5">
+              <Label className="text-sm font-bold">Electricity Bill Awareness</Label>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-black">Do you track your monthly usage?</p>
+            </div>
+            <Controller
+              name="energyProfile.billAwareness"
+              control={control}
+              render={({ field }) => (
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  disabled={isLoading}
+                />
+              )}
+            />
+          </div>
         </div>
       </div>
 
@@ -298,12 +370,47 @@ const ProfileForm = ({ initialData, onSubmit, isLoading, buttonText = 'Save Prof
             disabled={isLoading}
           />
           <CustomSelect
-            label="Waste Segregation Habit"
+            label="Fashion Purchase"
+            register={register('shoppingProfile.fashionPurchaseFrequency')}
+            options={FASHION_PURCHASE_FREQUENCIES}
+            disabled={isLoading}
+          />
+          <CustomSelect
+            label="Gadget Upgrade Cycle"
+            register={register('shoppingProfile.gadgetUpgradeCycle')}
+            options={GADGET_UPGRADE_CYCLES}
+            disabled={isLoading}
+          />
+          <CustomSelect
+            label="Waste Segregation"
             register={register('wasteProfile.wasteSegregation')}
-            options={WASTE_HABIT_OPTIONS}
+            options={WASTE_SEGREGATION_LEVELS}
+            disabled={isLoading}
+          />
+          <CustomSelect
+            label="Recycling Habit"
+            register={register('wasteProfile.recyclingHabit')}
+            options={RECYCLING_HABITS}
+            disabled={isLoading}
+          />
+          <CustomSelect
+            label="Plastic Usage"
+            register={register('wasteProfile.plasticUsage')}
+            options={PLASTIC_USAGE_LEVELS}
             disabled={isLoading}
           />
         </div>
+      </div>
+
+      {/* Routine Section */}
+      <div id="routine" className="space-y-6 scroll-mt-24 p-5 rounded-[2rem] bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-100 dark:border-zinc-800/50">
+        <SectionHeader icon={Palette} title="Daily Routine" />
+        <CustomSelect
+          label="What best describes your daily routine?"
+          register={register('workRoutine.type')}
+          options={WORK_ROUTINES}
+          disabled={isLoading}
+        />
       </div>
 
       {/* Lifestyle & Tone Section */}
