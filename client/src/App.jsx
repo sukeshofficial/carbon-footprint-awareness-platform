@@ -7,11 +7,10 @@ import { Toaster } from "./components/ui/sonner";
 import { UnderDevelopmentBadge } from "./components/ui/underDevelopmentBadge/under-development-badge";
 import { FeedbackSheet } from "./components/ui/feedbackSheet/feedback-sheet";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import { Button } from "./components/ui/button";
 import { useAuth } from "./contexts/AuthContext";
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { Settings, User as UserIcon, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { User as UserIcon, ChevronRight } from "lucide-react";
 
 import { ThemeProvider } from "next-themes";
 import { useThemeShortcut } from "./hooks/useThemeShortcut";
@@ -32,9 +31,10 @@ import { useCarbonContext } from "./store/carbonContextStore";
 // Components
 import CarbonDashboardCard from "./components/carbon/CarbonDashboardCard";
 import CurrentDevelopmentCard from "./components/ui/CurrentDevelopmentCard";
+import Navbar from "./components/layout/Navbar";
 
 const Dashboard = () => {
-  const { logout, user } = useAuth();
+  const { user } = useAuth();
   const { profile } = useProfile();
   const { isComplete: isCarbonComplete } = useCarbonContext();
 
@@ -84,26 +84,6 @@ const Dashboard = () => {
           </div>
 
           <CurrentDevelopmentCard {...devData} />
-
-          <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm lg:mx-auto">
-            <Link to="/profile/edit" className="flex-1">
-              <Button
-                variant="outline"
-                className="w-full rounded-full h-10 font-medium gap-2"
-              >
-                <Settings className="w-4 h-4" />
-                Profile Settings
-              </Button>
-            </Link>
-
-            <Button
-              variant="outline"
-              onClick={() => logout()}
-              className="flex-1 rounded-full h-10 font-medium border-destructive/20 text-destructive hover:bg-destructive/10! hover:text-destructive"
-            >
-              Sign Out
-            </Button>
-          </div>
         </div>
 
         {/* Sidebar / Nudges Card */}
@@ -189,6 +169,7 @@ function App() {
             <ProfileProvider>
               <CarbonEstimationProvider>
                 <div className="min-h-screen bg-background font-sans antialiased text-foreground">
+                  <Navbar />
                   <UnderDevelopmentBadge />
                   <Routes>
                     {/* Public Routes */}
