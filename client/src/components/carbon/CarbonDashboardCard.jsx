@@ -7,6 +7,9 @@ import SeverityBadge from './SeverityBadge';
 import TrendBadge from './TrendBadge';
 import WeeklyMonthlyToggle from './WeeklyMonthlyToggle';
 import { useCarbonEstimation } from '../../store/carbonEstimationStore';
+import ExplanationsPanel from './explanations/ExplanationsPanel';
+import RecommendationReasoning from './explanations/RecommendationReasoning';
+import useExplanationStore from '../../store/explanationStore';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1';
 
@@ -284,6 +287,7 @@ const CarbonDashboardCard = () => {
                     <div>
                       <p className="text-[11px] font-bold text-slate-900 group-hover:text-green-700 transition-colors italic leading-snug">{tip.title}</p>
                       <p className="text-[10px] text-slate-500 leading-relaxed mt-0.5 font-medium">{tip.description}</p>
+                      <RecommendationReasoning reason={useExplanationStore.getState().explanation?.recommendation_reasoning?.find(r => r.recommendation_id === tip.id)?.reason} />
                     </div>
                   </div>
                 ))}
@@ -306,6 +310,13 @@ const CarbonDashboardCard = () => {
               </div>
             )}
           </div>
+        </div>
+      </div>
+
+      {/* ── Explanations Panel ── */}
+      <div className="border-t border-slate-50 bg-slate-50/10 p-8">
+        <div className="max-w-4xl mx-auto">
+          <ExplanationsPanel />
         </div>
       </div>
 

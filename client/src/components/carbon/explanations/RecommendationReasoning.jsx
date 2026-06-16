@@ -1,0 +1,25 @@
+import React from 'react';
+import { Lightbulb, CheckCircle2 } from 'lucide-react';
+
+const RecommendationReasoning = ({ reason }) => {
+  if (!reason) return null;
+
+  return (
+    <div className="mt-3 p-3 bg-emerald-50/50 border border-emerald-100 rounded-lg flex gap-3 animate-in fade-in slide-in-from-left-2">
+      <div className="mt-0.5 text-emerald-600">
+        <Lightbulb size={16} />
+      </div>
+      <div className="flex-1">
+        <div className="flex items-center gap-1.5 mb-1">
+          <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Why this matters</span>
+          <CheckCircle2 size={10} className="text-emerald-500" />
+        </div>
+        <p className="text-emerald-900 text-xs md:text-sm leading-relaxed font-medium">
+          {reason}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default RecommendationReasoning;

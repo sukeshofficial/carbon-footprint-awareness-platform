@@ -5,6 +5,7 @@ import authRoutes from "./authRoutes.js";
 import profileRoutes from "./profile.routes.js";
 import onboardingRoutes from "./carbonContext.routes.js";
 import carbonEstimationRoutes from "./carbonEstimation.routes.js";
+import explanationRoutes from "./explanation.routes.js";
 
 const router = express.Router();
 
@@ -14,5 +15,6 @@ router.use("/auth", authRoutes);
 router.use("/profile", profileRoutes);
 router.use("/onboarding", onboardingRoutes);
 router.use("/carbon-estimation", carbonEstimationRoutes);
+router.use("/explanations", explanationRoutes);
 
 export default router;
