@@ -14,8 +14,8 @@ const ExpandableExplanation = ({ title, description, children, defaultExpanded =
           <Icon size={18} />
         </div>
         <div className="flex-1">
-          <h4 className="font-semibold text-slate-800 text-sm md:text-base">{title}</h4>
-          <p className="text-slate-500 text-xs md:text-sm mt-1 line-clamp-1">{description}</p>
+          <h4 className="text-base font-semibold text-slate-800">{title}</h4>
+          <p className="text-muted-foreground text-xs mt-0.5 line-clamp-1">{description}</p>
         </div>
         <div className="mt-1 text-slate-400">
           {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
@@ -24,7 +24,7 @@ const ExpandableExplanation = ({ title, description, children, defaultExpanded =
 
       {isExpanded && (
         <div className="px-4 pb-4 pt-2 border-t border-slate-50 animate-in fade-in slide-in-from-top-2">
-          <div className="pl-14 text-slate-600 text-sm leading-relaxed">
+          <div className="pl-14 text-slate-600 text-sm font-normal leading-relaxed">
             {children}
           </div>
         </div>

@@ -3,12 +3,12 @@ import { Button } from '../ui/button';
 
 const WeeklyMonthlyToggle = ({ view, onChange }) => {
   return (
-    <div className="flex bg-slate-100 p-1 rounded-lg">
+    <div className="flex bg-slate-100 p-1 rounded-full">
       <Button
         variant={view === 'weekly' ? 'default' : 'ghost'}
         size="sm"
         onClick={() => onChange('weekly')}
-        className={`px-4 py-1.5 h-auto text-xs font-medium rounded-md transition-all ${view === 'weekly' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'
+        className={`px-4 py-1.5 h-auto text-xs font-medium rounded-full transition-all ${view === 'weekly' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'
           }`}
       >
         Weekly
@@ -17,7 +17,7 @@ const WeeklyMonthlyToggle = ({ view, onChange }) => {
         variant={view === 'monthly' ? 'default' : 'ghost'}
         size="sm"
         onClick={() => onChange('monthly')}
-        className={`px-4 py-1.5 h-auto text-xs font-medium rounded-md transition-all ${view === 'monthly' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'
+        className={`px-4 py-1.5 h-auto text-xs font-medium rounded-full transition-all ${view === 'monthly' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'
           }`}
       >
         Monthly

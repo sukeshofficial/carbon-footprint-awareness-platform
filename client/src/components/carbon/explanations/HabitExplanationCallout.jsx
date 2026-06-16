@@ -13,11 +13,11 @@ const HabitExplanationCallout = ({ habit, reason }) => {
           <Zap size={16} />
         </div>
         <div>
-          <span className="text-xs font-bold uppercase tracking-widest text-amber-400 mb-1 block">
-            Kye Impact Habit
+          <span className="text-xs font-medium uppercase tracking-[0.1em] text-amber-400 mb-0.5 block">
+            Key Impact Habit
           </span>
-          <h4 className="font-bold text-lg mb-2 capitalize">{habit}</h4>
-          <p className="text-slate-300 text-sm leading-relaxed">
+          <h4 className="text-base font-semibold text-white mb-2 capitalize">{habit}</h4>
+          <p className="text-slate-300 text-sm font-normal leading-relaxed">
             {reason}
           </p>
         </div>

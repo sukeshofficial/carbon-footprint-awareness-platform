@@ -69,7 +69,7 @@ const EditProfile = () => {
         <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-primary/30 dark:bg-primary/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4" />
         <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
 
-        <div className="container max-w-6xl relative z-10">
+        <div className="container mx-auto max-w-7xl relative z-10">
           {/* Breadcrumbs */}
           {/* <nav className={cn(
             "fixed z-[100] transition-all duration-300",
@@ -164,7 +164,7 @@ const EditProfile = () => {
       </div>
 
       {/* Main Content Grid */}
-      <div className="container max-w-6xl -mt-6 px-4">
+      <div className="container mx-auto max-w-7xl -mt-6 px-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
           {/* Sticky Sidebar — only shown on Carbon tab */}
@@ -203,7 +203,7 @@ const EditProfile = () => {
           </div>
 
           {/* Form Content */}
-          <div className={cn(activeTab === 'account' ? 'col-span-1 lg:col-span-10 lg:col-start-2' : 'lg:col-span-8')}>
+          <div className={cn(activeTab === 'account' ? 'col-span-1 lg:col-span-12' : 'lg:col-span-8')}>
             <Card className="py-0 mt-4 sm:mt-10 shadow-2xl shadow-zinc-200/50 dark:shadow-black/50 overflow-hidden bg-transparent">
               <div className="bg-white dark:bg-zinc-900 px-6 py-8 md:px-10 md:py-12 rounded-3xl">
                 {activeTab === 'account' ? (

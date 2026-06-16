@@ -10,11 +10,11 @@ const RecommendationReasoning = ({ reason }) => {
         <Lightbulb size={16} />
       </div>
       <div className="flex-1">
-        <div className="flex items-center gap-1.5 mb-1">
-          <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Why this matters</span>
+        <div className="flex items-center gap-1.5 mb-0.5">
+          <span className="text-[10px] font-medium text-emerald-700 uppercase tracking-wider">Why this matters</span>
           <CheckCircle2 size={10} className="text-emerald-500" />
         </div>
-        <p className="text-emerald-900 text-xs md:text-sm leading-relaxed font-medium">
+        <p className="text-emerald-900 text-sm font-normal leading-relaxed">
           {reason}
         </p>
       </div>

@@ -29,7 +29,7 @@ const ExplanationsPanel = () => {
       <div className="p-6 bg-rose-50 border border-rose-100 rounded-2xl text-rose-800">
         <div className="flex items-center gap-3 mb-2">
           <Info size={20} />
-          <h4 className="font-bold">Couldn't load explanations</h4>
+          <h3 className="text-base font-semibold">Couldn't load explanations</h3>
         </div>
         <p className="text-sm opacity-90">{error}</p>
         <button
@@ -66,7 +66,7 @@ const ExplanationsPanel = () => {
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-slate-800">
             <HelpCircle size={18} className="text-indigo-500" />
-            <h4 className="font-bold">Deeper Insights</h4>
+            <h3 className="text-xl font-bold">Deeper Insights</h3>
           </div>
           <div className="grid grid-cols-1 gap-4">
             {explanation.habit_explanations.map((habit, idx) => (

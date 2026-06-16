@@ -21,13 +21,13 @@ const CategoryExplanationCard = ({ category, reason }) => {
   const Icon = config.icon;
 
   return (
-    <div className={`flex items-start gap-4 p-4 bg-white border ${config.border} rounded-xl shadow-sm hover:shadow-md transition-shadow`}>
+    <div className={`flex items-start gap-4 p-4 bg-white border ${config.border} rounded-4xl hover:shadow-sm transition-shadow`}>
       <div className={`p-2 rounded-lg ${config.color}`}>
         <Icon size={20} />
       </div>
       <div>
-        <h4 className="font-bold text-slate-800 text-sm mb-1">{config.label}</h4>
-        <p className="text-slate-600 text-sm leading-relaxed">{reason}</p>
+        <h4 className="text-base font-semibold text-slate-800 mb-1">{config.label}</h4>
+        <p className="text-slate-600 text-sm font-normal leading-relaxed">{reason}</p>
       </div>
     </div>
   );
