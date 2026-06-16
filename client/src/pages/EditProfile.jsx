@@ -71,7 +71,7 @@ const EditProfile = () => {
 
         <div className="container max-w-6xl relative z-10">
           {/* Breadcrumbs */}
-          <nav className={cn(
+          {/* <nav className={cn(
             "fixed z-[100] transition-all duration-300",
             scrolled ? "top-2 left-2" : "top-2 left-2"
           )}>
@@ -90,7 +90,7 @@ const EditProfile = () => {
                 <span className="text-[11px] uppercase font-black tracking-widest leading-none">Dashboard</span>
               </div>
             </Link>
-          </nav>
+          </nav> */}
 
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10">
             <div className="space-y-4 max-w-2xl">
@@ -168,11 +168,11 @@ const EditProfile = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
           {/* Sticky Sidebar — only shown on Carbon tab */}
-          <div className={cn('lg:col-span-4 space-y-6 lg:sticky lg:-top-0', activeTab === 'account' && 'hidden lg:hidden')}>
+          <div className={cn('lg:col-span-4 space-y-6 lg:sticky lg:top-13', activeTab === 'account' && 'hidden lg:hidden')}>
             <ProfileSummaryCard profile={profile} />
 
             <Card className="p-2 border-none shadow-2xl shadow-primary/10 dark:shadow-black/20">
-              <div className="px-4 py-3 flex items-center justify-between">
+              <div className="px-4 pt-3 flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Quick Nav</span>
                 <div className="w-1.5 h-1.5 bg-primary rounded-full" />
               </div>
@@ -192,7 +192,7 @@ const EditProfile = () => {
                         }, 2000);
                       }
                     }}
-                    className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-full transition-all group"
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm font-bold text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-full transition-all group"
                   >
                     <item.icon className="w-4 h-4 transition-transform group-hover:scale-110" />
                     {item.title}

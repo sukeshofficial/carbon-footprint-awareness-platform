@@ -15,9 +15,11 @@ const profileSchema = z.object({
   // New Category Fields
   transportProfile: z.object({
     primaryTransportMode: z.string().optional(),
-    commuteDistance: z.number().optional(),
+    secondaryTransportMode: z.string().optional(),
+    commuteDistance: z.coerce.number().optional(),
+    weeklyCommuteDistance: z.coerce.number().optional(),
     travelFrequency: z.string().optional(),
-    flightFrequency: z.number().optional(),
+    flightFrequency: z.coerce.number().optional(),
   }).optional(),
   foodProfile: z.object({
     dietType: z.string().optional(),
@@ -27,7 +29,9 @@ const profileSchema = z.object({
   energyProfile: z.object({
     electricityUsage: z.coerce.number().optional(),
     acUsage: z.string().optional(),
+    fanUsage: z.string().optional(),
     applianceCount: z.coerce.number().optional(),
+    billAwareness: z.boolean().optional(),
   }).optional(),
   shoppingProfile: z.object({
     onlineShoppingFrequency: z.string().optional(),
@@ -38,6 +42,12 @@ const profileSchema = z.object({
     wasteSegregation: z.string().optional(),
     recyclingHabit: z.string().optional(),
     plasticUsage: z.string().optional(),
+  }).optional(),
+  workRoutine: z.object({
+    type: z.string().optional(),
+  }).optional(),
+  lifestyleContext: z.object({
+    cityType: z.string().optional(),
   }).optional(),
 
   // Tracking

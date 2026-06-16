@@ -6,56 +6,80 @@ class CarbonContextService {
   constructor() {
     this.mappings = {
       transport: {
-        'public': 'bus',
         'car': 'car',
         'bike': 'bike',
+        'bus': 'bus',
+        'metro': 'metro',
+        'train': 'train',
+        'cab': 'cab',
+        'walking': 'walking',
         'mixed': 'other',
+        'public': 'bus',
         'walk': 'walking'
       },
       diet: {
         'vegan': 'vegetarian',
         'vegetarian': 'vegetarian',
+        'eggetarian': 'eggetarian',
         'pescatarian': 'mixed_diet',
         'omnivore': 'non_vegetarian',
-        'mixed': 'mixed_diet'
+        'mixed': 'mixed_diet',
+        'mixed_diet': 'mixed_diet',
+        'non_vegetarian': 'non_vegetarian'
       },
-      ac: {
+      usageLevels: {
         'none': 'none',
+        'rarely': 'rarely',
+        'occasionally': 'occasionally',
+        'frequently': 'frequently',
+        'very_frequently': 'very_frequently',
         'low': 'rarely',
         'moderate': 'occasionally',
         'high': 'frequently'
       },
       shoppingFreq: {
+        'minimal': 'minimal',
+        'occasional': 'occasional',
+        'frequent_online': 'frequent_online',
         'rarely': 'minimal',
+        'average': 'occasional',
+        'frequent': 'frequent_online',
         'monthly': 'occasional',
         'weekly': 'frequent_online',
         'daily': 'frequent_online'
       },
       fashion: {
-        'rarely': 'rarely',
         'monthly': 'monthly',
         'quarterly': 'quarterly',
+        'semi_annually': 'semi_annually',
+        'annually': 'annually',
+        'rarely': 'rarely',
         'moderate': 'semi_annually',
         'low': 'annually'
       },
       gadgets: {
         'every_year': 'every_year',
         'every_2_years': 'every_2_years',
+        'every_3_to_5_years': 'every_3_to_5_years',
+        'more_than_5_years': 'more_than_5_years',
         'balanced': 'every_3_to_5_years',
         'rarely': 'more_than_5_years'
       },
       segregation: {
-        'never': 'none',
         'none': 'none',
+        'partial': 'partial',
+        'complete': 'complete',
+        'never': 'none',
         'sometimes': 'partial',
         'regularly': 'partial',
         'always': 'complete'
       },
       recycling: {
         'never': 'never',
-        'sometimes': 'occasionally',
+        'occasionally': 'occasionally',
         'regularly': 'regularly',
-        'always': 'always'
+        'always': 'always',
+        'sometimes': 'occasionally'
       }
     };
   }
@@ -130,8 +154,8 @@ class CarbonContextService {
     // 1. Fetch current context or create empty object
     const context = await carbonContextRepository.findByUserId(userId) || {};
 
-    // 2. Only sync if context is not already completed
-    if (context.draftStatus === 'completed') return;
+    // 2. We sync even if completed, to keep profile and context aligned for calculations
+    // But we might want to handle it differently if it's completed (e.g., re-triggering estimation)
 
     const updates = {};
 
@@ -167,10 +191,11 @@ class CarbonContextService {
     // 5. Map Energy
     if (profileData.energyProfile) {
       const acVal = profileData.energyProfile.acUsage;
+      const fanVal = profileData.energyProfile.fanUsage;
       updates.energyProfile = {
         ...context.energyProfile,
-        acUsage: this.mappings.ac[acVal] || acVal,
-        fanUsage: this.mappings.ac[profileData.energyProfile.fanUsage] || profileData.energyProfile.fanUsage,
+        acUsage: this.mappings.usageLevels[acVal] || acVal,
+        fanUsage: this.mappings.usageLevels[fanVal] || fanVal,
         homeType: profileData.householdType, // Sync homeType from householdType
         billAwareness: profileData.energyProfile.billAwareness
       };
@@ -199,11 +224,11 @@ class CarbonContextService {
     }
 
     // 8. Map Lifestyle/Household
-    if (profileData.householdSize || profileData.lifestyleContext?.cityType) {
+    if (profileData.householdSize !== undefined || profileData.lifestyleContext?.cityType) {
       updates.lifestyleContext = {
         ...context.lifestyleContext,
-        householdSize: profileData.householdSize || context.lifestyleContext?.householdSize,
-        cityType: profileData.lifestyleContext?.cityType
+        householdSize: profileData.householdSize !== undefined ? profileData.householdSize : context.lifestyleContext?.householdSize,
+        cityType: profileData.lifestyleContext?.cityType || context.lifestyleContext?.cityType
       };
     }
 
@@ -215,7 +240,7 @@ class CarbonContextService {
       };
     }
 
-    // 9. Perform update
+    // 10. Perform update
     if (Object.keys(updates).length > 0) {
       await carbonContextRepository.updateByUserId(userId, {
         ...updates,
@@ -227,13 +252,15 @@ class CarbonContextService {
   async syncToProfile(userId, existingProfile) {
     // 1. Fetch current context
     const context = await carbonContextRepository.findByUserId(userId);
-    if (!context) return existingProfile;
+    if (!context) return { data: existingProfile, changed: false };
 
-    const profileUpdates = { ...existingProfile.toObject?.() || existingProfile };
+    const profileUpdates = { ...(existingProfile.toObject?.() || existingProfile) };
     let changed = false;
 
     // Helper for inverse mapping
     const getInverse = (mapping, value) => {
+      // Find exact match first
+      if (mapping[value] === value) return value;
       return Object.keys(mapping).find(key => mapping[key] === value) || value;
     };
 
@@ -280,11 +307,11 @@ class CarbonContextService {
       const p = profileUpdates.energyProfile;
 
       if (!p.acUsage && e.acUsage) {
-        p.acUsage = getInverse(this.mappings.ac, e.acUsage);
+        p.acUsage = getInverse(this.mappings.usageLevels, e.acUsage);
         changed = true;
       }
       if (!p.fanUsage && e.fanUsage) {
-        p.fanUsage = getInverse(this.mappings.ac, e.fanUsage);
+        p.fanUsage = getInverse(this.mappings.usageLevels, e.fanUsage);
         changed = true;
       }
       if (p.billAwareness === undefined && e.billAwareness !== undefined) {

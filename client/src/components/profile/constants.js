@@ -60,6 +60,7 @@ export const TRANSPORT_MODES = [
   { id: 'cab', title: 'Cab' },
   { id: 'walking', title: 'Walking' },
   { id: 'mixed', title: 'Mixed Modes' },
+  { id: 'none', title: 'None / N/A' },
 ];
 
 export const DIET_TYPES = [

@@ -20,6 +20,8 @@ export const HOME_TYPES = [
   'shared_home',
   'independent_home',
   'apartment',
+  'family_home',
+  'hostel',
   'other',
 ];
 

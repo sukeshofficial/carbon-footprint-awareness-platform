@@ -124,7 +124,7 @@ export function FeedbackSheet() {
         <Button
           variant="outline"
           size="xs"
-          className="fixed top-4 right-6 z-40 gap-2 transition-all duration-200"
+          className="fixed top-5 right-4 z-50 gap-2 transition-all duration-200"
         >
           <MessageSquarePlus className="h-4 w-4" />
           Send Feedback
