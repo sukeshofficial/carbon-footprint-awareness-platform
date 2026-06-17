@@ -3,6 +3,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { CarbonContextProvider } from "./store/carbonContextStore";
 import { CarbonEstimationProvider } from "./store/carbonEstimationStore";
 import { ProfileProvider, useProfile } from "./store/profileStore";
+import { WhatIfProvider } from "./store/whatIfStore";
 import { Toaster } from "./components/ui/sonner";
 import { UnderDevelopmentBadge } from "./components/ui/underDevelopmentBadge/under-development-badge";
 import { FeedbackSheet } from "./components/ui/feedbackSheet/feedback-sheet";
@@ -41,6 +42,7 @@ import { useCarbonEstimation } from "./store/carbonEstimationStore";
 import { useCarbonInsightsStream } from "./hooks/useCarbonInsightsStream";
 import CurrentDevelopmentCard from "./components/ui/CurrentDevelopmentCard";
 import Navbar from "./components/layout/Navbar";
+import WhatIfSimulator from "./components/carbon/what-if/WhatIfSimulator";
 import { Button } from "./components/ui/button";
 import { Leaf, Loader2, RefreshCw, Activity, TrendingUp } from "lucide-react";
 
@@ -205,6 +207,9 @@ const Dashboard = () => {
               </div>
               <ExplanationsPanel />
             </div>
+
+            {/* What-If Scenario Simulator */}
+            <WhatIfSimulator />
           </div>
 
           {/* Sidebar Area */}
@@ -301,45 +306,47 @@ function App() {
           <CarbonContextProvider>
             <ProfileProvider>
               <CarbonEstimationProvider>
-                <div className="min-h-screen bg-background font-sans antialiased text-foreground">
-                  <Navbar />
-                  <UnderDevelopmentBadge />
-                  <Routes>
-                    {/* Public Routes */}
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/signup" element={<SignupPage />} />
-                    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                    <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-                    <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
-                    <Route path="/auth/callback" element={<GoogleCallback />} />
+                <WhatIfProvider>
+                  <div className="min-h-screen bg-background font-sans antialiased text-foreground">
+                    <Navbar />
+                    <UnderDevelopmentBadge />
+                    <Routes>
+                      {/* Public Routes */}
+                      <Route path="/login" element={<LoginPage />} />
+                      <Route path="/signup" element={<SignupPage />} />
+                      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+                      <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
+                      <Route path="/auth/callback" element={<GoogleCallback />} />
 
-                    {/* Protected Routes */}
-                    <Route element={<ProtectedRoute />}>
-                      <Route element={<OnboardingRedirect />}>
-                        <Route path="/" element={<Dashboard />} />
-                        <Route path="/dashboard" element={<Navigate to="/" replace />} />
-                        <Route path="/profile/edit" element={<EditProfile />} />
+                      {/* Protected Routes */}
+                      <Route element={<ProtectedRoute />}>
+                        <Route element={<OnboardingRedirect />}>
+                          <Route path="/" element={<Dashboard />} />
+                          <Route path="/dashboard" element={<Navigate to="/" replace />} />
+                          <Route path="/profile/edit" element={<EditProfile />} />
+                        </Route>
                       </Route>
-                    </Route>
 
-                    {/* Fallback */}
-                    <Route path="*" element={<Navigate to="/" replace />} />
-                  </Routes>
+                      {/* Fallback */}
+                      <Route path="*" element={<Navigate to="/" replace />} />
+                    </Routes>
 
-                  <FeedbackSheet />
-                  <Toaster
-                    position="bottom-right"
-                    closeButton
-                    richColors={false}
-                    toastOptions={{
-                      classNames: {
-                        toast: "rounded-xl border border-border bg-background/80 backdrop-blur-md",
-                        title: "!text-foreground font-semibold",
-                        description: "!text-muted-foreground !opacity-100",
-                      },
-                    }}
-                  />
-                </div>
+                    <FeedbackSheet />
+                    <Toaster
+                      position="bottom-right"
+                      closeButton
+                      richColors={false}
+                      toastOptions={{
+                        classNames: {
+                          toast: "rounded-xl border border-border bg-background/80 backdrop-blur-md",
+                          title: "!text-foreground font-semibold",
+                          description: "!text-muted-foreground !opacity-100",
+                        },
+                      }}
+                    />
+                  </div>
+                </WhatIfProvider>
               </CarbonEstimationProvider>
             </ProfileProvider>
           </CarbonContextProvider>

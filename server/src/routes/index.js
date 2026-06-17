@@ -6,6 +6,7 @@ import profileRoutes from "./profile.routes.js";
 import onboardingRoutes from "./carbonContext.routes.js";
 import carbonEstimationRoutes from "./carbonEstimation.routes.js";
 import explanationRoutes from "./explanation.routes.js";
+import whatIfScenarioRoutes from "./whatIfScenario.routes.js";
 
 const router = express.Router();
 
@@ -16,5 +17,7 @@ router.use("/profile", profileRoutes);
 router.use("/onboarding", onboardingRoutes);
 router.use("/carbon-estimation", carbonEstimationRoutes);
 router.use("/explanations", explanationRoutes);
+router.use("/what-if", whatIfScenarioRoutes);
 
 export default router;
+
