@@ -7,6 +7,8 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import apiRoutes from "./routes/index.js";
 import connectDB from "./config/db.js";
+import AppError from "./utils/appError.js";
+
 
 const app = express();
 
@@ -70,7 +72,7 @@ app.use(async (req, res, next) => {
     await connectDB();
     next();
   } catch (err) {
-    next(err);
+    next(new AppError('Database connection failed', 500));
   }
 });
 
@@ -99,11 +101,8 @@ app.use(cookieParser());
 app.use("/api/v1", apiRoutes);
 
 // 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    status: "error",
-    message: `Can't find ${req.originalUrl} on this server`,
-  });
+app.use((req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
 });
 
 // Global error handler

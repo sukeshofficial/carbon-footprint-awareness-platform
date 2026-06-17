@@ -79,10 +79,10 @@ const Dashboard = () => {
   const devData = {
     title: "🚧 In Development",
     description: "Building a profile system to personalize carbon insights, benchmarks, coaching tone, and recommendations based on user lifestyle and preferences.",
-    phase: "Phase 1 / 7",
+    phase: "Phase 6 / 7",
     status: "Active Development",
-    nextMilestone: "Profile API + Setup UI",
-    updatedAt: "2 hours ago",
+    nextMilestone: "Completed ✅",
+    updatedAt: "5 hours ago",
     checklist: [
       { label: "Identity details (display name, city/region)", completed: true },
       { label: "User type selection", completed: true },
@@ -90,7 +90,7 @@ const Dashboard = () => {
       { label: "Tone preference setup", completed: true },
       { label: "Profile Onboarding (8 steps)", completed: true },
       { label: "Carbon Context Onboarding (7 steps)", completed: true },
-      { label: "Personalized carbon recommendations", completed: false },
+      { label: "Personalized carbon recommendations", completed: true },
     ]
   };
 
