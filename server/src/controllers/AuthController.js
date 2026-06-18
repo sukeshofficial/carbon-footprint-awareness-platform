@@ -1,6 +1,7 @@
 import authService from '../services/AuthService.js';
 import tokenService from '../security/TokenService.js';
 import userRepository from '../repositories/UserRepository.js';
+import streakService from '../services/streak.service.js';
 import { uploadAvatar } from '../services/cloudinary.service.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
@@ -52,6 +53,11 @@ class AuthController {
 
     const rememberMe = req.body.rememberMe === true;
     setRefreshTokenCookie(res, refreshToken, rememberMe);
+
+    // Update login streak (fire-and-forget — must not break login on failure)
+    streakService.updateStreakOnLogin(user._id).catch((err) =>
+      console.error('[StreakService] Failed to update login streak:', err)
+    );
 
     res.status(200).json({
       status: 'success',

@@ -11,6 +11,14 @@ import profileRepository from '../repositories/profile.repository.js';
 import CarbonContext from '../models/carbonContext.model.js';
 import whatIfScenarioRepository from '../repositories/whatIfScenario.repository.js';
 
+import { SCENARIO_TEMPLATES } from '../constants/scenarioDefinitions.js';
+import { normalizeInputs } from './carbonEstimation/inputNormalizer.js';
+import { applyScenario } from './whatIf/scenarioApplier.js';
+import { calculateImpact } from './whatIf/impactCalculator.js';
+import { estimateMoneySavings } from './whatIf/savingsEstimator.js';
+import { scoreConfidence } from './whatIf/confidenceScorer.js';
+import { scoreDifficulty } from './whatIf/difficultyScorer.js';
+
 import {
   scenarioInputSchema,
   switchToTransportSchema,

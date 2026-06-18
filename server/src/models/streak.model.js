@@ -17,7 +17,7 @@ const streakSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    lastCompletionDate: {
+    lastLoginDate: {
       type: Date,
     },
     graceSkipsUsedThisWeek: {

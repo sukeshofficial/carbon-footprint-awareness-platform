@@ -1,5 +1,4 @@
 import actionRepository from '../repositories/action.repository.js';
-import streakService from './streak.service.js';
 import analyticsService from './analytics.service.js';
 import goalRepository from '../repositories/goal.repository.js';
 import AppError from '../utils/appError.js';
@@ -23,9 +22,6 @@ class ActionService {
     }
 
     const updatedAction = await actionRepository.updateStatus(actionId, 'completed', new Date());
-
-    // Update streak
-    await streakService.updateStreakOnCompletion(userId);
 
     // Update goal progress — use the active goal (planId already on action if needed later)
     const activeGoal = await goalRepository.findActiveByUserId(userId);

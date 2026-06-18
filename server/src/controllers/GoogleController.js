@@ -3,6 +3,7 @@ import userRepository from '../repositories/UserRepository.js';
 import authService from '../services/AuthService.js';
 import sessionRepository from '../repositories/SessionRepository.js';
 import tokenService from '../security/TokenService.js';
+import streakService from '../services/streak.service.js';
 
 let oauth2Client;
 
@@ -121,6 +122,11 @@ class GoogleController {
       });
 
       setRefreshTokenCookie(res, tokens.refreshToken);
+
+      // Update login streak (fire-and-forget)
+      streakService.updateStreakOnLogin(user._id).catch((err) =>
+        console.error('[StreakService] Failed to update Google login streak:', err)
+      );
 
       // Redirect back to frontend
       res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${tokens.accessToken}`);
