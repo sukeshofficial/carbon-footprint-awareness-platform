@@ -1,7 +1,10 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-const Progress = React.forwardRef(({ className = "", value = 0, ...props }, ref) => (
+/**
+ * @type {React.ForwardRefExoticComponent<React.RefAttributes<HTMLDivElement> & { value?: number; className?: string; }>}
+ */
+const Progress = React.forwardRef(/** @param {{ value?: number; className?: string; [key: string]: any }} props */({ className = "", value = 0, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
