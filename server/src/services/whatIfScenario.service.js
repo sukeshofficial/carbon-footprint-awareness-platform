@@ -11,16 +11,25 @@ import profileRepository from '../repositories/profile.repository.js';
 import CarbonContext from '../models/carbonContext.model.js';
 import whatIfScenarioRepository from '../repositories/whatIfScenario.repository.js';
 
-import { normalizeInputs } from './carbonEstimation/inputNormalizer.js';
-import { applyScenario } from './whatIf/scenarioApplier.js';
-import { calculateImpact } from './whatIf/impactCalculator.js';
-import { estimateMoneySavings } from './whatIf/savingsEstimator.js';
-import { scoreConfidence } from './whatIf/confidenceScorer.js';
-import { scoreDifficulty } from './whatIf/difficultyScorer.js';
-import { SCENARIO_TEMPLATES } from '../constants/scenarioDefinitions.js';
+import {
+  scenarioInputSchema,
+  switchToTransportSchema,
+  walkOrBikeSchema,
+  vegetarianDaysSchema,
+  reduceAcSchema,
+  reduceOnlineOrdersSchema
+} from '../validators/validation.schemas.js';
+
+const PAYLOAD_SCHEMAS = {
+  switch_to_metro: switchToTransportSchema,
+  switch_to_bus: switchToTransportSchema,
+  walk_or_bike: walkOrBikeSchema,
+  vegetarian_days: vegetarianDaysSchema,
+  reduce_ac_usage: reduceAcSchema,
+  reduce_online_orders: reduceOnlineOrdersSchema,
+};
 
 class WhatIfScenarioService {
-
   /**
    * Returns all available scenario templates (no user-specific data).
    */
@@ -35,8 +44,15 @@ class WhatIfScenarioService {
    * @param {object} inputPayload - User-configured inputs (e.g., { daysPerWeek: 4 })
    */
   async previewScenario(userId, templateId, inputPayload) {
+    // 1. Basic validation
+    scenarioInputSchema.parse({ templateId, inputPayload });
+
     const template = SCENARIO_TEMPLATES.find((t) => t.id === templateId);
     if (!template) throw new Error(`Unknown scenario template: ${templateId}`);
+
+    // 2. Scenario-specific payload validation
+    const payloadValidator = PAYLOAD_SCHEMAS[templateId];
+    const validatedPayload = payloadValidator ? payloadValidator.parse(inputPayload) : inputPayload;
 
     // Load baseline data
     const profile = await profileRepository.getProfileByUserId(userId);
@@ -48,9 +64,9 @@ class WhatIfScenarioService {
     }
 
     const baselineInputs = normalizeInputs(profile, carbonContext);
-    const modifiedInputs = applyScenario(baselineInputs, templateId, inputPayload);
+    const modifiedInputs = applyScenario(baselineInputs, templateId, validatedPayload);
     const impact = calculateImpact(baselineInputs, modifiedInputs, latestEstimation);
-    const moneySavings = estimateMoneySavings(templateId, modifiedInputs, inputPayload);
+    const moneySavings = estimateMoneySavings(templateId, modifiedInputs, validatedPayload);
     const confidence = scoreConfidence(baselineInputs, templateId, latestEstimation);
     const difficulty = scoreDifficulty(templateId);
 

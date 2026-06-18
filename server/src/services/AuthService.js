@@ -4,30 +4,33 @@ import sessionRepository from '../repositories/SessionRepository.js';
 import passwordService from '../security/PasswordService.js';
 import tokenService from '../security/TokenService.js';
 import * as emailService from './email.service.js';
+import { signupSchema, loginSchema } from '../validators/validation.schemas.js';
 
 class AuthService {
   /**
    * Handles user signup.
    */
   async signup(userData) {
-    const existingUser = await userRepository.findByEmail(userData.email);
+    const validated = signupSchema.parse(userData);
+
+    const existingUser = await userRepository.findByEmail(validated.email);
     if (existingUser) {
       throw new Error('Email already in use');
     }
 
-    const existingUsername = await userRepository.findByUsername(userData.username);
+    const existingUsername = await userRepository.findByUsername(validated.username);
     if (existingUsername) {
       throw new Error('Username already in use');
     }
 
-    const hashedPassword = await passwordService.hash(userData.password);
+    const hashedPassword = await passwordService.hash(validated.password);
 
     // Generate verification token
     const verificationToken = crypto.randomBytes(32).toString('hex');
     const hashedVerificationToken = crypto.createHash('sha256').update(verificationToken).digest('hex');
 
     const user = await userRepository.create({
-      ...userData,
+      ...validated,
       password: hashedPassword,
       verificationToken: hashedVerificationToken,
       verificationTokenExpires: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
@@ -63,12 +66,14 @@ class AuthService {
    * Handles user login.
    */
   async login(email, password, userAgent, ipAddress) {
-    const user = await userRepository.findByEmail(email);
+    const validated = loginSchema.parse({ email, password });
+
+    const user = await userRepository.findByEmail(validated.email);
     if (!user || !user.password) {
       throw new Error('Invalid email or password');
     }
 
-    const isPasswordValid = await passwordService.verify(user.password, password);
+    const isPasswordValid = await passwordService.verify(user.password, validated.password);
     if (!isPasswordValid) {
       throw new Error('Invalid email or password');
     }

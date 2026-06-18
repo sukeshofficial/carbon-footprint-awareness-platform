@@ -7,6 +7,7 @@ import recommendationRanker from './recommendation/recommendationRanker.js';
 import reasonBuilder from './recommendation/reasonBuilder.js';
 import recommendationFormatter from './recommendation/recommendationFormatter.js';
 import recommendationCache from './recommendation/recommendationCache.js';
+import { recommendationFeedbackSchema } from '../validators/validation.schemas.js';
 
 class RecommendationService {
   async getRecommendations(userId, forceRefresh = false) {
@@ -78,12 +79,13 @@ class RecommendationService {
   }
 
   async updateRecommendationStatus(userId, id, status) {
+    const validated = recommendationFeedbackSchema.parse({ status });
     const recommendation = await recommendationRepository.getById(id);
     if (!recommendation || recommendation.userId.toString() !== userId.toString()) {
       throw new Error('Recommendation not found or unauthorized');
     }
 
-    const updated = await recommendationRepository.updateStatus(id, status);
+    const updated = await recommendationRepository.updateStatus(id, validated.status);
 
     // Log feedback
     await recommendationFeedbackRepository.logFeedback({

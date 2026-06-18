@@ -6,10 +6,10 @@ import { TRANSPORT_CONVERSION_FACTORS, FLIGHT_FACTORS } from '../../config/carbo
  */
 export const estimateTransport = (inputs) => {
   const {
-    primaryMode,
-    secondaryMode,
-    weeklyCommuteDistance,
-    yearlyFlightFrequency,
+    primaryMode = 'walking',
+    secondaryMode = null,
+    weeklyCommuteDistance = 0,
+    yearlyFlightFrequency = 0,
   } = inputs;
 
   // Monthly commute distance (4.33 weeks per month)
@@ -31,5 +31,6 @@ export const estimateTransport = (inputs) => {
   const flightImpact = FLIGHT_FACTORS.domestic;
   const monthlyFlightCO2 = (yearlyFlightFrequency * flightImpact) / 12;
 
-  return commuteCO2 + monthlyFlightCO2;
+  const total = commuteCO2 + monthlyFlightCO2;
+  return isNaN(total) ? 0 : total;
 };

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { User as UserIcon, ChevronRight } from 'lucide-react';
 import { Leaf, Loader2, RefreshCw, Activity, TrendingUp, BarChart3, Lightbulb, Zap, Map } from 'lucide-react';
 
+import { toast } from 'sonner';
 import { useAuth } from '../contexts/AuthContext';
 import { useProfile } from '../store/profileStore';
 import { useCarbonEstimation } from '../store/carbonEstimationStore';
@@ -49,7 +50,6 @@ const DEV_STATUS_DATA = {
   ],
 };
 
-// ─── Sub-components ──────────────────────────────────────────────────────────
 
 const DashboardLoadingSpinner = () => (
   <div className="flex h-screen w-full items-center justify-center">
@@ -59,6 +59,25 @@ const DashboardLoadingSpinner = () => (
         Calculating your carbon impact...
       </p>
     </div>
+  </div>
+);
+
+const DashboardEmptyState = () => (
+  <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+    <div className="w-20 h-20 bg-primary/10 rounded-[2.5rem] flex items-center justify-center text-primary mb-8 animate-bounce">
+      <Leaf size={40} />
+    </div>
+    <h2 className="text-2xl font-black text-slate-900 dark:text-zinc-50 mb-3 italic">
+      Start Your Green Journey
+    </h2>
+    <p className="text-muted-foreground text-sm max-w-md mb-10 leading-relaxed font-medium">
+      We couldn't find your carbon footprint data. Complete the onboarding to see your impact, get personalized tips, and start reducing your emissions.
+    </p>
+    <Link to="/onboarding">
+      <Button size="lg" className="rounded-full px-10 h-14 text-base font-bold italic shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all">
+        Complete Onboarding
+      </Button>
+    </Link>
   </div>
 );
 
@@ -137,8 +156,10 @@ const Dashboard = () => {
     try {
       resetStream();
       await recalculate();
+      toast.success('Emissions updated successfully!');
     } catch (err) {
       console.error('Recalculate failed:', err);
+      toast.error('Failed to update emissions. Please try again.');
     }
   };
 
@@ -146,6 +167,13 @@ const Dashboard = () => {
     return <DashboardLoadingSpinner />;
   }
 
+  if (!estimation && !loading) {
+    return (
+      <div className="min-h-screen w-full bg-[#f8fafc] dark:bg-zinc-950/50">
+        <DashboardEmptyState />
+      </div>
+    );
+  }
   const displayValue =
     view === 'weekly' ? estimation?.weeklyEstimate : estimation?.monthlyEstimate;
   const trendValue = computeTrendFromHistory(history);

@@ -5,11 +5,8 @@ import { DIET_FACTORS } from '../../config/carbonEstimation.config.js';
  * Units: kg CO2 per month.
  */
 export const estimateFood = (inputs) => {
-  const { dietType } = inputs;
-
-  // Daily factor
-  const dailyCO2 = DIET_FACTORS[dietType] || DIET_FACTORS.mixed_diet;
-
-  // Monthly (30.4 days avg)
-  return dailyCO2 * 30.4;
+  const { dietType = 'mixed_diet' } = inputs;
+  const dailyKg = DIET_FACTORS[dietType] || DIET_FACTORS.mixed_diet;
+  const total = dailyKg * 30.4;
+  return isNaN(total) ? 0 : total;
 };

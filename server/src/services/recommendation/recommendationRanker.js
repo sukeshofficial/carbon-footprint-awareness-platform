@@ -1,13 +1,6 @@
-class RecommendationRanker {
-  constructor() {
-    this.weights = {
-      impact: 0.4,
-      effort: 0.2, // Inverse weight (higher effort = lower score)
-      savings: 0.2,
-      urgency: 0.2,
-    };
-  }
+import { RECOMMENDATION_WEIGHTS, RANKING_THRESHOLDS } from '../../config/carbonEstimation.config.js';
 
+class RecommendationRanker {
   scoreAndRank(candidates, estimation) {
     const scoredCandidates = candidates.map(candidate => {
       const impactScore = candidate.baseImpactScore;
@@ -16,10 +9,10 @@ class RecommendationRanker {
       const urgencyScore = this.getUrgencyScore(candidate.category, estimation);
 
       const rankScore = (
-        (impactScore * this.weights.impact) +
-        (effortScore * this.weights.effort) +
-        (savingsScore * this.weights.savings) +
-        (urgencyScore * this.weights.urgency)
+        (impactScore * RECOMMENDATION_WEIGHTS.impact) +
+        (effortScore * RECOMMENDATION_WEIGHTS.effort) +
+        (savingsScore * RECOMMENDATION_WEIGHTS.savings) +
+        (urgencyScore * RECOMMENDATION_WEIGHTS.urgency)
       );
 
       return {
@@ -35,19 +28,14 @@ class RecommendationRanker {
   }
 
   getEffortScore(effortLevel) {
-    switch (effortLevel) {
-      case 'low': return 10;
-      case 'medium': return 6;
-      case 'high': return 2;
-      default: return 5;
-    }
+    return RANKING_THRESHOLDS.effort[effortLevel] || RANKING_THRESHOLDS.effort.default;
   }
 
   getSavingsScore(savings) {
-    if (savings > 500) return 10;
-    if (savings > 200) return 7;
-    if (savings > 0) return 4;
-    return 1;
+    if (savings > 500) return RANKING_THRESHOLDS.savings.high;
+    if (savings > 200) return RANKING_THRESHOLDS.savings.medium;
+    if (savings > 0) return RANKING_THRESHOLDS.savings.low;
+    return RANKING_THRESHOLDS.savings.none;
   }
 
   getUrgencyScore(category, estimation) {

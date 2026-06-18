@@ -76,3 +76,25 @@ export const SEVERITY_THRESHOLDS = {
 };
 
 export const ESTIMATION_MODEL_VERSION = '2.0.0'; // Updated to 2.0 for production-grade logic
+
+export const RECOMMENDATION_WEIGHTS = {
+  impact: 0.4,
+  effort: 0.2, // Inverse weight (higher effort = lower score)
+  savings: 0.2,
+  urgency: 0.2,
+};
+
+export const RANKING_THRESHOLDS = {
+  effort: {
+    low: 10,
+    medium: 6,
+    high: 2,
+    default: 5,
+  },
+  savings: {
+    high: 10,  // > 500
+    medium: 7, // > 200
+    low: 4,    // > 0
+    none: 1,
+  },
+};

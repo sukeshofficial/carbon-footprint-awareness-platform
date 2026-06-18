@@ -105,6 +105,18 @@ General platform feedback.
 
 ---
 
+## 9. Recommendations (`/recommendations`)
+Personalized reduction strategies.
+
+| Endpoint | Method | Auth | Description |
+| :--- | :--- | :--- | :--- |
+| `/` | GET | Yes | Fetch prioritized recommendations. |
+| `/refresh` | POST | Yes | Force a refresh of the recommendation list. |
+| `/:id/status` | PATCH | Yes | Update recommendation status (`active`, `completed`, `dismissed`). |
+| `/history` | GET | Yes | View history of recommendation feedback. |
+
+---
+
 ## 8. Health & Infrastructure (`/health`)
 System monitoring.
 
@@ -115,13 +127,15 @@ System monitoring.
 ---
 
 ## Error Responses
-Standardized error format across all endpoints:
+Standardized error format across all endpoints.
+
+**Validation Errors:**
+The API uses **Zod** for strict schema validation. If validation fails, the server returns a `400 Bad Request` with details in the `error` field.
 
 ```json
 {
-  "status": "error/fail",
-  "message": "Human readable error message",
-  "stack": "...", // Only in development mode
-  "error": { ... } // Detailed error object if applicable
+  "status": "error",
+  "message": "Validation failed",
+  "error": { ... } 
 }
 ```

@@ -5,17 +5,19 @@ import { ENERGY_FACTORS } from '../../config/carbonEstimation.config.js';
  * Units: kg CO2 per month.
  */
 export const estimateEnergy = (inputs) => {
-  const { acUsage, fanUsage, householdSize } = inputs;
+  const {
+    acUsage = 'none',
+    fanUsage = 'none',
+    householdSize = 1
+  } = inputs;
 
   const acKWh = ENERGY_FACTORS.ac[acUsage] || 0;
   const fanKWh = ENERGY_FACTORS.fan[fanUsage] || 0;
+  const baseKWh = ENERGY_FACTORS.householdBasePerPerson;
 
-  const baseKWhPerPerson = ENERGY_FACTORS.householdBasePerPerson;
+  const safeHouseholdSize = Math.max(1, householdSize || 1);
+  const totalKWh = (acKWh + fanKWh + baseKWh);
+  const perPersonCO2 = (totalKWh * ENERGY_FACTORS.gridIntensity) / safeHouseholdSize;
 
-  const totalHouseholdKWh = acKWh + fanKWh + (baseKWhPerPerson * (householdSize || 1));
-
-  // Share among household members (simplified shared impact)
-  const myKWhShare = householdSize > 1 ? totalHouseholdKWh / householdSize : totalHouseholdKWh;
-
-  return myKWhShare * ENERGY_FACTORS.gridIntensity;
+  return isNaN(perPersonCO2) ? 0 : perPersonCO2;
 };

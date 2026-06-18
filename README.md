@@ -245,7 +245,7 @@ Accessibility improvements include:
 
 ---
 
-## Testing
+### Testing
 
 Backend tests use Node.js built-in test runner for zero-dependency testing.
 
@@ -258,9 +258,13 @@ npm test
 
 Coverage includes:
 
-* Estimation services
-* Business logic validation
-* Edge case handling
+* Estimation services (Transport, Food, Energy, Shopping, Aggregation)
+* What-If Scenario Simulations
+* Recommendation Scoring & Ranking
+* Auth & Validation (Zod)
+* Edge case handling (NaN-safety, Zero-values)
+
+Total tests: **88** 🟢
 
 ---
 
