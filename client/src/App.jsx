@@ -43,8 +43,10 @@ import { useCarbonInsightsStream } from "./hooks/useCarbonInsightsStream";
 import CurrentDevelopmentCard from "./components/ui/CurrentDevelopmentCard";
 import Navbar from "./components/layout/Navbar";
 import WhatIfSimulator from "./components/carbon/what-if/WhatIfSimulator";
+import RecommendationsPanel from "./components/carbon/recommendations/RecommendationsPanel";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "./components/ui/tabs";
 import { Button } from "./components/ui/button";
-import { Leaf, Loader2, RefreshCw, Activity, TrendingUp } from "lucide-react";
+import { Leaf, Loader2, RefreshCw, Activity, TrendingUp, BarChart3, Lightbulb, Zap, Map } from "lucide-react";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -183,33 +185,53 @@ const Dashboard = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-          {/* Left Main Content */}
+          {/* Left Main Content - Tabbed Area */}
           <div className="lg:col-span-8 flex flex-col gap-8 w-full">
-            {/* Analysis Section */}
-            <div className="w-full">
-              <EmissionsBreakdownCard
-                categoryBreakdown={estimation?.categoryBreakdown}
-                coachInsight={estimation?.explanation}
-                history={history}
-              />
-            </div>
+            <Tabs defaultValue="overview" className="w-full">
+              <TabsList>
+                <TabsTrigger value="overview" label="Overview" icon={BarChart3} />
+                <TabsTrigger value="insights" label="Insights" icon={Lightbulb} />
+                <TabsTrigger value="simulator" label="Simulator" icon={Zap} />
+                <TabsTrigger value="roadmap" label="Roadmap" icon={Map} />
+              </TabsList>
 
-            {/* Deep Insights */}
-            <div className="w-full bg-white dark:bg-zinc-900 rounded-[2.5rem] p-8 md:p-10 border border-slate-100 dark:border-zinc-800 shadow-sm">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                  <RefreshCw size={20} />
+              <TabsContent value="overview" className="space-y-8">
+                {/* Analysis Section */}
+                <div className="w-full">
+                  <EmissionsBreakdownCard
+                    categoryBreakdown={estimation?.categoryBreakdown}
+                    coachInsight={estimation?.explanation}
+                    history={history}
+                  />
                 </div>
-                <div>
-                  <h2 className="text-xl font-black text-slate-900 dark:text-zinc-50">Footprint Overview</h2>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-1">Rule-Based Analysis</p>
-                </div>
-              </div>
-              <ExplanationsPanel />
-            </div>
+              </TabsContent>
 
-            {/* What-If Scenario Simulator */}
-            <WhatIfSimulator />
+              <TabsContent value="insights" className="space-y-8">
+                {/* Deep Insights */}
+                <div className="w-full bg-white dark:bg-zinc-900 rounded-[2.5rem] p-8 md:p-10 border border-slate-100 dark:border-zinc-800 shadow-sm">
+                  <div className="flex items-center gap-3 mb-8">
+                    <div className="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                      <RefreshCw size={20} />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-black text-slate-900 dark:text-zinc-50">Footprint Overview</h2>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-1">Rule-Based Analysis</p>
+                    </div>
+                  </div>
+                  <ExplanationsPanel />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="simulator" className="space-y-8">
+                {/* What-If Scenario Simulator */}
+                <WhatIfSimulator />
+              </TabsContent>
+
+              <TabsContent value="roadmap" className="space-y-8">
+                {/* Recommendation Engine */}
+                <RecommendationsPanel />
+              </TabsContent>
+            </Tabs>
           </div>
 
           {/* Sidebar Area */}
