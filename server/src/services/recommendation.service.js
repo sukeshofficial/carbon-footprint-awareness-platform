@@ -1,7 +1,7 @@
 import recommendationRepository from '../repositories/recommendation.repository.js';
 import recommendationFeedbackRepository from '../repositories/recommendationFeedback.repository.js';
 import carbonEstimationRepository from '../repositories/carbonEstimation.repository.js';
-import carbonContextService from './carbonContext.service.js';
+import carbonContextRepository from '../repositories/carbonContext.repository.js';
 import candidateGenerator from './recommendation/candidateGenerator.js';
 import recommendationRanker from './recommendation/recommendationRanker.js';
 import reasonBuilder from './recommendation/reasonBuilder.js';
@@ -33,7 +33,7 @@ class RecommendationService {
       throw new Error('No carbon estimation found for user. Please complete onboarding first.');
     }
 
-    const context = await carbonContextService.getContextByUserId(userId);
+    const context = await carbonContextRepository.findByUserId(userId);
     if (!context) {
       throw new Error('No carbon context found for user.');
     }

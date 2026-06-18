@@ -21,6 +21,7 @@ import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
 import GoogleCallback from "./pages/auth/GoogleCallback";
 import Dashboard from "./pages/Dashboard";
 import EditProfile from "./pages/EditProfile";
+import PlannerPage from "./pages/PlannerPage";
 
 // Layout
 import Navbar from "./components/layout/Navbar";
@@ -61,6 +62,7 @@ function App() {
                           <Route path="/" element={<Dashboard />} />
                           <Route path="/dashboard" element={<Navigate to="/" replace />} />
                           <Route path="/profile/edit" element={<EditProfile />} />
+                          <Route path="/planner" element={<PlannerPage />} />
                         </Route>
                       </Route>
 

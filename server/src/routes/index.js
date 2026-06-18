@@ -8,6 +8,8 @@ import carbonEstimationRoutes from "./carbonEstimation.routes.js";
 import explanationRoutes from "./explanation.routes.js";
 import whatIfScenarioRoutes from "./whatIfScenario.routes.js";
 import recommendationRoutes from "./recommendation.routes.js";
+import goalRoutes from "./goal.routes.js";
+import plannerRoutes from "./planner.routes.js";
 
 const router = express.Router();
 
@@ -20,6 +22,8 @@ router.use("/carbon-estimation", carbonEstimationRoutes);
 router.use("/explanations", explanationRoutes);
 router.use("/what-if", whatIfScenarioRoutes);
 router.use("/recommendations", recommendationRoutes);
+router.use("/goals", goalRoutes);
+router.use("/planner", plannerRoutes);
 
 export default router;
 
