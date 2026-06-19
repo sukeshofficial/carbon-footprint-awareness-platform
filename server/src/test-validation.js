@@ -4,7 +4,7 @@ const testData = {
   name: "SUKESH D",
   email: "sukesh.d.31012006@gmail.com",
   username: "sukeshofficial",
-  password: "Sukesh@123"
+  password: process.env.TEST_PASSWORD || "Dummy@12345"
 };
 
 try {

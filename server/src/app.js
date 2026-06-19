@@ -116,8 +116,13 @@ app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const status = err.status || "error";
 
-  // Log error for server-side debugging
-  console.error(`[Error] ${req.method} ${req.url}:`, err);
+  // Log error for server-side debugging - Sanitized to prevent log injection (S5145)
+  const safeMethod = String(req.method).replace(/[^A-Z]/g, "");
+  console.error("[Error]", {
+    method: safeMethod,
+    statusCode,
+    message: err.message || "Internal server error"
+  });
 
   res.status(statusCode).json({
     status,
