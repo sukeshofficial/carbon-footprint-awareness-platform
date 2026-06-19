@@ -1,6 +1,7 @@
 import express from 'express';
 import whatIfScenarioController from '../controllers/whatIfScenario.controller.js';
 import { protect } from '../middlewares/authMiddleware.js';
+import { aiRateLimiter } from '../middlewares/rateLimiter.js';
 
 const router = express.Router();
 
@@ -11,13 +12,13 @@ router.use(protect);
 router.get('/scenarios', whatIfScenarioController.getTemplates.bind(whatIfScenarioController));
 
 /** POST /api/v1/what-if/scenarios/preview — preview impact without saving */
-router.post('/scenarios/preview', whatIfScenarioController.previewScenario.bind(whatIfScenarioController));
+router.post('/scenarios/preview', aiRateLimiter, whatIfScenarioController.previewScenario.bind(whatIfScenarioController));
 
 /** GET  /api/v1/what-if/scenarios/me  — list user's saved scenarios */
 router.get('/scenarios/me', whatIfScenarioController.getMyScenarios.bind(whatIfScenarioController));
 
 /** POST /api/v1/what-if/scenarios     — save a scenario */
-router.post('/scenarios', whatIfScenarioController.saveScenario.bind(whatIfScenarioController));
+router.post('/scenarios', aiRateLimiter, whatIfScenarioController.saveScenario.bind(whatIfScenarioController));
 
 /** GET  /api/v1/what-if/scenarios/:id — get a single saved scenario */
 router.get('/scenarios/:id', whatIfScenarioController.getScenarioById.bind(whatIfScenarioController));

@@ -45,6 +45,12 @@ function App() {
               <CarbonEstimationProvider>
                 <WhatIfProvider>
                   <div className="min-h-screen bg-background font-sans antialiased text-foreground">
+                    <a
+                      href="#main-content"
+                      className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-lg focus:font-bold focus:shadow-2xl transition-all"
+                    >
+                      Skip to content
+                    </a>
                     <Navbar />
                     <UnderDevelopmentBadge />
                     <Routes>
@@ -59,10 +65,31 @@ function App() {
                       {/* Protected Routes */}
                       <Route element={<ProtectedRoute />}>
                         <Route element={<OnboardingRedirect />}>
-                          <Route path="/" element={<Dashboard />} />
+                          <Route
+                            path="/"
+                            element={
+                              <main id="main-content" tabIndex={-1} className="outline-none">
+                                <Dashboard />
+                              </main>
+                            }
+                          />
                           <Route path="/dashboard" element={<Navigate to="/" replace />} />
-                          <Route path="/profile/edit" element={<EditProfile />} />
-                          <Route path="/planner" element={<PlannerPage />} />
+                          <Route
+                            path="/profile/edit"
+                            element={
+                              <main id="main-content" tabIndex={-1} className="outline-none">
+                                <EditProfile />
+                              </main>
+                            }
+                          />
+                          <Route
+                            path="/planner"
+                            element={
+                              <main id="main-content" tabIndex={-1} className="outline-none">
+                                <PlannerPage />
+                              </main>
+                            }
+                          />
                         </Route>
                       </Route>
 

@@ -52,7 +52,7 @@ const EmissionsBreakdownCard = ({ categoryBreakdown, coachInsight, history = [] 
               />
               <Bar dataKey="value" radius={999} barSize={24}>
                 {chartData.map((entry) => (
-                  <Cell key={`cell-${entry.name}`} fill={COLORS[entry.name]}/>
+                  <Cell key={`cell-${entry.name}`} fill={COLORS[entry.name]} />
                 ))}
               </Bar>
             </BarChart>
@@ -182,4 +182,4 @@ const EmissionsBreakdownCard = ({ categoryBreakdown, coachInsight, history = [] 
   );
 };
 
-export default EmissionsBreakdownCard;
+export default React.memo(EmissionsBreakdownCard);

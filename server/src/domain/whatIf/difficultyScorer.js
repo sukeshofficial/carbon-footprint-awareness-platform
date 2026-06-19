@@ -7,7 +7,7 @@
  * hard:   Needs lifestyle disruption or significant commitment.
  */
 
-import { SCENARIO_TEMPLATES } from '../../constants/scenarioDefinitions.js';
+import { SCENARIO_TEMPLATES } from '../../../../shared/constants/scenarioDefinitions.js';
 
 /**
  * @param {string} templateId - Scenario template ID

@@ -82,4 +82,4 @@ const MetricStatCard = ({ title, value, unit = null, icon: Icon = null, chip = n
   );
 };
 
-export default MetricStatCard;
+export default React.memo(MetricStatCard);

@@ -1,4 +1,4 @@
-import profileRepository from '../repositories/profile.repository.js';
+import profileRepository from '../infrastructure/repositories/profile.repository.js';
 import carbonContextService from './carbonContext.service.js';
 import carbonEstimationService from './carbonEstimation.service.js';
 

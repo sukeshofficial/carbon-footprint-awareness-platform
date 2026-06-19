@@ -1,0 +1,16 @@
+{
+  "project": "ACo2 Carbon Coach",
+  "version": "1.1.0",
+  "navigation": {
+    "entry": "AGENT_NAVIGATION.md",
+    "matrix": "EVALUATION_MATRIX.md",
+    "architecture": "SECURITY_ARCHITECTURE.md",
+    "standards": "CODE_QUALITY_STANDARDS.md"
+  },
+  "flags": {
+    "monorepo": true,
+    "wcag_compliant": true,
+    "ai_fallback": true,
+    "shared_schemas": true
+  }
+}

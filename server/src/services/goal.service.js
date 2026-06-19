@@ -1,4 +1,4 @@
-import goalRepository from '../repositories/goal.repository.js';
+import goalRepository from '../infrastructure/repositories/goal.repository.js';
 import AppError from '../utils/appError.js';
 
 class GoalService {

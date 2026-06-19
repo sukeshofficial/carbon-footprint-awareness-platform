@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { USER_TYPES, TONE_PREFERENCES, HOUSEHOLD_TYPES } from '../constants/profile.enums.js';
+import { USER_TYPES, TONE_PREFERENCES, HOUSEHOLD_TYPES } from '../../../../shared/constants/profile.enums.js';
 
 const profileSchema = new mongoose.Schema(
   {

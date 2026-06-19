@@ -1,6 +1,6 @@
-import actionRepository from '../repositories/action.repository.js';
+import actionRepository from '../infrastructure/repositories/action.repository.js';
 import analyticsService from './analytics.service.js';
-import goalRepository from '../repositories/goal.repository.js';
+import goalRepository from '../infrastructure/repositories/goal.repository.js';
 import AppError from '../utils/appError.js';
 
 class ActionService {

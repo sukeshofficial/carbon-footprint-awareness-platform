@@ -1,6 +1,8 @@
 import carbonEstimationService from '../services/carbonEstimation.service.js';
-import { formatEstimationResponse } from '../services/carbonEstimation/outputFormatter.js';
+import { formatEstimationResponse } from '../domain/carbonEstimation/outputFormatter.js';
 import aiService from '../services/ai.service.js';
+import { carbonInputSchema } from '../../../shared/schemas/carbon.schemas.js';
+import { getFallbackInsights } from '../domain/rules/fallbackEngine.js';
 
 class CarbonEstimationController {
   async getMyEstimation(req, res) {

@@ -78,4 +78,4 @@ const CoachingTipsCard = ({ insights, isStreaming, streamToken, streamError, onR
   );
 };
 
-export default CoachingTipsCard;
+export default React.memo(CoachingTipsCard);

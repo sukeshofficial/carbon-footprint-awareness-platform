@@ -31,7 +31,9 @@ const ShoppingStep = ({ data, onChange }) => {
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
       <div className="space-y-3">
-        <Label className="text-sm font-bold">Online Shopping Frequency</Label>
+        <Label className="text-sm font-bold">
+          Online Shopping Frequency <span className="text-red-500">*</span>
+        </Label>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
           {shoppingFreq.map((item) => (
             <button
@@ -53,7 +55,9 @@ const ShoppingStep = ({ data, onChange }) => {
       </div>
 
       <div className="space-y-3">
-        <Label className="text-sm font-bold">Fashion Purchase Frequency</Label>
+        <Label className="text-sm font-bold">
+          Fashion Purchase Frequency <span className="text-red-500">*</span>
+        </Label>
         <div className="flex flex-wrap gap-2">
           {fashionFreq.map((item) => (
             <button
@@ -74,7 +78,9 @@ const ShoppingStep = ({ data, onChange }) => {
       </div>
 
       <div className="space-y-3">
-        <Label className="text-sm font-bold">Gadget Upgrade Cycle</Label>
+        <Label className="text-sm font-bold">
+          Gadget Upgrade Cycle <span className="text-red-500">*</span>
+        </Label>
         <div className="flex flex-wrap gap-2">
           {gadgetCycles.map((item) => (
             <button

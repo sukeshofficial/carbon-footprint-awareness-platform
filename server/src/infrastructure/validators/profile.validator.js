@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { USER_TYPES, TONE_PREFERENCES, HOUSEHOLD_TYPES } from '../constants/profile.enums.js';
+import { USER_TYPES, TONE_PREFERENCES, HOUSEHOLD_TYPES } from '../../../../shared/constants/profile.enums.js';
 
 const profileSchema = z.object({
   displayName: z.string().min(1).max(50).trim(),

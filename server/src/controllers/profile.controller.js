@@ -1,5 +1,5 @@
 import profileService from '../services/profile.service.js';
-import { createProfileValidator, updateProfileValidator, patchPreferencesValidator } from '../validators/profile.validator.js';
+import { createProfileValidator, updateProfileValidator, patchPreferencesValidator } from '../infrastructure/validators/profile.validator.js';
 
 class ProfileController {
   async createProfileController(req, res) {

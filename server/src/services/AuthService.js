@@ -1,17 +1,17 @@
 import crypto from 'crypto';
-import userRepository from '../repositories/UserRepository.js';
-import sessionRepository from '../repositories/SessionRepository.js';
+import userRepository from '../infrastructure/repositories/UserRepository.js';
+import sessionRepository from '../infrastructure/repositories/SessionRepository.js';
 import passwordService from '../security/PasswordService.js';
 import tokenService from '../security/TokenService.js';
 import * as emailService from './email.service.js';
-import { signupSchema, loginSchema } from '../validators/validation.schemas.js';
+import { signupSchema, loginSchema } from '../../../shared/schemas/auth.schemas.js';
 
 class AuthService {
   /**
    * Handles user signup.
    */
   async signup(userData) {
-    const validated = signupSchema.parse(userData);
+    const validated = signupSchema.shape.body.parse(userData);
 
     const existingUser = await userRepository.findByEmail(validated.email);
     if (existingUser) {
@@ -66,7 +66,7 @@ class AuthService {
    * Handles user login.
    */
   async login(email, password, userAgent, ipAddress) {
-    const validated = loginSchema.parse({ email, password });
+    const validated = loginSchema.shape.body.parse({ email, password });
 
     const user = await userRepository.findByEmail(validated.email);
     if (!user || !user.password) {

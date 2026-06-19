@@ -1,6 +1,6 @@
-import progressSnapshotRepository from '../repositories/progressSnapshot.repository.js';
-import actionRepository from '../repositories/action.repository.js';
-import goalRepository from '../repositories/goal.repository.js';
+import progressSnapshotRepository from '../infrastructure/repositories/progressSnapshot.repository.js';
+import actionRepository from '../infrastructure/repositories/action.repository.js';
+import goalRepository from '../infrastructure/repositories/goal.repository.js';
 
 class AnalyticsService {
   async updateProgressSnapshot(userId, goalId) {

@@ -19,5 +19,8 @@
   "type": "commonjs",
   "engines": {
     "node": "24.x"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
   }
 }

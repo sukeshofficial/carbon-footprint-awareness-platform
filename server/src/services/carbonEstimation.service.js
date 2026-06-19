@@ -1,14 +1,15 @@
-import carbonEstimationRepository from '../repositories/carbonEstimation.repository.js';
-import profileRepository from '../repositories/profile.repository.js';
-import CarbonContext from '../models/carbonContext.model.js'; // Directly using model as repository for CC might not exist yet or I haven't seen it
-import { normalizeInputs } from './carbonEstimation/inputNormalizer.js';
-import { estimateTransport } from './carbonEstimation/transportEstimator.js';
-import { estimateFood } from './carbonEstimation/foodEstimator.js';
-import { estimateEnergy } from './carbonEstimation/energyEstimator.js';
-import { estimateShopping } from './carbonEstimation/shoppingEstimator.js';
-import { aggregateResults } from './carbonEstimation/carbonAggregation.service.js';
+import carbonEstimationRepository from '../infrastructure/repositories/carbonEstimation.repository.js';
+import profileRepository from '../infrastructure/repositories/profile.repository.js';
+import CarbonContext from '../infrastructure/models/carbonContext.model.js';
+import { normalizeInputs } from '../domain/carbonEstimation/inputNormalizer.js';
+import { estimateTransport } from '../domain/carbonEstimation/transportEstimator.js';
+import { estimateFood } from '../domain/carbonEstimation/foodEstimator.js';
+import { estimateEnergy } from '../domain/carbonEstimation/energyEstimator.js';
+import { estimateShopping } from '../domain/carbonEstimation/shoppingEstimator.js';
+import { aggregateResults } from '../domain/carbonEstimation/carbonAggregation.service.js';
 import { ESTIMATION_MODEL_VERSION } from '../config/carbonEstimation.config.js';
 import aiService from './ai.service.js';
+import { getFallbackInsights } from '../domain/rules/fallbackEngine.js';
 
 class CarbonEstimationService {
   async calculateForUser(userId) {
@@ -53,12 +54,15 @@ class CarbonEstimationService {
     // 5. Generate AI Insights (Fire-and-forget background task for initial run)
     // We don't await this to keep the response time fast.
     aiService.generateCarbonInsights(aggregated, normalizedInputs)
-      .then(aiInsights => {
-        if (aiInsights) {
-          carbonEstimationRepository.updateByUserId(userId, { aiInsights });
-        }
+      .then(async (aiInsights) => {
+        const insights = aiInsights || getFallbackInsights(aggregated, normalizedInputs);
+        await carbonEstimationRepository.updateByUserId(userId, { aiInsights: insights });
       })
-      .catch(err => console.warn('[CarbonEstimationService] Background AI Insights generation failed:', err.message));
+      .catch(async (err) => {
+        console.warn('[CarbonEstimationService] Background AI Insights generation failed, using fallback:', err.message);
+        const fallback = getFallbackInsights(aggregated, normalizedInputs);
+        await carbonEstimationRepository.updateByUserId(userId, { aiInsights: fallback });
+      });
 
     // 6. Build record
     const estimationData = {

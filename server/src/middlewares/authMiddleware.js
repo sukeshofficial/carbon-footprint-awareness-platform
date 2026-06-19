@@ -1,5 +1,5 @@
 import tokenService from '../security/TokenService.js';
-import userRepository from '../repositories/UserRepository.js';
+import userRepository from '../infrastructure/repositories/UserRepository.js';
 
 /**
  * Protect routes - ensures user is logged in

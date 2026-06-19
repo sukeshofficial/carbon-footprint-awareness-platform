@@ -1,13 +1,13 @@
-import recommendationRepository from '../repositories/recommendation.repository.js';
-import recommendationFeedbackRepository from '../repositories/recommendationFeedback.repository.js';
-import carbonEstimationRepository from '../repositories/carbonEstimation.repository.js';
-import carbonContextRepository from '../repositories/carbonContext.repository.js';
-import candidateGenerator from './recommendation/candidateGenerator.js';
-import recommendationRanker from './recommendation/recommendationRanker.js';
-import reasonBuilder from './recommendation/reasonBuilder.js';
-import recommendationFormatter from './recommendation/recommendationFormatter.js';
-import recommendationCache from './recommendation/recommendationCache.js';
-import { recommendationFeedbackSchema } from '../validators/validation.schemas.js';
+import recommendationRepository from '../infrastructure/repositories/recommendation.repository.js';
+import recommendationFeedbackRepository from '../infrastructure/repositories/recommendationFeedback.repository.js';
+import carbonEstimationRepository from '../infrastructure/repositories/carbonEstimation.repository.js';
+import carbonContextRepository from '../infrastructure/repositories/carbonContext.repository.js';
+import candidateGenerator from '../domain/recommendation/candidateGenerator.js';
+import recommendationRanker from '../domain/recommendation/recommendationRanker.js';
+import reasonBuilder from '../domain/recommendation/reasonBuilder.js';
+import recommendationFormatter from '../domain/recommendation/recommendationFormatter.js';
+import recommendationCache from '../domain/recommendation/recommendationCache.js';
+import { recommendationFeedbackSchema } from '../infrastructure/validators/validation.schemas.js';
 
 class RecommendationService {
   async getRecommendations(userId, forceRefresh = false) {

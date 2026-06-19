@@ -6,18 +6,18 @@
  * Save flow:    validate → preview → persist scenario + result → return
  */
 
-import carbonEstimationRepository from '../repositories/carbonEstimation.repository.js';
-import profileRepository from '../repositories/profile.repository.js';
-import CarbonContext from '../models/carbonContext.model.js';
-import whatIfScenarioRepository from '../repositories/whatIfScenario.repository.js';
+import carbonEstimationRepository from '../infrastructure/repositories/carbonEstimation.repository.js';
+import profileRepository from '../infrastructure/repositories/profile.repository.js';
+import CarbonContext from '../infrastructure/models/carbonContext.model.js';
+import whatIfScenarioRepository from '../infrastructure/repositories/whatIfScenario.repository.js';
 
-import { SCENARIO_TEMPLATES } from '../constants/scenarioDefinitions.js';
-import { normalizeInputs } from './carbonEstimation/inputNormalizer.js';
-import { applyScenario } from './whatIf/scenarioApplier.js';
-import { calculateImpact } from './whatIf/impactCalculator.js';
-import { estimateMoneySavings } from './whatIf/savingsEstimator.js';
-import { scoreConfidence } from './whatIf/confidenceScorer.js';
-import { scoreDifficulty } from './whatIf/difficultyScorer.js';
+import { SCENARIO_TEMPLATES } from '../../../shared/constants/scenarioDefinitions.js';
+import { normalizeInputs } from '../domain/carbonEstimation/inputNormalizer.js';
+import { applyScenario } from '../domain/whatIf/scenarioApplier.js';
+import { calculateImpact } from '../domain/whatIf/impactCalculator.js';
+import { estimateMoneySavings } from '../domain/whatIf/savingsEstimator.js';
+import { scoreConfidence } from '../domain/whatIf/confidenceScorer.js';
+import { scoreDifficulty } from '../domain/whatIf/difficultyScorer.js';
 
 import {
   scenarioInputSchema,
@@ -25,8 +25,8 @@ import {
   walkOrBikeSchema,
   vegetarianDaysSchema,
   reduceAcSchema,
-  reduceOnlineOrdersSchema
-} from '../validators/validation.schemas.js';
+  reduceOnlineOrdersSchema,
+} from '../../../shared/schemas/carbon.schemas.js';
 
 const PAYLOAD_SCHEMAS = {
   switch_to_metro: switchToTransportSchema,

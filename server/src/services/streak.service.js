@@ -1,4 +1,4 @@
-import streakRepository from '../repositories/streak.repository.js';
+import streakRepository from '../infrastructure/repositories/streak.repository.js';
 
 /**
  * Returns the UTC calendar date string (YYYY-MM-DD) for a given Date object.

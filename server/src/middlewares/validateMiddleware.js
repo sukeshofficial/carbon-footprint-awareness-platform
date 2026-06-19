@@ -1,18 +1,36 @@
+import logger from '../utils/logger.js';
+import AppError from '../utils/appError.js';
+
 /**
- * Middleware to validate request body using Zod schema
+ * Middleware factory for validating request data against Zod schemas.
+ * Validates body, query, and params.
  */
 export const validate = (schema) => (req, res, next) => {
   try {
-    schema.parse(req.body);
+    const dataToValidate = {
+      body: req.body,
+      query: req.query,
+      params: req.params,
+    };
+
+    console.log('[DEBUG] Validation input body:', JSON.stringify(req.body));
+
+    const validated = schema.parse(dataToValidate);
+
+    // Replace request properties with validated/sanitized data
+    if (validated.body) req.body = validated.body;
+    if (validated.query) req.query = validated.query;
+    if (validated.params) req.params = validated.params;
+
     next();
-  } catch (error) {
-    return res.status(400).json({
-      status: 'error',
-      message: error.errors?.[0]?.message || 'Validation failed',
-      errors: error.errors?.map((err) => ({
-        path: err.path.join('.'),
-        message: err.message,
-      })) || [{ message: error.message }],
-    });
+  } catch (err) {
+    logger.debug('[Validation] Request validation failed:', err);
+
+    if (err.errors) {
+      const details = err.errors.map((e) => `${e.path.join('.')}: ${e.message}`).join(', ');
+      return next(new AppError(`Validation failed: ${details}`, 400));
+    }
+
+    next(err);
   }
 };

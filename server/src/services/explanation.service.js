@@ -1,5 +1,5 @@
 import carbonEstimationService from './carbonEstimation.service.js';
-import explanationRepository from '../repositories/explanation.repository.js';
+import explanationRepository from '../infrastructure/repositories/explanation.repository.js';
 import { summaryRules, categoryRules, habitRules, recommendationRules } from './explanation.rules.js';
 import { summaryTemplates, categoryTemplates, habitTemplates, recommendationTemplates } from './explanation.templates.js';
 import { mapToExplanationSignals } from './explanation.mapper.js';

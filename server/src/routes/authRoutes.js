@@ -3,7 +3,7 @@ import authController from '../controllers/AuthController.js';
 import googleController from '../controllers/GoogleController.js';
 import { protect } from '../middlewares/authMiddleware.js';
 import { validate } from '../middlewares/validateMiddleware.js';
-import { signupSchema, loginSchema, forgotPasswordSchema, resetPasswordSchema } from '../schemas/authSchemas.js';
+import { signupSchema, loginSchema, forgotPasswordSchema, resetPasswordSchema } from '../../../shared/schemas/auth.schemas.js';
 
 const router = express.Router();
 

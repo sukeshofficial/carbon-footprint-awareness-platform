@@ -1,7 +1,7 @@
 import { OAuth2Client } from 'google-auth-library';
-import userRepository from '../repositories/UserRepository.js';
+import userRepository from '../infrastructure/repositories/UserRepository.js';
 import authService from '../services/AuthService.js';
-import sessionRepository from '../repositories/SessionRepository.js';
+import sessionRepository from '../infrastructure/repositories/SessionRepository.js';
 import tokenService from '../security/TokenService.js';
 import streakService from '../services/streak.service.js';
 

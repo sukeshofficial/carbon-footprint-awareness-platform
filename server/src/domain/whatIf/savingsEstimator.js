@@ -6,7 +6,7 @@
  * All values are labelled as estimates and are directional only.
  */
 
-import { SAVINGS_MULTIPLIERS } from '../../constants/scenarioDefinitions.js';
+import { SAVINGS_MULTIPLIERS } from '../../../../shared/constants/scenarioDefinitions.js';
 
 /**
  * @param {string} templateId     - Scenario template ID

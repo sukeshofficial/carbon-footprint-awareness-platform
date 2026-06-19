@@ -1,5 +1,5 @@
-import actionPlanRepository from '../repositories/actionPlan.repository.js';
-import actionRepository from '../repositories/action.repository.js';
+import actionPlanRepository from '../infrastructure/repositories/actionPlan.repository.js';
+import actionRepository from '../infrastructure/repositories/action.repository.js';
 import recommendationService from './recommendation.service.js';
 import AppError from '../utils/appError.js';
 
