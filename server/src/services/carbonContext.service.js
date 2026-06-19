@@ -1,7 +1,7 @@
 import carbonContextRepository from '../infrastructure/repositories/carbonContext.repository.js';
 import { mapContextToSignals } from './contextMapper.js';
 import { stepValidators, finalSubmissionValidator } from '../infrastructure/validators/carbonContext.validator.js';
-import { mapValue, inverseMap, CONTEXT_MAPPINGS, STEP_ORDER, QUESTIONNAIRE_CONFIG } from '../../../shared/constants/carbonContext.constants.js';
+import { mapValue, inverseMap, CONTEXT_MAPPINGS, STEP_ORDER, QUESTIONNAIRE_CONFIG } from '../shared/constants/carbonContext.constants.js';
 
 class CarbonContextService {
   async getCompletionProgress(userId) {

@@ -11,7 +11,7 @@ import profileRepository from '../infrastructure/repositories/profile.repository
 import CarbonContext from '../infrastructure/models/carbonContext.model.js';
 import whatIfScenarioRepository from '../infrastructure/repositories/whatIfScenario.repository.js';
 
-import { SCENARIO_TEMPLATES } from '../../../shared/constants/scenarioDefinitions.js';
+import { SCENARIO_TEMPLATES } from '../shared/constants/scenarioDefinitions.js';
 import { normalizeInputs } from '../domain/carbonEstimation/inputNormalizer.js';
 import { applyScenario } from '../domain/whatIf/scenarioApplier.js';
 import { calculateImpact } from '../domain/whatIf/impactCalculator.js';
@@ -26,7 +26,7 @@ import {
   vegetarianDaysSchema,
   reduceAcSchema,
   reduceOnlineOrdersSchema,
-} from '../../../shared/schemas/carbon.schemas.js';
+} from '../shared/schemas/carbon.schemas.js';
 
 const PAYLOAD_SCHEMAS = {
   switch_to_metro: switchToTransportSchema,

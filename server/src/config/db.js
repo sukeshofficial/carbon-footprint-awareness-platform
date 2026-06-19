@@ -17,7 +17,7 @@ const connectDB = async () => {
       bufferCommands: false,
     };
 
-    const uri = process.env.MONGO_URI;
+    const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
     if (!uri) {
       const error = new Error('MONGO_URI is not defined in environment variables');
       error.statusCode = 500;

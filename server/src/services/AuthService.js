@@ -4,7 +4,7 @@ import sessionRepository from '../infrastructure/repositories/SessionRepository.
 import passwordService from '../security/PasswordService.js';
 import tokenService from '../security/TokenService.js';
 import * as emailService from './email.service.js';
-import { signupSchema, loginSchema } from '../../../shared/schemas/auth.schemas.js';
+import { signupSchema, loginSchema } from '../shared/schemas/auth.schemas.js';
 
 class AuthService {
   /**

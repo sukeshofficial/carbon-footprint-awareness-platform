@@ -15,7 +15,7 @@ import {
   PLASTIC_USAGE_LEVELS,
   ONBOARDING_DRAFT_STATUS,
   QUESTIONNAIRE_VERSION,
-} from '../../../../shared/constants/carbonContext.enums.js';
+} from '../../shared/constants/carbonContext.enums.js';
 
 const carbonContextSchema = new mongoose.Schema(
   {

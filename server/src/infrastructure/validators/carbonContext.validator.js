@@ -13,7 +13,7 @@ import {
   RECYCLING_HABITS,
   WASTE_SEGREGATION_LEVELS,
   PLASTIC_USAGE_LEVELS,
-} from '../../../../shared/constants/carbonContext.enums.js';
+} from '../../shared/constants/carbonContext.enums.js';
 
 const transportStepSchema = z.object({
   primaryMode: z.enum(TRANSPORT_MODES),

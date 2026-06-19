@@ -60,7 +60,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // 5. Handle explicit preflight for Express 4/5
-app.options("*", cors(corsOptions));
+app.options("/*path", cors(corsOptions));
 
 // 6. Security headers (Migrated from Seyal: explicitly allowing cross-origin resources)
 app.use(helmet({
