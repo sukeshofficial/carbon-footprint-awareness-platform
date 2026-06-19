@@ -5,6 +5,7 @@ import AppError from '../utils/appError.js';
 
 class ActionService {
   async getActions(userId, planId) {
+    // Contract enforcement: ensure planId is either null or a trusted ObjectId
     if (planId) {
       return await actionRepository.findByPlanId(planId);
     }

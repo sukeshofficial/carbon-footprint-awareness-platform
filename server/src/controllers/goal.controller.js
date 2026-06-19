@@ -1,5 +1,6 @@
 import goalService from '../services/goal.service.js';
 import catchAsync from '../utils/catchAsync.js';
+import { sanitizeObjectId } from '../utils/mongooseUtils.js';
 
 class GoalController {
   createGoal = catchAsync(async (req, res) => {
@@ -27,7 +28,9 @@ class GoalController {
   });
 
   updateGoal = catchAsync(async (req, res) => {
-    const goal = await goalService.updateGoal(req.user.id, req.params.id, req.body);
+    const { id } = req.params;
+    const sanitizedId = sanitizeObjectId(id, 'goalId');
+    const goal = await goalService.updateGoal(req.user.id, sanitizedId, req.body);
     res.status(200).json({
       status: 'success',
       data: { goal }
@@ -35,7 +38,9 @@ class GoalController {
   });
 
   deleteGoal = catchAsync(async (req, res) => {
-    await goalService.deleteGoal(req.user.id, req.params.id);
+    const { id } = req.params;
+    const sanitizedId = sanitizeObjectId(id, 'goalId');
+    await goalService.deleteGoal(req.user.id, sanitizedId);
     res.status(204).json({
       status: 'success',
       data: null

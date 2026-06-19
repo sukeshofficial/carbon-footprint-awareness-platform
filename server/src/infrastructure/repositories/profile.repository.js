@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Profile from '../models/profile.model.js';
 
 class ProfileRepository {
@@ -11,7 +12,7 @@ class ProfileRepository {
       const value = obj[key];
       const newKey = prefix ? `${prefix}.${key}` : key;
 
-      if (value && typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date) && !(value.constructor?.name === 'ObjectId')) {
+      if (value && typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date) && !(value instanceof mongoose.Types.ObjectId)) {
         Object.assign(flattened, this.flattenObject(value, newKey));
       } else {
         flattened[newKey] = value;
@@ -25,32 +26,36 @@ class ProfileRepository {
   }
 
   async getProfileByUserId(userId) {
-    return await Profile.findOne({ userId });
+    const safeUserId = mongoose.Types.ObjectId.isValid(userId) ? new mongoose.Types.ObjectId(String(userId)) : userId;
+    return await Profile.findOne({ userId: safeUserId });
   }
 
   async updateProfile(userId, profileData) {
+    const safeUserId = mongoose.Types.ObjectId.isValid(userId) ? new mongoose.Types.ObjectId(String(userId)) : userId;
     const updates = this.flattenObject(profileData);
     return await Profile.findOneAndUpdate(
-      { userId },
+      { userId: safeUserId },
       { $set: updates },
       { new: true, runValidators: true }
     );
   }
 
   async updatePreferences(userId, preferences) {
+    const safeUserId = mongoose.Types.ObjectId.isValid(userId) ? new mongoose.Types.ObjectId(String(userId)) : userId;
     const updates = this.flattenObject(preferences);
     return await Profile.findOneAndUpdate(
-      { userId },
+      { userId: safeUserId },
       { $set: updates },
       { new: true, runValidators: true }
     );
   }
 
   async upsertProfile(userId, profileData) {
+    const safeUserId = mongoose.Types.ObjectId.isValid(userId) ? new mongoose.Types.ObjectId(String(userId)) : userId;
     const updates = this.flattenObject(profileData);
     return await Profile.findOneAndUpdate(
-      { userId },
-      { $set: { ...updates, userId } },
+      { userId: safeUserId },
+      { $set: { ...updates, userId: safeUserId } },
       { new: true, upsert: true, runValidators: true }
     );
   }

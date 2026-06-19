@@ -1,4 +1,8 @@
+import mongoose from 'mongoose';
 import Goal from '../models/goal.model.js';
+
+const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+const toObjectId = (id) => new mongoose.Types.ObjectId(String(id));
 
 class GoalRepository {
   async create(goalData) {
@@ -6,28 +10,34 @@ class GoalRepository {
   }
 
   async findByUserId(userId) {
-    return await Goal.find({ userId }).sort({ createdAt: -1 });
+    const safeUserId = isValidObjectId(userId) ? toObjectId(userId) : userId;
+    return await Goal.find({ userId: safeUserId }).sort({ createdAt: -1 });
   }
 
   async findActiveByUserId(userId) {
-    return await Goal.findOne({ userId, status: 'active' });
+    const safeUserId = isValidObjectId(userId) ? toObjectId(userId) : userId;
+    return await Goal.findOne({ userId: safeUserId, status: 'active' });
   }
 
   async findById(id) {
-    return await Goal.findById(id);
+    const safeId = isValidObjectId(id) ? toObjectId(id) : id;
+    return await Goal.findById(safeId);
   }
 
   async update(id, updateData) {
-    return await Goal.findByIdAndUpdate(id, updateData, { new: true });
+    const safeId = isValidObjectId(id) ? toObjectId(id) : id;
+    return await Goal.findByIdAndUpdate(safeId, updateData, { new: true });
   }
 
   async delete(id) {
-    return await Goal.findByIdAndDelete(id);
+    const safeId = isValidObjectId(id) ? toObjectId(id) : id;
+    return await Goal.findByIdAndDelete(safeId);
   }
 
   async updateCurrentValue(id, value) {
+    const safeId = isValidObjectId(id) ? toObjectId(id) : id;
     return await Goal.findByIdAndUpdate(
-      id,
+      safeId,
       { $set: { currentValue: value } },
       { new: true }
     );

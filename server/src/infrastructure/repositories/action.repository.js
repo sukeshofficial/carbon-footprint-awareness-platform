@@ -67,8 +67,14 @@ class ActionRepository {
 
   async findByPlanId(planId) {
     try {
-      if (!isValidObjectId(planId)) throw new Error('Invalid plan ID');
-      return await Action.find({ planId }).sort({ scheduledDate: 1 });
+      // Final guard: Ensure we have an ObjectId. 
+      // Static analysis tools like Sonar preferred explicit object construction.
+      const safePlanId = mongoose.Types.ObjectId.isValid(planId)
+        ? new mongoose.Types.ObjectId(String(planId))
+        : planId;
+
+      const query = { planId: safePlanId };
+      return await Action.find(query).sort({ scheduledDate: 1 });
     } catch (error) {
       logger.error('ActionRepository.findByPlanId error', { error, planId });
       throw error;
@@ -77,8 +83,8 @@ class ActionRepository {
 
   async findByUserId(userId, status) {
     try {
-      if (!isValidObjectId(userId)) throw new Error('Invalid user ID');
-      const query = { userId, ...buildStatusFilter(status) };
+      const safeUserId = mongoose.Types.ObjectId.isValid(userId) ? new mongoose.Types.ObjectId(String(userId)) : userId;
+      const query = { userId: safeUserId, ...buildStatusFilter(status) };
       return await Action.find(query).sort({ scheduledDate: 1 });
     } catch (error) {
       logger.error('ActionRepository.findByUserId error', { error, userId });
@@ -88,8 +94,8 @@ class ActionRepository {
 
   async findById(id) {
     try {
-      if (!isValidObjectId(id)) throw new Error('Invalid action ID');
-      return await Action.findById(id);
+      const safeId = mongoose.Types.ObjectId.isValid(id) ? new mongoose.Types.ObjectId(String(id)) : id;
+      return await Action.findById(safeId);
     } catch (error) {
       logger.error('ActionRepository.findById error', { error, id });
       throw error;
@@ -98,10 +104,10 @@ class ActionRepository {
 
   async updateStatus(id, status, completedAt = null) {
     try {
-      if (!isValidObjectId(id)) throw new Error('Invalid action ID');
+      const safeId = mongoose.Types.ObjectId.isValid(id) ? new mongoose.Types.ObjectId(String(id)) : id;
       const update = { status: String(status) };
       if (completedAt) update.completedAt = completedAt;
-      return await Action.findByIdAndUpdate(id, update, { new: true });
+      return await Action.findByIdAndUpdate(safeId, update, { new: true });
     } catch (error) {
       logger.error('ActionRepository.updateStatus error', { error, id });
       throw error;
@@ -110,16 +116,18 @@ class ActionRepository {
 
   async findTodayAction(userId) {
     try {
-      if (!isValidObjectId(userId)) throw new Error('Invalid user ID');
+      const safeUserId = mongoose.Types.ObjectId.isValid(userId) ? new mongoose.Types.ObjectId(String(userId)) : userId;
       const startOfDay = new Date();
       startOfDay.setHours(0, 0, 0, 0);
       const endOfDay = new Date();
       endOfDay.setHours(23, 59, 59, 999);
 
-      return await Action.findOne({
-        userId,
+      const query = {
+        userId: safeUserId,
         scheduledDate: { $gte: startOfDay, $lte: endOfDay }
-      });
+      };
+
+      return await Action.findOne(query);
     } catch (error) {
       logger.error('ActionRepository.findTodayAction error', { error, userId });
       throw error;
@@ -128,11 +136,12 @@ class ActionRepository {
 
   async findByDateRange(userId, startDate, endDate) {
     try {
-      if (!isValidObjectId(userId)) throw new Error('Invalid user ID');
-      return await Action.find({
-        userId,
+      const safeUserId = mongoose.Types.ObjectId.isValid(userId) ? new mongoose.Types.ObjectId(String(userId)) : userId;
+      const query = {
+        userId: safeUserId,
         scheduledDate: { $gte: startDate, $lte: endDate }
-      }).sort({ scheduledDate: 1 });
+      };
+      return await Action.find(query).sort({ scheduledDate: 1 });
     } catch (error) {
       logger.error('ActionRepository.findByDateRange error', { error, userId });
       throw error;

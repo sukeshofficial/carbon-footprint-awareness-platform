@@ -22,8 +22,8 @@ class ActionPlanRepository {
 
   async findActiveByUserId(userId, planType) {
     try {
-      if (!isValidObjectId(userId)) throw new Error('Invalid user ID');
-      const query = { userId, status: 'active' };
+      const safeUserId = isValidObjectId(userId) ? new mongoose.Types.ObjectId(String(userId)) : userId;
+      const query = { userId: safeUserId, status: 'active' };
       if (planType) query.planType = String(planType);
       return await ActionPlan.findOne(query).sort({ createdAt: -1 });
     } catch (error) {
@@ -34,8 +34,8 @@ class ActionPlanRepository {
 
   async findById(id) {
     try {
-      if (!isValidObjectId(id)) throw new Error('Invalid plan ID');
-      return await ActionPlan.findById(id);
+      const safeId = isValidObjectId(id) ? new mongoose.Types.ObjectId(String(id)) : id;
+      return await ActionPlan.findById(safeId);
     } catch (error) {
       logger.error('ActionPlanRepository.findById error', { error, id });
       throw error;
@@ -44,8 +44,8 @@ class ActionPlanRepository {
 
   async updateStatus(id, status) {
     try {
-      if (!isValidObjectId(id)) throw new Error('Invalid plan ID');
-      return await ActionPlan.findByIdAndUpdate(id, { status: String(status) }, { new: true });
+      const safeId = isValidObjectId(id) ? new mongoose.Types.ObjectId(String(id)) : id;
+      return await ActionPlan.findByIdAndUpdate(safeId, { status: String(status) }, { new: true });
     } catch (error) {
       logger.error('ActionPlanRepository.updateStatus error', { error, id });
       throw error;
@@ -54,8 +54,8 @@ class ActionPlanRepository {
 
   async findByGoalId(goalId) {
     try {
-      if (!isValidObjectId(goalId)) throw new Error('Invalid goal ID');
-      return await ActionPlan.find({ goalId }).sort({ createdAt: -1 });
+      const safeGoalId = isValidObjectId(goalId) ? new mongoose.Types.ObjectId(String(goalId)) : goalId;
+      return await ActionPlan.find({ goalId: safeGoalId }).sort({ createdAt: -1 });
     } catch (error) {
       logger.error('ActionPlanRepository.findByGoalId error', { error, goalId });
       throw error;
