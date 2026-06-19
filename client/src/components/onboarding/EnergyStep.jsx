@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Label } from '../ui/label';
 import { Switch } from '../ui/switch';
 import { cn } from '@/lib/utils';
@@ -86,15 +87,39 @@ const EnergyStep = ({ data, onChange }) => {
       <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-100 dark:border-zinc-800">
         <div className="space-y-0.5">
           <Label className="text-sm font-bold">Electricity Bill Awareness</Label>
-          <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-black">Do you track your monthly usage?</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-black">
+            Do you track your monthly usage?
+          </p>
         </div>
+
         <Switch
-          checked={data.billAwareness || false}
-          onCheckedChange={(checked) => onChange({ ...data, billAwareness: checked })}
+          checked={data.billAwareness}
+          onCheckedChange={(checked) =>
+            onChange({ ...data, billAwareness: checked })
+          }
         />
       </div>
     </div>
   );
+};
+
+EnergyStep.propTypes = {
+  data: PropTypes.shape({
+    homeType: PropTypes.string,
+    acUsage: PropTypes.string,
+    fanUsage: PropTypes.string,
+    billAwareness: PropTypes.bool,
+  }),
+  onChange: PropTypes.func.isRequired,
+};
+
+EnergyStep.defaultProps = {
+  data: {
+    homeType: '',
+    acUsage: '',
+    fanUsage: '',
+    billAwareness: false,
+  },
 };
 
 export default EnergyStep;

@@ -1,9 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button } from '../../ui/button';
 import { cn } from '../../../lib/utils';
-import { Filter, Zap, TrendingDown, IndianRupee } from 'lucide-react';
+import {
+  Filter,
+  Zap,
+  TrendingDown,
+  IndianRupee,
+} from 'lucide-react';
 
-const RecommendationFilters = ({ activeFilter, onFilterChange, className = "" }) => {
+const RecommendationFilters = ({
+  activeFilter = 'all',
+  onFilterChange,
+  className = '',
+}) => {
   const filters = [
     { id: 'all', label: 'All', icon: Filter },
     { id: 'impact', label: 'High Impact', icon: TrendingDown },
@@ -12,7 +22,7 @@ const RecommendationFilters = ({ activeFilter, onFilterChange, className = "" })
   ];
 
   return (
-    <div className={cn("flex flex-wrap gap-2 items-center", className)}>
+    <div className={cn('flex flex-wrap gap-2 items-center', className)}>
       {filters.map((filter) => {
         const Icon = filter.icon;
         const isActive = activeFilter === filter.id;
@@ -20,23 +30,39 @@ const RecommendationFilters = ({ activeFilter, onFilterChange, className = "" })
         return (
           <Button
             key={filter.id}
-            variant={isActive ? "default" : "outline"}
+            variant={isActive ? 'default' : 'outline'}
             size="sm"
-            onClick={() => onFilterChange(filter.id)}
+            onClick={() => onFilterChange?.(filter.id)}
             className={cn(
-              "rounded-full h-8 px-4 text-[10px] font-black uppercase tracking-widest gap-2 transition-all duration-300",
+              'rounded-full h-8 px-4 text-[10px] font-black uppercase tracking-widest gap-2 transition-all duration-300',
               isActive
-                ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900 border-transparent shadow-lg"
-                : "bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-500 hover:border-slate-300 dark:hover:border-zinc-700 shadow-sm"
+                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 border-transparent shadow-lg'
+                : 'bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-500 hover:border-slate-300 dark:hover:border-zinc-700 shadow-sm'
             )}
           >
-            <Icon size={12} className={cn(isActive ? "text-primary" : "text-slate-400")} />
+            <Icon
+              size={12}
+              className={cn(
+                isActive ? 'text-primary' : 'text-slate-400'
+              )}
+            />
             {filter.label}
           </Button>
         );
       })}
     </div>
   );
+};
+
+RecommendationFilters.propTypes = {
+  activeFilter: PropTypes.oneOf([
+    'all',
+    'impact',
+    'effort',
+    'savings',
+  ]),
+  onFilterChange: PropTypes.func,
+  className: PropTypes.string,
 };
 
 export default RecommendationFilters;

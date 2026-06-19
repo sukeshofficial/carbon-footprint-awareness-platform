@@ -4,7 +4,8 @@
  */
 
 import React from 'react';
-import { Bus, Leaf, Zap, ShoppingBag, Bike, Train } from 'lucide-react';
+import PropTypes from 'prop-types';
+import { Leaf, Zap, ShoppingBag, Train } from 'lucide-react';
 import { cn } from '../../../lib/utils';
 import DifficultyBadge from './DifficultyBadge';
 
@@ -37,12 +38,23 @@ export default function ScenarioCard({ template, isSelected, onClick }) {
       )}
     >
       <div className="flex items-start gap-3">
-        <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0', colorClass)}>
+        <div
+          className={cn(
+            'w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0',
+            colorClass
+          )}
+        >
           <Icon className="w-5 h-5" />
         </div>
+
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-bold text-slate-900 dark:text-zinc-100 leading-tight">{template.title}</p>
-          <p className="text-xs text-muted-foreground mt-1 leading-snug line-clamp-2">{template.description}</p>
+          <p className="text-sm font-bold text-slate-900 dark:text-zinc-100 leading-tight">
+            {template.title}
+          </p>
+          <p className="text-xs text-muted-foreground mt-1 leading-snug line-clamp-2">
+            {template.description}
+          </p>
+
           <div className="mt-3">
             <DifficultyBadge level={template.difficulty} />
           </div>
@@ -51,3 +63,20 @@ export default function ScenarioCard({ template, isSelected, onClick }) {
     </button>
   );
 }
+
+ScenarioCard.propTypes = {
+  template: PropTypes.shape({
+    type: PropTypes.oneOf(['transport', 'food', 'energy', 'shopping'])
+      .isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    difficulty: PropTypes.oneOf(['easy', 'medium', 'hard']).isRequired,
+  }).isRequired,
+  isSelected: PropTypes.bool,
+  onClick: PropTypes.func,
+};
+
+ScenarioCard.defaultProps = {
+  isSelected: false,
+  onClick: () => { },
+};

@@ -1,8 +1,14 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import PropTypes from 'prop-types';
+import { Card } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
-import { CheckCircle2, TrendingDown, Circle, SkipForward } from 'lucide-react';
+import {
+  CheckCircle2,
+  TrendingDown,
+  Circle,
+  SkipForward,
+} from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 const ActionCard = ({ action, onComplete, onSkip, compact = false }) => {
@@ -20,20 +26,27 @@ const ActionCard = ({ action, onComplete, onSkip, compact = false }) => {
   };
 
   return (
-    <Card className={cn(
-      "overflow-hidden transition-all duration-200",
-      action.status === 'completed' ? "bg-green-50/30 border-green-100" : "hover:border-primary/20",
-      compact ? "p-3" : "p-4"
-    )}>
+    <Card
+      className={cn(
+        'overflow-hidden transition-all duration-200',
+        action.status === 'completed'
+          ? 'bg-green-50/30 border-green-100'
+          : 'hover:border-primary/20',
+        compact ? 'p-3' : 'p-4'
+      )}
+    >
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 space-y-2">
           <div className="flex items-center gap-2">
             {statusIcons[action.status]}
-            <h4 className={cn(
-              "font-semibold tracking-tight",
-              compact ? "text-sm" : "text-base",
-              action.status === 'completed' && "text-gray-500 line-through"
-            )}>
+            <h4
+              className={cn(
+                'font-semibold tracking-tight',
+                compact ? 'text-sm' : 'text-base',
+                action.status === 'completed' &&
+                'text-gray-500 line-through'
+              )}
+            >
               {action.title}
             </h4>
           </div>
@@ -45,13 +58,23 @@ const ActionCard = ({ action, onComplete, onSkip, compact = false }) => {
           )}
 
           <div className="flex flex-wrap items-center gap-2 pt-1">
-            <Badge variant="outline" className={cn("text-[10px] uppercase font-bold", effortColors[action.effortLevel])}>
+            <Badge
+              variant="outline"
+              className={cn(
+                'text-[10px] uppercase font-bold',
+                effortColors[action.effortLevel]
+              )}
+            >
               {action.effortLevel} effort
             </Badge>
+
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
               <TrendingDown className="w-3.5 h-3.5 text-green-500" />
-              <span>{action.impactEstimate} {action.carbonUnit} saved</span>
+              <span>
+                {action.impactEstimate} {action.carbonUnit} saved
+              </span>
             </div>
+
             {action.savingsCurrencyEstimate > 0 && (
               <div className="text-xs text-muted-foreground font-medium">
                 • ₹{action.savingsCurrencyEstimate} saved
@@ -69,6 +92,7 @@ const ActionCard = ({ action, onComplete, onSkip, compact = false }) => {
             >
               Complete
             </Button>
+
             <Button
               variant="ghost"
               size="sm"
@@ -82,6 +106,22 @@ const ActionCard = ({ action, onComplete, onSkip, compact = false }) => {
       </div>
     </Card>
   );
+};
+
+ActionCard.propTypes = {
+  action: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    status: PropTypes.oneOf(['pending', 'completed', 'skipped']).isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    effortLevel: PropTypes.oneOf(['low', 'easy', 'medium', 'high']).isRequired,
+    impactEstimate: PropTypes.number.isRequired,
+    carbonUnit: PropTypes.string.isRequired,
+    savingsCurrencyEstimate: PropTypes.number.isRequired,
+  }).isRequired,
+  onComplete: PropTypes.func.isRequired,
+  onSkip: PropTypes.func.isRequired,
+  compact: PropTypes.bool,
 };
 
 export default ActionCard;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Label } from '../ui/label';
 import { cn } from '@/lib/utils';
 
@@ -34,12 +35,15 @@ const ShoppingStep = ({ data, onChange }) => {
         <Label className="text-sm font-bold">
           Online Shopping Frequency <span className="text-red-500">*</span>
         </Label>
+
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
           {shoppingFreq.map((item) => (
             <button
               key={item.value}
               type="button"
-              onClick={() => handleSelect('onlineShoppingFrequency', item.value)}
+              onClick={() =>
+                handleSelect('onlineShoppingFrequency', item.value)
+              }
               className={cn(
                 "p-3 rounded-2xl border text-center transition-all",
                 data.onlineShoppingFrequency === item.value
@@ -58,12 +62,15 @@ const ShoppingStep = ({ data, onChange }) => {
         <Label className="text-sm font-bold">
           Fashion Purchase Frequency <span className="text-red-500">*</span>
         </Label>
+
         <div className="flex flex-wrap gap-2">
           {fashionFreq.map((item) => (
             <button
               key={item.value}
               type="button"
-              onClick={() => handleSelect('fashionPurchaseFrequency', item.value)}
+              onClick={() =>
+                handleSelect('fashionPurchaseFrequency', item.value)
+              }
               className={cn(
                 "px-3 py-1.5 rounded-full border text-[10px] sm:text-xs font-bold transition-all",
                 data.fashionPurchaseFrequency === item.value
@@ -81,12 +88,15 @@ const ShoppingStep = ({ data, onChange }) => {
         <Label className="text-sm font-bold">
           Gadget Upgrade Cycle <span className="text-red-500">*</span>
         </Label>
+
         <div className="flex flex-wrap gap-2">
           {gadgetCycles.map((item) => (
             <button
               key={item.value}
               type="button"
-              onClick={() => handleSelect('gadgetUpgradeCycle', item.value)}
+              onClick={() =>
+                handleSelect('gadgetUpgradeCycle', item.value)
+              }
               className={cn(
                 "px-3 py-1.5 rounded-full border text-[10px] sm:text-xs font-bold transition-all",
                 data.gadgetUpgradeCycle === item.value
@@ -101,6 +111,23 @@ const ShoppingStep = ({ data, onChange }) => {
       </div>
     </div>
   );
+};
+
+ShoppingStep.propTypes = {
+  data: PropTypes.shape({
+    onlineShoppingFrequency: PropTypes.string,
+    fashionPurchaseFrequency: PropTypes.string,
+    gadgetUpgradeCycle: PropTypes.string,
+  }),
+  onChange: PropTypes.func.isRequired,
+};
+
+ShoppingStep.defaultProps = {
+  data: {
+    onlineShoppingFrequency: '',
+    fashionPurchaseFrequency: '',
+    gadgetUpgradeCycle: '',
+  },
 };
 
 export default ShoppingStep;

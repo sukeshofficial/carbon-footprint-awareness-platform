@@ -5,20 +5,30 @@ import { cn } from '../../lib/utils';
 
 const Sparkline = ({ data = [] }) => {
   const sparkData = Array.isArray(data) ? data : [];
+
   if (sparkData.length < 2) return null;
+
   const min = Math.min(...sparkData);
   const max = Math.max(...sparkData);
   const range = max - min || 1;
   const width = 60;
   const height = 14;
-  const points = data.map((d, i) => ({
-    x: (i / (data.length - 1)) * width,
+
+  const points = sparkData.map((d, i) => ({
+    x: (i / (sparkData.length - 1)) * width,
     y: height - ((d - min) / range) * height
   }));
-  const path = `M ${points[0].x} ${points[0].y} ` + points.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ');
+
+  const path =
+    `M ${points[0].x} ${points[0].y} ` +
+    points.slice(1).map((p) => `L ${p.x} ${p.y}`).join(' ');
 
   return (
-    <svg width={width} height={height} className="opacity-30 group-hover:opacity-60 transition-opacity duration-500">
+    <svg
+      width={width}
+      height={height}
+      className="opacity-30 group-hover:opacity-60 transition-opacity duration-500"
+    >
       <path
         d={path}
         fill="none"
@@ -30,6 +40,10 @@ const Sparkline = ({ data = [] }) => {
       />
     </svg>
   );
+};
+
+Sparkline.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.number)
 };
 
 const MetricStatCard = ({ title, value, unit = null, icon: Icon = null, chip = null, description = null, trend = null, history = [], className = "" }) => {

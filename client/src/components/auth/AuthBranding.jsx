@@ -149,7 +149,7 @@ const AuthBranding = () => {
             />
             <div className={STYLES.testimonialContent}>
               <div className={STYLES.stars}>
-                {[...Array(5)].map((_, i) => (
+                {[...new Array(5)].map((_, i) => (
                   <Star key={`star-${i}`} className="w-3 h-3 fill-current" />
                 ))}
               </div>

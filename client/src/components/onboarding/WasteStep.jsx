@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Label } from '../ui/label';
 import { cn } from '@/lib/utils';
 
@@ -93,6 +94,23 @@ const WasteStep = ({ data, onChange }) => {
       </div>
     </div>
   );
+};
+
+WasteStep.propTypes = {
+  data: PropTypes.shape({
+    recyclingHabit: PropTypes.string,
+    wasteSegregation: PropTypes.string,
+    plasticUsage: PropTypes.string,
+  }),
+  onChange: PropTypes.func.isRequired,
+};
+
+WasteStep.defaultProps = {
+  data: {
+    recyclingHabit: '',
+    wasteSegregation: '',
+    plasticUsage: '',
+  },
 };
 
 export default WasteStep;

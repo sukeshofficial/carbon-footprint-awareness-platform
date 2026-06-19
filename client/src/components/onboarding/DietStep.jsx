@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Label } from '../ui/label';
 import { cn } from '@/lib/utils';
 
@@ -16,6 +17,7 @@ const DietStep = ({ data, onChange }) => {
         <Label className="text-sm font-bold">
           What's your typical diet? <span className="text-destructive">*</span>
         </Label>
+
         <div className="grid gap-3">
           {diets.map((diet) => (
             <button
@@ -29,19 +31,39 @@ const DietStep = ({ data, onChange }) => {
                   : "bg-background dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700"
               )}
             >
-              <p className={cn(
-                "text-sm font-bold",
-                data.dietStyle === diet.value ? "text-primary dark:text-primary-foreground/90" : "text-zinc-900 dark:text-zinc-100"
-              )}>
+              <p
+                className={cn(
+                  "text-sm font-bold",
+                  data.dietStyle === diet.value
+                    ? "text-primary dark:text-primary-foreground/90"
+                    : "text-zinc-900 dark:text-zinc-100"
+                )}
+              >
                 {diet.label}
               </p>
-              <p className="text-xs text-muted-foreground mt-1">{diet.description}</p>
+
+              <p className="text-xs text-muted-foreground mt-1">
+                {diet.description}
+              </p>
             </button>
           ))}
         </div>
       </div>
     </div>
   );
+};
+
+DietStep.propTypes = {
+  data: PropTypes.shape({
+    dietStyle: PropTypes.string,
+  }),
+  onChange: PropTypes.func.isRequired,
+};
+
+DietStep.defaultProps = {
+  data: {
+    dietStyle: '',
+  },
 };
 
 export default DietStep;

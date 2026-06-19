@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { cn } from '@/lib/utils';
@@ -24,6 +25,7 @@ const TransportStep = ({ data, onChange }) => {
         <Label className="text-sm font-bold">
           Primary Travel Mode <span className="text-destructive">*</span>
         </Label>
+
         <div className="flex flex-wrap gap-2">
           {modes.map((mode) => (
             <button
@@ -44,7 +46,10 @@ const TransportStep = ({ data, onChange }) => {
       </div>
 
       <div className="space-y-3">
-        <Label className="text-sm font-bold">Secondary Travel Mode (Optional)</Label>
+        <Label className="text-sm font-bold">
+          Secondary Travel Mode (Optional)
+        </Label>
+
         <div className="flex flex-wrap gap-2">
           {modes.map((mode) => (
             <button
@@ -66,34 +71,70 @@ const TransportStep = ({ data, onChange }) => {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="grid gap-2">
-          <Label htmlFor="weeklyCommuteDistance" className="text-sm font-bold">Weekly Commute (km)</Label>
+          <Label htmlFor="weeklyCommuteDistance" className="text-sm font-bold">
+            Weekly Commute (km)
+          </Label>
+
           <Input
             id="weeklyCommuteDistance"
             type="number"
             min="0"
             className="h-11 rounded-full border-zinc-200 dark:border-zinc-800 bg-background dark:bg-zinc-900/50 focus-visible:ring-primary/20"
             placeholder="e.g. 50"
-            value={data.weeklyCommuteDistance || ''}
-            // Sonar S2737: use Number.parseFloat instead of global parseFloat
-            onChange={(e) => onChange({ ...data, weeklyCommuteDistance: Number.parseFloat(e.target.value) || 0 })}
+            value={data.weeklyCommuteDistance}
+            onChange={(e) =>
+              onChange({
+                ...data,
+                weeklyCommuteDistance:
+                  Number.parseFloat(e.target.value) || 0,
+              })
+            }
           />
         </div>
+
         <div className="grid gap-2">
-          <Label htmlFor="yearlyFlightFrequency" className="text-sm font-bold">Yearly Flights</Label>
+          <Label htmlFor="yearlyFlightFrequency" className="text-sm font-bold">
+            Yearly Flights
+          </Label>
+
           <Input
             id="yearlyFlightFrequency"
             type="number"
             min="0"
             className="h-11 rounded-full border-zinc-200 dark:border-zinc-800 bg-background dark:bg-zinc-900/50 focus-visible:ring-primary/20"
             placeholder="e.g. 2"
-            value={data.yearlyFlightFrequency || ''}
-            // Sonar S2737: use Number.parseInt instead of global parseInt
-            onChange={(e) => onChange({ ...data, yearlyFlightFrequency: Number.parseInt(e.target.value, 10) || 0 })}
+            value={data.yearlyFlightFrequency}
+            onChange={(e) =>
+              onChange({
+                ...data,
+                yearlyFlightFrequency:
+                  Number.parseInt(e.target.value, 10) || 0,
+              })
+            }
           />
         </div>
       </div>
     </div>
   );
+};
+
+TransportStep.propTypes = {
+  data: PropTypes.shape({
+    primaryMode: PropTypes.string,
+    secondaryMode: PropTypes.string,
+    weeklyCommuteDistance: PropTypes.number,
+    yearlyFlightFrequency: PropTypes.number,
+  }),
+  onChange: PropTypes.func.isRequired,
+};
+
+TransportStep.defaultProps = {
+  data: {
+    primaryMode: '',
+    secondaryMode: '',
+    weeklyCommuteDistance: 0,
+    yearlyFlightFrequency: 0,
+  },
 };
 
 export default TransportStep;
