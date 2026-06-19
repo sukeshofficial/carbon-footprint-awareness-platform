@@ -182,10 +182,7 @@ const AccountTab = () => {
               onDrop={handleDrop}
             >
               <div className="relative">
-                <div className={cn(
-                  "w-20 h-20 rounded-full bg-primary/10 overflow-hidden flex items-center justify-center transition-colors",
-                  isDragging ? "border-primary/20" : "border-primary/20"
-                )}>
+                <div className={cn("w-20 h-20 rounded-full bg-primary/10 overflow-hidden flex items-center justify-center transition-colors border-primary/20")}>
                   {avatarPreview ? (
                     <img src={avatarPreview} alt="avatar" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   ) : (
