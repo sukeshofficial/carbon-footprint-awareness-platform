@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardContent } from '../ui/card';
 import { cn } from '../../lib/utils';
 
@@ -58,7 +59,7 @@ const MetricStatCard = ({ title, value, unit = null, icon: Icon = null, chip = n
             {trend && (
               <div className={cn(
                 "text-[9px] font-black px-2 py-0.5 rounded-full whitespace-nowrap",
-                trend.startsWith('+') ? "bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400" : "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
+                trend?.startsWith?.('+') ? "bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400" : "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
               )}>
                 {trend}
               </div>
@@ -80,6 +81,18 @@ const MetricStatCard = ({ title, value, unit = null, icon: Icon = null, chip = n
       </CardContent>
     </Card>
   );
+};
+
+MetricStatCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  unit: PropTypes.string,
+  icon: PropTypes.elementType,
+  chip: PropTypes.node,
+  description: PropTypes.string,
+  trend: PropTypes.string,
+  history: PropTypes.arrayOf(PropTypes.number),
+  className: PropTypes.string
 };
 
 export default React.memo(MetricStatCard);

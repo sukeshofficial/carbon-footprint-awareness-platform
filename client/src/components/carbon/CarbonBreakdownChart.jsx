@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
@@ -47,8 +48,8 @@ const CarbonBreakdownChart = ({ data, loading }) => {
                 paddingAngle={5}
                 dataKey="value"
               >
-                {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                {chartData.map((entry) => (
+                  <Cell key={`cell-${entry.name}`} fill={COLORS[chartData.indexOf(entry) % COLORS.length]} />
                 ))}
               </Pie>
               <Tooltip
@@ -66,6 +67,16 @@ const CarbonBreakdownChart = ({ data, loading }) => {
       </CardContent>
     </Card>
   );
+};
+
+CarbonBreakdownChart.propTypes = {
+  data: PropTypes.shape({
+    transport: PropTypes.number,
+    food: PropTypes.number,
+    energy: PropTypes.number,
+    shopping: PropTypes.number,
+  }),
+  loading: PropTypes.bool
 };
 
 export default CarbonBreakdownChart;

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import useExplanationStore from '../../../store/explanationStore';
 import ExplanationSummaryCard from './ExplanationSummaryCard';
 import CategoryExplanationCard from './CategoryExplanationCard';
@@ -53,9 +54,9 @@ const ExplanationsPanel = () => {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {explanation.category_explanations?.map((cat, idx) => (
+        {explanation.category_explanations?.map((cat) => (
           <CategoryExplanationCard
-            key={idx}
+            key={cat.category}
             category={cat.category}
             reason={cat.reason}
           />
@@ -69,9 +70,9 @@ const ExplanationsPanel = () => {
             <h3 className="text-xl font-bold">Deeper Insights</h3>
           </div>
           <div className="grid grid-cols-1 gap-4">
-            {explanation.habit_explanations.map((habit, idx) => (
+            {explanation.habit_explanations.map((habit) => (
               <HabitExplanationCallout
-                key={idx}
+                key={habit.habit}
                 habit={habit.habit}
                 reason={habit.reason}
               />
@@ -81,6 +82,10 @@ const ExplanationsPanel = () => {
       )}
     </div>
   );
+};
+
+ExplanationsPanel.propTypes = {
+  // No direct props from parent, but adding for consistency
 };
 
 export default ExplanationsPanel;

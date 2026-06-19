@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Zap } from 'lucide-react';
 
 const HabitExplanationCallout = ({ habit, reason }) => {
@@ -24,6 +25,11 @@ const HabitExplanationCallout = ({ habit, reason }) => {
       </div>
     </div>
   );
+};
+
+HabitExplanationCallout.propTypes = {
+  habit: PropTypes.string.isRequired,
+  reason: PropTypes.string.isRequired
 };
 
 export default HabitExplanationCallout;

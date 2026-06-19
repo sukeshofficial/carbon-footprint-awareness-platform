@@ -1,15 +1,19 @@
 class RecommendationFormatter {
   format(rankedRecommendations, estimation) {
-    const topActions = rankedRecommendations.slice(0, 3).map(rec => ({
+    const plainRecommendations = rankedRecommendations.map(rec =>
+      typeof rec.toObject === 'function' ? rec.toObject() : rec
+    );
+
+    const topActions = plainRecommendations.slice(0, 3).map(rec => ({
       ...rec,
       isTopPriority: true
     }));
 
     const categorySuggestions = {
-      transport: rankedRecommendations.filter(r => r.category === 'transport'),
-      food: rankedRecommendations.filter(r => r.category === 'food'),
-      energy: rankedRecommendations.filter(r => r.category === 'energy'),
-      shopping: rankedRecommendations.filter(r => r.category === 'shopping'),
+      transport: plainRecommendations.filter(r => r.category === 'transport'),
+      food: plainRecommendations.filter(r => r.category === 'food'),
+      energy: plainRecommendations.filter(r => r.category === 'energy'),
+      shopping: plainRecommendations.filter(r => r.category === 'shopping'),
     };
 
     const summary = {

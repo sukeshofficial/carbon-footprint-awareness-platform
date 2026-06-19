@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardContent } from '../ui/card';
 import { Sparkles, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '../ui/button';
@@ -34,7 +35,7 @@ const CoachingTipsCard = ({ insights, isStreaming, streamToken, streamError, onR
           ) : insights?.tips?.length > 0 ? (
             <div className="flex flex-col gap-4">
               {insights.tips.map((tip, idx) => (
-                <div key={idx} className="bg-slate-50/50 border border-slate-200 rounded-3xl p-6 flex flex-col gap-3 group">
+                <div key={tip.id || tip.title || idx} className="bg-slate-50/50 border border-slate-200 rounded-3xl p-6 flex flex-col gap-3 group">
                   <div className="flex gap-4">
                     <div className="w-8 h-8 rounded-xl bg-green-50 flex items-center justify-center text-green-600 text-xs font-black shrink-0">
                       {idx + 1}
@@ -76,6 +77,20 @@ const CoachingTipsCard = ({ insights, isStreaming, streamToken, streamError, onR
       </CardContent>
     </Card>
   );
+};
+
+CoachingTipsCard.propTypes = {
+  insights: PropTypes.shape({
+    tips: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      title: PropTypes.string,
+      description: PropTypes.string
+    }))
+  }),
+  isStreaming: PropTypes.bool,
+  streamToken: PropTypes.string,
+  streamError: PropTypes.bool,
+  onRetry: PropTypes.func
 };
 
 export default React.memo(CoachingTipsCard);

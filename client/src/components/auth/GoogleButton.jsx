@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button } from '../ui/button';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'sonner';

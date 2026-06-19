@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
 import { Button } from '../ui/button';
 import SeverityBadge from './SeverityBadge';
@@ -91,7 +92,7 @@ const CarbonSummaryCard = ({ estimation, onRecalculate, loading }) => {
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Actionable Tips</p>
                 <div className="grid grid-cols-1 gap-2">
                   {estimation.aiInsights.tips.map((tip, idx) => (
-                    <div key={idx} className="bg-green-50/50 border border-green-100 rounded-xl p-3 flex gap-3 group hover:bg-green-50 transition-colors">
+                    <div key={tip.id || tip.title || idx} className="bg-green-50/50 border border-green-100 rounded-xl p-3 flex gap-3 group hover:bg-green-50 transition-colors">
                       <div className="w-6 h-6 rounded-lg bg-green-100 flex items-center justify-center text-green-600 shrink-0 mt-0.5">
                         <span className="text-[10px] font-bold">{idx + 1}</span>
                       </div>
@@ -118,6 +119,25 @@ const CarbonSummaryCard = ({ estimation, onRecalculate, loading }) => {
       </CardContent>
     </Card>
   );
+};
+
+CarbonSummaryCard.propTypes = {
+  estimation: PropTypes.shape({
+    weeklyEstimate: PropTypes.number,
+    monthlyEstimate: PropTypes.number,
+    severityLevel: PropTypes.string,
+    trendLabel: PropTypes.string,
+    explanation: PropTypes.string,
+    aiInsights: PropTypes.shape({
+      tips: PropTypes.arrayOf(PropTypes.shape({
+        title: PropTypes.string,
+        description: PropTypes.string,
+        id: PropTypes.string
+      }))
+    })
+  }),
+  onRecalculate: PropTypes.func,
+  loading: PropTypes.bool
 };
 
 export default CarbonSummaryCard;

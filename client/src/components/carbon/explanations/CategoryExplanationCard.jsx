@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Car, Utensils, Zap, ShoppingBag, Info } from 'lucide-react';
 
 const CategoryExplanationCard = ({ category, reason }) => {
@@ -31,6 +32,11 @@ const CategoryExplanationCard = ({ category, reason }) => {
       </div>
     </div>
   );
+};
+
+CategoryExplanationCard.propTypes = {
+  category: PropTypes.string.isRequired,
+  reason: PropTypes.string.isRequired
 };
 
 export default CategoryExplanationCard;

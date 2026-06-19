@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Shield, Leaf } from 'lucide-react';
 import AuthBranding from './AuthBranding';

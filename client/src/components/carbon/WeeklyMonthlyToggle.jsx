@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button } from '../ui/button';
 
 const WeeklyMonthlyToggle = ({ view, onChange }) => {
@@ -24,6 +25,11 @@ const WeeklyMonthlyToggle = ({ view, onChange }) => {
       </Button>
     </div>
   );
+};
+
+WeeklyMonthlyToggle.propTypes = {
+  view: PropTypes.oneOf(['weekly', 'monthly']).isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 export default WeeklyMonthlyToggle;

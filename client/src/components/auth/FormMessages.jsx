@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -7,7 +8,7 @@ export const FormError = ({ message, className = "" }) => {
 
   // Final Fail-safe: Try to parse message if it looks like JSON
   let cleanMessage = message;
-  if (typeof message === 'string' && (message.startsWith('{') || message.startsWith('['))) {
+  if (typeof message === 'string' && (message?.startsWith?.('{') || message?.startsWith?.('['))) {
     try {
       const parsed = JSON.parse(message);
       if (Array.isArray(parsed)) {

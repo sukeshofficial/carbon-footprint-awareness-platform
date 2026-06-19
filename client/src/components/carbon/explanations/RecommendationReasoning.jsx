@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Lightbulb, CheckCircle2 } from 'lucide-react';
 
 const RecommendationReasoning = ({ reason }) => {
@@ -20,6 +21,10 @@ const RecommendationReasoning = ({ reason }) => {
       </div>
     </div>
   );
+};
+
+RecommendationReasoning.propTypes = {
+  reason: PropTypes.string
 };
 
 export default RecommendationReasoning;

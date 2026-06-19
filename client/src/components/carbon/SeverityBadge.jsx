@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Badge } from '../ui/badge';
 
 const SeverityBadge = ({ level }) => {
@@ -16,6 +17,10 @@ const SeverityBadge = ({ level }) => {
       {label}
     </Badge>
   );
+};
+
+SeverityBadge.propTypes = {
+  level: PropTypes.string
 };
 
 export default SeverityBadge;

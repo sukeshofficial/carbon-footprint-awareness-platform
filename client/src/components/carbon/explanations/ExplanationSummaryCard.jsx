@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Leaf, AlertCircle, TrendingDown, TrendingUp, Minus } from 'lucide-react';
 
 const ExplanationSummaryCard = ({ summary, trend, dominantCategory }) => {
@@ -37,6 +38,12 @@ const ExplanationSummaryCard = ({ summary, trend, dominantCategory }) => {
       </div>
     </div>
   );
+};
+
+ExplanationSummaryCard.propTypes = {
+  totalImpact: PropTypes.number,
+  topCategory: PropTypes.string,
+  keyHabit: PropTypes.string
 };
 
 export default ExplanationSummaryCard;

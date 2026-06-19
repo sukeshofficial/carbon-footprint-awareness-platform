@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { Leaf, Info, Loader2, Sparkles, AlertCircle } from 'lucide-react';
@@ -20,6 +21,71 @@ const COLORS = {
   Shopping: '#8b5cf6',
 };
 
+const AICoachingContent = ({ isStreaming, streamedInsights, streamedToken, streamError, resetStream }) => {
+  if (isStreaming && !streamedInsights) {
+    return (
+      <div className="space-y-3">
+        <div className="bg-white border border-slate-100 rounded-2xl p-4">
+          <p className="text-[10px] font-bold text-green-600 uppercase tracking-widest mb-1.5">Your AI Coach is thinking…</p>
+          <p className="text-[11px] text-slate-500 leading-relaxed font-mono whitespace-pre-wrap">{streamedToken || '...'}</p>
+        </div>
+        {[1, 2].map(i => (
+          <div key={`stream-${i}`} className="h-14 bg-slate-100 rounded-2xl animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  if (streamedInsights?.tips?.length > 0) {
+    return (
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
+        {streamedInsights.tips.map((tip, idx) => (
+          <div key={tip.id || tip.title || idx} className="bg-white border border-slate-100 rounded-2xl p-4 flex gap-4 group hover:border-green-200 hover:shadow-sm transition-all">
+            <div className="w-7 h-7 rounded-xl bg-green-50 flex items-center justify-center text-green-600 text-[10px] font-black shrink-0 mt-0.5">
+              {idx + 1}
+            </div>
+            <div>
+              <p className="text-[11px] font-bold text-slate-900 group-hover:text-green-700 transition-colors italic leading-snug">{tip.title}</p>
+              <p className="text-[10px] text-slate-500 leading-relaxed mt-0.5 font-medium">{tip.description}</p>
+              <RecommendationReasoning reason={useExplanationStore.getState().explanation?.recommendation_reasoning?.find(r => r.recommendation_id === tip.id)?.reason} />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (streamError) {
+    return (
+      <div className="flex flex-col items-center gap-3 py-8 text-center bg-white rounded-3xl border border-dashed border-slate-200">
+        <AlertCircle className="w-8 h-8 text-slate-200" />
+        <div>
+          <p className="text-xs font-bold text-slate-400">Couldn't generate AI tips right now.</p>
+          <Button variant="ghost" size="sm" onClick={resetStream} className="text-xs text-green-600 font-bold mt-0.5 h-7">
+            Retry
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3 animate-pulse">
+      {[1, 2, 3].map(i => (
+        <div key={`pulse-${i}`} className="h-16 bg-slate-100 rounded-2xl" />
+      ))}
+    </div>
+  );
+};
+
+AICoachingContent.propTypes = {
+  isStreaming: PropTypes.bool,
+  streamedInsights: PropTypes.object,
+  streamedToken: PropTypes.string,
+  streamError: PropTypes.bool,
+  resetStream: PropTypes.func
+};
+
 const CarbonDashboardCard = () => {
   const {
     estimation,
@@ -31,7 +97,6 @@ const CarbonDashboardCard = () => {
   const [view, setView] = useState('monthly');
   const [streamedToken, setStreamedToken] = useState('');
   const [streamedInsights, setStreamedInsights] = useState(null);
-  const [streamingDone, setStreamingDone] = useState(false);
   const [streamError, setStreamError] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const esRef = useRef(null);
@@ -40,7 +105,7 @@ const CarbonDashboardCard = () => {
     if (!estimation) {
       fetchMyEstimation();
     }
-  }, []); // eslint-disable-line
+  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   // When estimation is available and no resolved insights, open SSE stream
   useEffect(() => {
@@ -79,7 +144,7 @@ const CarbonDashboardCard = () => {
           for (const line of lines) {
             if (!line.startsWith('data:')) continue;
             const data = line.slice(5).trim();
-            if (data === '[DONE]') { setStreamingDone(true); continue; }
+            if (data === '[DONE]') { continue; }
             try {
               const parsed = JSON.parse(data);
               if (parsed.token) {
@@ -87,7 +152,6 @@ const CarbonDashboardCard = () => {
               }
               if (parsed.done && parsed.insights) {
                 setStreamedInsights(parsed.insights);
-                setStreamingDone(true);
               }
               if (parsed.error) {
                 setStreamError(true);
@@ -106,14 +170,13 @@ const CarbonDashboardCard = () => {
 
     esRef.current = controller;
     return () => controller.abort();
-  }, [estimation]); // eslint-disable-line
+  }, [estimation]); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   // ── Handlers ──
   const handleRecalculate = async () => {
     try {
       setStreamedInsights(null);
       setStreamedToken('');
-      setStreamingDone(false);
       setStreamError(false);
       await recalculate();
     } catch (err) {
@@ -266,49 +329,14 @@ const CarbonDashboardCard = () => {
               {isStreaming && <Loader2 className="w-3.5 h-3.5 animate-spin text-slate-400" />}
             </div>
 
-            {/* Streaming in progress — show raw token text */}
-            {isStreaming && !streamedInsights ? (
-              <div className="space-y-3">
-                <div className="bg-white border border-slate-100 rounded-2xl p-4">
-                  <p className="text-[10px] font-bold text-green-600 uppercase tracking-widest mb-1.5">Your AI Coach is thinking…</p>
-                  <p className="text-[11px] text-slate-500 leading-relaxed font-mono whitespace-pre-wrap">{streamedToken || '...'}</p>
-                </div>
-                {[1, 2].map(i => (
-                  <div key={i} className="h-14 bg-slate-100 rounded-2xl animate-pulse" />
-                ))}
-              </div>
-            ) : streamedInsights?.tips?.length > 0 ? (
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
-                {streamedInsights.tips.map((tip, idx) => (
-                  <div key={idx} className="bg-white border border-slate-100 rounded-2xl p-4 flex gap-4 group hover:border-green-200 hover:shadow-sm transition-all">
-                    <div className="w-7 h-7 rounded-xl bg-green-50 flex items-center justify-center text-green-600 text-[10px] font-black shrink-0 mt-0.5">
-                      {idx + 1}
-                    </div>
-                    <div>
-                      <p className="text-[11px] font-bold text-slate-900 group-hover:text-green-700 transition-colors italic leading-snug">{tip.title}</p>
-                      <p className="text-[10px] text-slate-500 leading-relaxed mt-0.5 font-medium">{tip.description}</p>
-                      <RecommendationReasoning reason={useExplanationStore.getState().explanation?.recommendation_reasoning?.find(r => r.recommendation_id === tip.id)?.reason} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : streamError ? (
-              <div className="flex flex-col items-center gap-3 py-8 text-center bg-white rounded-3xl border border-dashed border-slate-200">
-                <AlertCircle className="w-8 h-8 text-slate-200" />
-                <div>
-                  <p className="text-xs font-bold text-slate-400">Couldn't generate AI tips right now.</p>
-                  <Button variant="ghost" size="sm" onClick={() => { setStreamError(false); setStreamedInsights(null); setStreamedToken(''); }} className="text-xs text-green-600 font-bold mt-0.5 h-7">
-                    Retry
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-3 animate-pulse">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="h-16 bg-slate-100 rounded-2xl" />
-                ))}
-              </div>
-            )}
+            {/* Coaching Content — Refactored to avoid nested ternaries */}
+            <AICoachingContent
+              isStreaming={isStreaming}
+              streamedInsights={streamedInsights}
+              streamedToken={streamedToken}
+              streamError={streamError}
+              resetStream={() => { setStreamError(false); setStreamedInsights(null); setStreamedToken(''); }}
+            />
           </div>
         </div>
       </div>
@@ -337,6 +365,10 @@ const CarbonDashboardCard = () => {
       </div>
     </div>
   );
+};
+
+CarbonDashboardCard.propTypes = {
+  // Component takes no props, but adding for consistency
 };
 
 export default CarbonDashboardCard;

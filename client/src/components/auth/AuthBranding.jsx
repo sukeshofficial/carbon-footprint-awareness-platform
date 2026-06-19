@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Leaf, Users, Globe2, ArrowUpRight, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -96,13 +97,12 @@ const AuthBranding = () => {
           </motion.div>
 
           <div className={STYLES.heroTitle}>
-            {BrandingData.hero.title.map((word, i) => (
+            {BrandingData.hero.title.map((word) => (
               <motion.div
                 key={word}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 + (i * 0.05) }}
-                className={i === 2 ? "text-green-600" : ""}
+                className={word === "Optimize." ? "text-green-600" : ""}
               >
                 {word}
               </motion.div>
@@ -120,12 +120,11 @@ const AuthBranding = () => {
 
           {/* Technical Stats Grid */}
           <div className={STYLES.statsGrid}>
-            {BrandingData.stats.map((stat, i) => (
+            {BrandingData.stats.map((stat) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 + (i * 0.1) }}
                 className={STYLES.statItem}
               >
                 <span className={STYLES.statLabel}>{stat.label}</span>
@@ -152,7 +151,7 @@ const AuthBranding = () => {
             <div className={STYLES.testimonialContent}>
               <div className={STYLES.stars}>
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3 h-3 fill-current" />
+                  <Star key={`star-${i}`} className="w-3 h-3 fill-current" />
                 ))}
               </div>
               <h4 className={STYLES.quoteTitle}>{BrandingData.testimonial.headline}</h4>
@@ -167,6 +166,10 @@ const AuthBranding = () => {
       </div>
     </div>
   );
+};
+
+AuthBranding.propTypes = {
+  // No props currently, but adding for consistency if needed later
 };
 
 export default AuthBranding;

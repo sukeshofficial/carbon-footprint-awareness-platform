@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Eye, EyeOff } from 'lucide-react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';

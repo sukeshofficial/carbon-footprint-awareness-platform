@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Badge } from '../ui/badge';
 import { TrendingDown, TrendingUp, Minus } from 'lucide-react';
 
@@ -18,6 +19,10 @@ const TrendBadge = ({ trend }) => {
       {label}
     </Badge>
   );
+};
+
+TrendBadge.propTypes = {
+  trend: PropTypes.string
 };
 
 export default TrendBadge;

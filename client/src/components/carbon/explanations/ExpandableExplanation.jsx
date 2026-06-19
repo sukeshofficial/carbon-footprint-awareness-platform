@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { ChevronDown, ChevronUp, Info } from 'lucide-react';
 
 const ExpandableExplanation = ({ title, description, children, defaultExpanded = false, icon: Icon = Info }) => {
@@ -31,6 +32,14 @@ const ExpandableExplanation = ({ title, description, children, defaultExpanded =
       )}
     </div>
   );
+};
+
+ExpandableExplanation.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  children: PropTypes.node.isRequired,
+  defaultExpanded: PropTypes.bool,
+  icon: PropTypes.elementType
 };
 
 export default ExpandableExplanation;

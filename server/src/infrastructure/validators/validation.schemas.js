@@ -45,5 +45,5 @@ export const reduceOnlineOrdersSchema = z.object({
 // ─── Recommendation Schemas ──────────────────────────────────────────────────
 
 export const recommendationFeedbackSchema = z.object({
-  status: z.enum(['active', 'completed', 'dismissed']),
+  status: z.enum(['active', 'accepted', 'completed', 'dismissed']),
 });
