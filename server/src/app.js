@@ -31,10 +31,16 @@ const corsOptions = {
     if (!origin) return callback(null, true);
 
     const normalizedOrigin = origin.replace(/\/$/, "");
+
+    // Debug log for CORS matching in development/debug mode
+    if (process.env.NODE_ENV === "development" || process.env.DEBUG === "true") {
+      console.log(`[CORS] Request Origin: ${origin}, Allowed: ${allowedOrigins.includes(normalizedOrigin)}`);
+    }
+
     if (allowedOrigins.includes(normalizedOrigin) || process.env.NODE_ENV === "development") {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error(`Not allowed by CORS: ${origin}`));
     }
   },
   credentials: true,
@@ -53,8 +59,8 @@ const corsOptions = {
 // 2. IMMEDIATE CORS HANDLING (MUST be before any async or DB middleware)
 app.use(cors(corsOptions));
 
-// 5. Handle explicit preflight for Express 5
-app.options("*splat", cors(corsOptions));
+// 5. Handle explicit preflight for Express 4/5
+app.options("*", cors(corsOptions));
 
 // 6. Security headers (Migrated from Seyal: explicitly allowing cross-origin resources)
 app.use(helmet({
