@@ -3,7 +3,7 @@ import { Progress } from "../ui/progress";
 import { cn } from '../../lib/utils';
 import { Target } from 'lucide-react';
 
-const GoalProgress = ({ goal, analytics, className }) => {
+const GoalProgress = ({ goal, analytics = null, className = "" }) => {
   if (!goal) return null;
 
   const progress = analytics?.goalAchievementPercent || 0;

@@ -46,3 +46,7 @@ export const PasswordInput = React.forwardRef(({ className, ...props }, ref) => 
 });
 
 PasswordInput.displayName = 'PasswordInput';
+
+PasswordInput.propTypes = {
+  className: PropTypes.string,
+};

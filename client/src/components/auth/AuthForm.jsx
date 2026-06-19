@@ -156,3 +156,9 @@ export const AuthForm = ({ type = 'login', onSubmit, isLoading }) => {
     </motion.div >
   );
 };
+
+AuthForm.propTypes = {
+  type: PropTypes.oneOf(['login', 'signup']),
+  onSubmit: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool,
+};

@@ -43,3 +43,7 @@ export const GoogleButton = ({ disabled }) => {
     </Button>
   );
 };
+
+GoogleButton.propTypes = {
+  disabled: PropTypes.bool,
+};

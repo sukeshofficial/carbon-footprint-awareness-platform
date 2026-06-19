@@ -41,9 +41,9 @@ const ExplanationSummaryCard = ({ summary, trend, dominantCategory }) => {
 };
 
 ExplanationSummaryCard.propTypes = {
-  totalImpact: PropTypes.number,
-  topCategory: PropTypes.string,
-  keyHabit: PropTypes.string
+  summary: PropTypes.string,
+  trend: PropTypes.oneOf(['improved', 'increased', 'stable']),
+  dominantCategory: PropTypes.string,
 };
 
 export default ExplanationSummaryCard;

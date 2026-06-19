@@ -19,9 +19,9 @@ const TestComponent = () => {
     selectedTemplate,
     runPreview,
     previewResult,
-    loading,
     previewing
   } = useWhatIf();
+
 
   return (
     <div>

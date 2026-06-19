@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Leaf, Users, Globe2, ArrowUpRight, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -168,8 +167,5 @@ const AuthBranding = () => {
   );
 };
 
-AuthBranding.propTypes = {
-  // No props currently, but adding for consistency if needed later
-};
 
 export default AuthBranding;

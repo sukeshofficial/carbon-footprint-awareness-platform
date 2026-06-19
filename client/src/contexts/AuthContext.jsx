@@ -3,7 +3,7 @@ import api from '../services/api';
 
 const AuthContext = createContext(null);
 
-const safeRoutes = ['/dashboard', '/profile', '/history', '/settings', '/planner'];
+const safeRoutes = new Set(['/dashboard', '/profile', '/history', '/settings', '/planner']);
 
 /**
  * Validates if a path is in the safe allowlist.
@@ -14,7 +14,7 @@ function getSafeRedirect(path) {
   // Check if it's a relative path starting with /
   if (path.startsWith('/') && !path.startsWith('//')) {
     const baseRoute = path.split('?')[0];
-    return safeRoutes.includes(baseRoute) ? path : '/dashboard';
+    return safeRoutes.has(baseRoute) ? path : '/dashboard';
   }
   return '/dashboard';
 }
@@ -78,15 +78,14 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.get('/auth/google');
       if (response.data.url) {
-        // SonarQube fix: Use allowlist for redirects
         const targetUrl = response.data.url;
-        const isInternal = targetUrl.startsWith('/') || targetUrl.startsWith(window.location.origin);
+        const isInternal = targetUrl.startsWith('/') || targetUrl.startsWith(globalThis.location.origin);
 
         if (isInternal) {
-          window.location.href = targetUrl;
+          globalThis.location.href = targetUrl;
         } else {
-          console.warn('Blocked external/unsafe redirect:', targetUrl);
-          window.location.href = '/dashboard';
+          // Blocked unsafe redirect — redirect to safe default
+          globalThis.location.href = '/dashboard';
         }
       }
     } catch (error) {

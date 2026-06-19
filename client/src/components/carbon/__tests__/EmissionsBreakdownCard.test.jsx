@@ -4,13 +4,13 @@ import EmissionsBreakdownCard from '../EmissionsBreakdownCard';
 
 // Mock Recharts since it doesn't render well in JSDOM
 vi.mock('recharts', () => ({
-  ResponsiveContainer: ({ children }) => <div>{children}</div>,
-  PieChart: ({ children }) => <div>{children}</div>,
+  ResponsiveContainer: ({ children }) => <div>{children}</div>, // NOSONAR
+  PieChart: ({ children }) => <div>{children}</div>, // NOSONAR
   Pie: () => <div>Pie</div>,
   Cell: () => <div>Cell</div>,
   Tooltip: () => <div>Tooltip</div>,
   Legend: () => <div>Legend</div>,
-  BarChart: ({ children }) => <div>{children}</div>,
+  BarChart: ({ children }) => <div>{children}</div>, // NOSONAR
   Bar: () => <div>Bar</div>,
   XAxis: () => <div>XAxis</div>,
   YAxis: () => <div>YAxis</div>,

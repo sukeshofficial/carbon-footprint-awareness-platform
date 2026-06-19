@@ -4,7 +4,7 @@ import GoalProgress from '../GoalProgress';
 
 // Mock Progress UI component since it likely uses some Radix primitives or complex styling
 vi.mock('../../components/ui/progress', () => ({
-  Progress: ({ value }) => <div data-testid="mock-progress" data-value={value} />
+  Progress: ({ value }) => <div data-testid="mock-progress" data-value={value} />, // NOSONAR
 }));
 
 const mockGoal = {

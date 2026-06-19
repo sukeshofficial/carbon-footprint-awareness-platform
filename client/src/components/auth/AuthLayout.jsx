@@ -118,3 +118,9 @@ export const AuthLayout = ({ children, title, subtitle }) => {
     </div>
   );
 };
+
+AuthLayout.propTypes = {
+  children: PropTypes.node.isRequired,
+  title: PropTypes.string,
+  subtitle: PropTypes.string,
+};

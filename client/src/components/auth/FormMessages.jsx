@@ -47,3 +47,13 @@ export const FormSuccess = ({ message, className = "" }) => {
     </div>
   );
 };
+
+FormError.propTypes = {
+  message: PropTypes.string,
+  className: PropTypes.string,
+};
+
+FormSuccess.propTypes = {
+  message: PropTypes.string,
+  className: PropTypes.string,
+};

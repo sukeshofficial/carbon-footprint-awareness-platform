@@ -33,8 +33,8 @@ vi.mock('../../store/explanationStore', () => ({
 
 // Mock Recharts
 vi.mock('recharts', () => ({
-  ResponsiveContainer: ({ children }) => <div>{children}</div>,
-  PieChart: ({ children }) => <div>{children}</div>,
+  ResponsiveContainer: ({ children }) => <div>{children}</div>, // NOSONAR
+  PieChart: ({ children }) => <div>{children}</div>, // NOSONAR
   Pie: () => <div>Pie</div>,
   Cell: () => <div>Cell</div>,
   Tooltip: () => <div>Tooltip</div>,
