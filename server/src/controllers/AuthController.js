@@ -17,8 +17,8 @@ const setRefreshTokenCookie = (res, token, rememberMe = false) => {
 
   res.cookie('refreshToken', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: true, // Always true — SameSite=None requires Secure
+    sameSite: 'none', // Required for cross-origin cookie (frontend and backend on different domains)
     maxAge: maxAge,
   });
 };
