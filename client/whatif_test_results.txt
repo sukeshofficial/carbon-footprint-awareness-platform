@@ -1,0 +1,59 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.9 [39m[90mE:/SUKESH-PRODUCTS/promptwars-virtual/client[39m
+
+ [31m❯[39m src/store/__tests__/WhatIfContext.test.jsx [2m([22m[2m3 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 46[2mms[22m[39m
+     [32m✓[39m fetches templates correctly[32m 33[2mms[22m[39m
+     [32m✓[39m selects template and sets default inputs[32m 4[2mms[22m[39m
+[31m     [31m×[31m runs preview and updates result[39m[32m 7[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/store/__tests__/WhatIfContext.test.jsx[2m > [22mWhatIfContext[2m > [22mruns preview and updates result
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: /Previewing.../i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [36m<button>[31m
+        [0mFetch Templates[0m
+      [36m</button>[31m
+      [36m<div[31m
+        [33mdata-testid[31m=[32m"templates-count"[31m
+      [36m>[31m
+        [0m0[0m
+      [36m</div>[31m
+      [36m<button>[31m
+        [0mSelect Template[0m
+      [36m</button>[31m
+      [36m<button>[31m
+        [0mRun Preview[0m
+      [36m</button>[31m
+      [36m<div[31m
+        [33mdata-testid[31m=[32m"preview-impact"[31m
+      [36m>[31m
+        [0m50kg[0m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/store/__tests__/WhatIfContext.test.jsx:[2m97:19[22m[39m
+    [90m 95|[39m     })[33m;[39m
+    [90m 96|[39m
+    [90m 97|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([36m/Previewing.../i[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 98|[39m
+    [90m 99|[39m     [35mawait[39m [34mwaitFor[39m(() [33m=>[39m {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 08:56:52
+[2m   Duration [22m 1.07s[2m (transform 43ms, setup 173ms, import 35ms, tests 46ms, environment 693ms)[22m
+

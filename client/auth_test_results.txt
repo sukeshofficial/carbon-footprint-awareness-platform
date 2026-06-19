@@ -1,0 +1,48 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.9 [39m[90mE:/SUKESH-PRODUCTS/promptwars-virtual/client[39m
+
+ [31m❯[39m src/contexts/__tests__/AuthContext.test.jsx [2m([22m[2m3 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 127[2mms[22m[39m
+     [32m✓[39m checks auth on mount and sets user if token exists[32m 31[2mms[22m[39m
+[31m     [31m×[31m performs login and updates state[39m[32m 78[2mms[22m[39m
+[31m     [31m×[31m performs logout and clears state[39m[32m 16[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/contexts/__tests__/AuthContext.test.jsx[2m > [22mAuthContext[2m > [22mperforms login and updates state
+[31m[1mReferenceError[22m: fireEvent is not defined[39m
+[36m [2m❯[22m src/contexts/__tests__/AuthContext.test.jsx:[2m87:7[22m[39m
+    [90m 85|[39m     [35mconst[39m loginBtn [33m=[39m screen[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [36m/login/i[39m })[33m;[39m
+    [90m 86|[39m     [35mawait[39m [34mact[39m([35masync[39m () [33m=>[39m {
+    [90m 87|[39m       fireEvent[33m.[39m[34mclick[39m(loginBtn)[33m;[39m
+    [90m   |[39m       [31m^[39m
+    [90m 88|[39m     })[33m;[39m
+    [90m 89|[39m
+[90m [2m❯[22m node_modules/@testing-library/react/dist/act-compat.js:[2m47:24[22m[39m
+[90m [2m❯[22m process.env.NODE_ENV.exports.act node_modules/react/cjs/react.development.js:[2m814:22[22m[39m
+[90m [2m❯[22m Proxy.<anonymous> node_modules/@testing-library/react/dist/act-compat.js:[2m46:25[22m[39m
+[90m [2m❯[22m src/contexts/__tests__/AuthContext.test.jsx:[2m86:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/contexts/__tests__/AuthContext.test.jsx[2m > [22mAuthContext[2m > [22mperforms logout and clears state
+[31m[1mReferenceError[22m: fireEvent is not defined[39m
+[36m [2m❯[22m src/contexts/__tests__/AuthContext.test.jsx:[2m119:7[22m[39m
+    [90m117|[39m     [35mconst[39m logoutBtn [33m=[39m screen[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [36m/logout/i[39m })[33m;[39m
+    [90m118|[39m     [35mawait[39m [34mact[39m([35masync[39m () [33m=>[39m {
+    [90m119|[39m       fireEvent[33m.[39m[34mclick[39m(logoutBtn)[33m;[39m
+    [90m   |[39m       [31m^[39m
+    [90m120|[39m     })[33m;[39m
+    [90m121|[39m
+[90m [2m❯[22m node_modules/@testing-library/react/dist/act-compat.js:[2m47:24[22m[39m
+[90m [2m❯[22m process.env.NODE_ENV.exports.act node_modules/react/cjs/react.development.js:[2m814:22[22m[39m
+[90m [2m❯[22m Proxy.<anonymous> node_modules/@testing-library/react/dist/act-compat.js:[2m46:25[22m[39m
+[90m [2m❯[22m src/contexts/__tests__/AuthContext.test.jsx:[2m118:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 08:49:46
+[2m   Duration [22m 1.09s[2m (transform 44ms, setup 170ms, import 39ms, tests 127ms, environment 644ms)[22m
+

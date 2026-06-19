@@ -16,6 +16,19 @@ const COLORS = {
 };
 
 const ChartView = ({ activeView, chartData, COLORS }) => {
+  if (chartData.length === 0 && activeView !== 'trends') {
+    return (
+      <div className="h-full w-full flex flex-col items-center justify-center text-center p-6">
+        <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-zinc-800 flex items-center justify-center text-slate-300 dark:text-zinc-600 mb-4">
+          <PieIcon size={24} />
+        </div>
+        <p className="text-xs font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest leading-relaxed">
+          No emissions data recorded<br />for the selected period
+        </p>
+      </div>
+    );
+  }
+
   switch (activeView) {
     case 'comparison':
       return (
@@ -132,6 +145,7 @@ const EmissionsBreakdownCard = ({ categoryBreakdown, coachInsight, history = [] 
           <div className="flex p-1.5 bg-slate-100 dark:bg-zinc-800/50 rounded-[1.5rem] w-fit shadow-inner">
             <button
               onClick={() => setActiveView('breakdown')}
+              aria-label="breakdown view"
               className={cn(
                 "p-2.5 rounded-2xl transition-all duration-300 flex items-center gap-2",
                 activeView === 'breakdown' ? "bg-white dark:bg-zinc-700 shadow-md text-primary" : "text-slate-400 hover:text-slate-600 dark:hover:text-zinc-300"
@@ -142,6 +156,7 @@ const EmissionsBreakdownCard = ({ categoryBreakdown, coachInsight, history = [] 
             </button>
             <button
               onClick={() => setActiveView('comparison')}
+              aria-label="comparison view"
               className={cn(
                 "p-2.5 rounded-2xl transition-all duration-300 flex items-center gap-2",
                 activeView === 'comparison' ? "bg-white dark:bg-zinc-700 shadow-md text-primary" : "text-slate-400 hover:text-slate-600 dark:hover:text-zinc-300"
@@ -152,6 +167,7 @@ const EmissionsBreakdownCard = ({ categoryBreakdown, coachInsight, history = [] 
             </button>
             <button
               onClick={() => setActiveView('trends')}
+              aria-label="trends view"
               className={cn(
                 "p-2.5 rounded-2xl transition-all duration-300 flex items-center gap-2",
                 activeView === 'trends' ? "bg-white dark:bg-zinc-700 shadow-md text-primary" : "text-slate-400 hover:text-slate-600 dark:hover:text-zinc-300"
