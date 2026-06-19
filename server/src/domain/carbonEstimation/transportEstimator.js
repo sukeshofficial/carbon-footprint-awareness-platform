@@ -32,5 +32,5 @@ export const estimateTransport = (inputs) => {
   const monthlyFlightCO2 = (yearlyFlightFrequency * flightImpact) / 12;
 
   const total = commuteCO2 + monthlyFlightCO2;
-  return isNaN(total) ? 0 : total;
+  return Number.isNaN(total) ? 0 : total;
 };

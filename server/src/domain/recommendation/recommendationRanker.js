@@ -18,7 +18,7 @@ class RecommendationRanker {
       return {
         ...candidate,
         impactScore,
-        rankScore: parseFloat(rankScore.toFixed(2)),
+        rankScore: Number.parseFloat(rankScore.toFixed(2)),
         confidenceScore: 90, // Default for now
       };
     });

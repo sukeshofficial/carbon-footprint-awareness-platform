@@ -64,7 +64,14 @@ const SelectContent = ({ children, onSelect, selectedValue, className }) => (
 
 const SelectItem = ({ children, value, onClick, isSelected, className }) => (
   <div
+    role="button"
+    tabIndex={0}
     onClick={onClick}
+    onKeyDown={(e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        onClick(e);
+      }
+    }}
     className={cn(
       "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 cursor-pointer",
       isSelected && "bg-accent text-accent-foreground",

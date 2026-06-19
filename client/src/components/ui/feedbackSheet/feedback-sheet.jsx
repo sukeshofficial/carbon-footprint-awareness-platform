@@ -198,7 +198,12 @@ export function FeedbackSheet() {
             {/* ── Star Rating ─────────────────────────────────────── */}
             <div className="px-6 py-5">
               <SectionHeading label="How would you rate the product?" />
-              <div className="flex items-center gap-1" onMouseLeave={() => setHoverRating(0)}>
+              <div
+                role="radiogroup"
+                tabIndex={0}
+                className="flex items-center gap-1"
+                onMouseLeave={() => setHoverRating(0)}
+              >
                 {[1, 2, 3, 4, 5].map((star) => {
                   const active = star <= (hoverRating || rating);
                   return (

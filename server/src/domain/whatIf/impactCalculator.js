@@ -72,11 +72,11 @@ export function calculateImpact(baselineInputs, modifiedInputs, latestEstimation
   const co2Saved = Math.max(0, baselineCO2 - projectedCO2);
 
   return {
-    baselineCO2: parseFloat(baselineCO2.toFixed(2)),
-    projectedCO2: parseFloat(projectedCO2.toFixed(2)),
-    co2Saved: parseFloat(co2Saved.toFixed(2)),
-    monthlySavingsCO2: parseFloat(co2Saved.toFixed(2)),
-    yearlySavingsCO2: parseFloat((co2Saved * 12).toFixed(2)),
+    baselineCO2: Number.parseFloat(baselineCO2.toFixed(2)),
+    projectedCO2: Number.parseFloat(projectedCO2.toFixed(2)),
+    co2Saved: Number.parseFloat(co2Saved.toFixed(2)),
+    monthlySavingsCO2: Number.parseFloat(co2Saved.toFixed(2)),
+    yearlySavingsCO2: Number.parseFloat((co2Saved * 12).toFixed(2)),
   };
 }
 

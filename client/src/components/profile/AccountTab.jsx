@@ -169,7 +169,14 @@ const AccountTab = () => {
                 isDragging ? "border-primary/20 bg-primary/5 dark:bg-primary/10" : "border-transparent hover:bg-zinc-100/50 dark:hover:bg-zinc-800/30",
                 uploading && "opacity-80 cursor-wait"
               )}
+              role="button"
+              tabIndex={0}
               onClick={() => !uploading && fileRef.current?.click()}
+              onKeyDown={(e) => {
+                if ((e.key === "Enter" || e.key === " ") && !uploading) {
+                  fileRef.current?.click();
+                }
+              }}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}

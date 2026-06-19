@@ -24,7 +24,7 @@ if (!parsedEnv.success) {
 
 export const config = {
   env: parsedEnv.data.NODE_ENV,
-  port: parseInt(parsedEnv.data.PORT, 10),
+  port: Number.parseInt(parsedEnv.data.PORT, 10),
   db: {
     url: parsedEnv.data.MONGO_URI,
   },

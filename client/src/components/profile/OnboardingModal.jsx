@@ -330,7 +330,7 @@ const OnboardingModal = ({ isOpen }) => {
                   value={formData.householdSize}
                   onChange={(e) => {
                     const val = e.target.value;
-                    handleSelectChange('householdSize', val === '' ? '' : parseInt(val));
+                    handleSelectChange('householdSize', val === '' ? '' : Number.parseInt(val));
                   }}
                 />
               </div>
@@ -370,7 +370,7 @@ const OnboardingModal = ({ isOpen }) => {
                     className="h-11 rounded-full"
                     placeholder="Distance in km"
                     value={formData.transportProfile.commuteDistance}
-                    onChange={(e) => handleSelectChange('transportProfile', { ...formData.transportProfile, commuteDistance: parseInt(e.target.value) || 0 })}
+                    onChange={(e) => handleSelectChange('transportProfile', { ...formData.transportProfile, commuteDistance: Number.parseInt(e.target.value) || 0 })}
                   />
                 </div>
               </div>
@@ -440,7 +440,7 @@ const OnboardingModal = ({ isOpen }) => {
                     className="h-11 rounded-full"
                     placeholder="kWh per month"
                     value={formData.energyProfile.electricityUsage}
-                    onChange={(e) => handleSelectChange('energyProfile', { ...formData.energyProfile, electricityUsage: parseInt(e.target.value) || 0 })}
+                    onChange={(e) => handleSelectChange('energyProfile', { ...formData.energyProfile, electricityUsage: Number.parseInt(e.target.value) || 0 })}
                   />
                 </div>
                 <div className="grid gap-2">

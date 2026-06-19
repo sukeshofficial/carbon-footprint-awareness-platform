@@ -19,5 +19,5 @@ export const estimateEnergy = (inputs) => {
   const totalKWh = (acKWh + fanKWh + baseKWh);
   const perPersonCO2 = (totalKWh * ENERGY_FACTORS.gridIntensity) / safeHouseholdSize;
 
-  return isNaN(perPersonCO2) ? 0 : perPersonCO2;
+  return Number.isNaN(perPersonCO2) ? 0 : perPersonCO2;
 };

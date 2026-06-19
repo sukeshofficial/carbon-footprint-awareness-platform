@@ -19,8 +19,11 @@ export const aggregateResults = (results, previousEstimation) => {
     { name: 'Energy', value: energy },
     { name: 'Shopping', value: shopping },
   ];
-  const topSource = categories.reduce((prev, current) => (prev.value > current.value ? prev : current)).name;
-
+  const topSource = categories.reduce(
+    (prev, current) => (prev.value > current.value ? prev : current),
+    { name: "", value: -Infinity }
+  ).name;
+  
   // Severity Level
   let severityLevel = 'high';
   if (totalMonthlyCO2 <= SEVERITY_THRESHOLDS.low) {
