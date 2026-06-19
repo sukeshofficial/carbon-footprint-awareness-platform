@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Leaf, Calendar, TrendingDown } from 'lucide-react';
 import DifficultyBadge from './DifficultyBadge';
 import ConfidenceBadge from './ConfidenceBadge';
@@ -105,3 +106,22 @@ export default function ScenarioResultCard({ result, onSave, isSaving }) {
     </div>
   );
 }
+
+ScenarioResultCard.propTypes = {
+  result: PropTypes.shape({
+    title: PropTypes.string,
+    baselineCO2: PropTypes.number,
+    projectedCO2: PropTypes.number,
+    co2Saved: PropTypes.number,
+    monthlySavingsCO2: PropTypes.number,
+    yearlySavingsCO2: PropTypes.number,
+    moneySavingsEstimate: PropTypes.number,
+    difficultyLevel: PropTypes.string,
+    confidenceScore: PropTypes.number,
+    explanationText: PropTypes.string,
+    comparisonSummary: PropTypes.any
+  }),
+  onSave: PropTypes.func,
+  isSaving: PropTypes.bool
+};
+

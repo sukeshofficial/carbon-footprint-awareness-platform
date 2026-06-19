@@ -43,9 +43,9 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return api(originalRequest);
       } catch (refreshError) {
-        // Refresh token failed, logout user
+        // Refresh token failed — force re-login
         localStorage.removeItem('accessToken');
-        window.location.href = '/login';
+        globalThis.location.href = '/login';
         return Promise.reject(refreshError);
       }
     }

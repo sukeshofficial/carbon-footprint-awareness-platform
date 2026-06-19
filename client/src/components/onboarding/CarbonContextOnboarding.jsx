@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { useCarbonContext } from '../../store/carbonContextStore';
 import { useAuth } from '../../contexts/AuthContext';
 import { useProfile } from '../../store/profileStore';
@@ -20,6 +21,14 @@ import RoutineStep from './RoutineStep';
 import LifestyleStep from './LifestyleStep';
 import WasteStep from './WasteStep';
 import CarbonContextReview from './CarbonContextReview';
+
+/** Maps a step key to its corresponding data key in localData. */
+function getContextKey(stepKey) {
+  if (stepKey === 'routine') return 'workRoutine';
+  if (stepKey === 'lifestyle') return 'lifestyleContext';
+  if (stepKey === 'waste') return 'wasteProfile';
+  return `${stepKey}Profile`;
+}
 
 const CarbonContextOnboarding = ({ isOpen, onOpenChange }) => {
   const {
@@ -149,11 +158,7 @@ const CarbonContextOnboarding = ({ isOpen, onOpenChange }) => {
     }
 
     const stepKey = currentStep.key;
-    let contextKey = `${stepKey}Profile`;
-    if (stepKey === 'routine') contextKey = 'workRoutine';
-    if (stepKey === 'lifestyle') contextKey = 'lifestyleContext';
-    if (stepKey === 'waste') contextKey = 'wasteProfile';
-
+    const contextKey = getContextKey(stepKey);
     const stepData = localData[contextKey] || {};
 
     // Basic validation for required steps
@@ -190,11 +195,7 @@ const CarbonContextOnboarding = ({ isOpen, onOpenChange }) => {
 
   const handleLocalChange = (stepData) => {
     const stepKey = currentStep.key;
-    let contextKey = `${stepKey}Profile`;
-    if (stepKey === 'routine') contextKey = 'workRoutine';
-    if (stepKey === 'lifestyle') contextKey = 'lifestyleContext';
-    if (stepKey === 'waste') contextKey = 'wasteProfile';
-
+    const contextKey = getContextKey(stepKey);
     setLocalData(prev => ({
       ...prev,
       [contextKey]: stepData
@@ -229,11 +230,7 @@ const CarbonContextOnboarding = ({ isOpen, onOpenChange }) => {
     if (isReviewStep) return <CarbonContextReview responses={localData} questions={questions} />;
 
     const stepKey = currentStep?.key;
-    let contextKey = `${stepKey}Profile`;
-    if (stepKey === 'routine') contextKey = 'workRoutine';
-    if (stepKey === 'lifestyle') contextKey = 'lifestyleContext';
-    if (stepKey === 'waste') contextKey = 'wasteProfile';
-
+    const contextKey = getContextKey(stepKey);
     const stepData = localData[contextKey] || {};
 
     switch (stepKey) {
@@ -393,6 +390,11 @@ const CarbonContextOnboarding = ({ isOpen, onOpenChange }) => {
       </DialogContent>
     </Dialog>
   );
+};
+
+CarbonContextOnboarding.propTypes = {
+  isOpen: PropTypes.bool,
+  onOpenChange: PropTypes.func.isRequired,
 };
 
 export default CarbonContextOnboarding;

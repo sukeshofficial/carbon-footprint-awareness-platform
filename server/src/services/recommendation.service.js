@@ -7,7 +7,7 @@ import recommendationRanker from '../domain/recommendation/recommendationRanker.
 import reasonBuilder from '../domain/recommendation/reasonBuilder.js';
 import recommendationFormatter from '../domain/recommendation/recommendationFormatter.js';
 import recommendationCache from '../domain/recommendation/recommendationCache.js';
-import { recommendationFeedbackSchema } from '../infrastructure/validators/validation.schemas.js';
+import { recommendationFeedbackSchema } from '../shared/schemas/carbon.schemas.js';
 
 class RecommendationService {
   async getRecommendations(userId, forceRefresh = false) {

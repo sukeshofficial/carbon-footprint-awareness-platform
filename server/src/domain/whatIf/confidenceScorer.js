@@ -10,6 +10,40 @@
  *   - Scenario is compound or depends on many assumptions.
  */
 
+// ── Per-category rule functions ─────────────────────────────────────────────
+
+function scoreTransport(baselineInputs) {
+  const hasTransport = !!baselineInputs.primaryMode && !!baselineInputs.weeklyCommuteDistance;
+  let score = hasTransport ? 80 : 40;
+  if (baselineInputs.weeklyCommuteDistance > 0) score = Math.min(score + 10, 90);
+  return score;
+}
+
+function scoreFood(baselineInputs) {
+  return baselineInputs.dietStyle ? 75 : 45;
+}
+
+function scoreEnergy(baselineInputs) {
+  return baselineInputs.acUsage ? 70 : 40;
+}
+
+function scoreShopping(baselineInputs) {
+  return baselineInputs.onlineShoppingFrequency ? 65 : 35;
+}
+
+// ── Template-to-scorer dispatch table ──────────────────────────────────────
+
+const SCENARIO_SCORERS = {
+  switch_to_metro: scoreTransport,
+  switch_to_bus: scoreTransport,
+  walk_or_bike: scoreTransport,
+  vegetarian_days: scoreFood,
+  reduce_ac_usage: scoreEnergy,
+  reduce_online_orders: scoreShopping,
+};
+
+// ── Public API ──────────────────────────────────────────────────────────────
+
 /**
  * @param {object} baselineInputs   - The user's normalized baseline inputs
  * @param {string} templateId       - Scenario template ID
@@ -17,29 +51,8 @@
  * @returns {number} Confidence score 0–100
  */
 export function scoreConfidence(baselineInputs, templateId, latestEstimation) {
-  let score = 50; // Start at medium
-
-  const hasTransport = !!baselineInputs.primaryMode && !!baselineInputs.weeklyCommuteDistance;
-  const hasFood = !!baselineInputs.dietStyle;
-  const hasEnergy = !!baselineInputs.acUsage;
-  const hasShopping = !!baselineInputs.onlineShoppingFrequency;
-
-  const transportScenarios = ['switch_to_metro', 'switch_to_bus', 'walk_or_bike'];
-  const foodScenarios = ['vegetarian_days'];
-  const energyScenarios = ['reduce_ac_usage'];
-  const shoppingScenarios = ['reduce_online_orders'];
-
-  if (transportScenarios.includes(templateId)) {
-    score = hasTransport ? 80 : 40;
-    // Bonus if commute distance is precise
-    if (baselineInputs.weeklyCommuteDistance > 0) score = Math.min(score + 10, 90);
-  } else if (foodScenarios.includes(templateId)) {
-    score = hasFood ? 75 : 45;
-  } else if (energyScenarios.includes(templateId)) {
-    score = hasEnergy ? 70 : 40;
-  } else if (shoppingScenarios.includes(templateId)) {
-    score = hasShopping ? 65 : 35;
-  }
+  const scorer = SCENARIO_SCORERS[templateId];
+  let score = scorer ? scorer(baselineInputs) : 50;
 
   // Penalty if baseline estimation confidence was already low
   const baseConfidence = latestEstimation?.confidenceScore ?? 100;
@@ -47,3 +60,4 @@ export function scoreConfidence(baselineInputs, templateId, latestEstimation) {
 
   return Math.min(100, Math.max(0, score));
 }
+

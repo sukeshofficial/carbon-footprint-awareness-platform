@@ -176,16 +176,7 @@ class AuthService {
     }
 
     // 2. Check if new password exists in history
-    if (user.passwordHistory && user.passwordHistory.length > 0) {
-      for (const entry of user.passwordHistory) {
-        const isMatch = await passwordService.verify(entry.password, newPassword);
-        if (isMatch) {
-          const daysAgo = Math.floor((Date.now() - new Date(entry.changedAt).getTime()) / (1000 * 60 * 60 * 24));
-          const timeText = daysAgo === 0 ? 'today' : `${daysAgo} day${daysAgo === 1 ? '' : 's'} ago`;
-          throw new Error(`You have already used this password. You last changed to this password ${timeText}.`);
-        }
-      }
-    }
+    await this._verifyNotInPasswordHistory(user, newPassword);
 
     // 3. Prepare old password to be pushed to history
     const oldPasswordEntry = {
@@ -206,6 +197,35 @@ class AuthService {
     // Optionally logout all sessions after password change
     await sessionRepository.deleteAllByUserId(user._id);
   }
+  /**
+   * Optionally logout all sessions after password change.
+   */
+  async _logoutAllSessions(userId) {
+    await sessionRepository.deleteAllByUserId(userId);
+  }
+
+  /**
+   * Checks whether the candidate password matches any previously used password.
+   * Throws with a human-readable message if a match is found.
+   * @param {object} user
+   * @param {string} candidatePassword
+   */
+  async _verifyNotInPasswordHistory(user, candidatePassword) {
+    if (!user.passwordHistory?.length) return;
+    for (const entry of user.passwordHistory) {
+      const isMatch = await passwordService.verify(entry.password, candidatePassword);
+      if (isMatch) {
+        const daysAgo = Math.floor(
+          (Date.now() - new Date(entry.changedAt).getTime()) / (1000 * 60 * 60 * 24)
+        );
+        const timeText = daysAgo === 0 ? 'today' : `${daysAgo} day${daysAgo === 1 ? '' : 's'} ago`;
+        throw new Error(
+          `You have already used this password. You last changed to this password ${timeText}.`
+        );
+      }
+    }
+  }
 }
 
 export default new AuthService();
+

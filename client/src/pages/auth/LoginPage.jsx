@@ -15,6 +15,7 @@ import { GoogleButton } from '../../components/auth/GoogleButton';
 import { Loader2, Mail, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '../../components/ui/checkbox';
+import { extractServerError } from '../../utils/extractServerError';
 
 const loginSchema = z.object({
   email: z.string().min(1, 'Email is required'),
@@ -66,42 +67,7 @@ const LoginPage = () => {
       });
       navigate('/');
     } catch (error) {
-      console.error('Login error:', error);
-      const serverErr = error.response?.data;
-
-      // Robust error message extraction
-      let errorMessage = 'Invalid credentials.';
-
-      if (serverErr) {
-        // 1. Direct Array
-        if (Array.isArray(serverErr)) {
-          errorMessage = serverErr[0]?.message || serverErr[0]?.msg || errorMessage;
-        }
-        // 2. Standard Mapped Format
-        else if (serverErr.errors && Array.isArray(serverErr.errors)) {
-          errorMessage = serverErr.errors[0]?.message || serverErr.errors[0]?.msg || errorMessage;
-        }
-        // 3. Stringified JSON string (either as plain string or in .message)
-        else {
-          const rawMessage = typeof serverErr === 'string' ? serverErr : serverErr.message;
-          if (typeof rawMessage === 'string' && (rawMessage.startsWith('{') || rawMessage.startsWith('['))) {
-            try {
-              const parsed = JSON.parse(rawMessage);
-              if (Array.isArray(parsed)) {
-                errorMessage = parsed[0]?.message || parsed[0]?.msg || rawMessage;
-              } else if (typeof parsed === 'object' && parsed !== null) {
-                errorMessage = parsed.message || parsed.msg || rawMessage;
-              }
-            } catch (e) {
-              errorMessage = rawMessage || errorMessage;
-            }
-          } else if (rawMessage) {
-            errorMessage = rawMessage;
-          }
-        }
-      }
-
-      setServerError(errorMessage);
+      setServerError(extractServerError(error.response?.data, 'Invalid credentials.'));
     } finally {
       setIsLoading(false);
     }

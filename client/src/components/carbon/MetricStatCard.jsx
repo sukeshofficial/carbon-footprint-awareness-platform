@@ -4,9 +4,10 @@ import { Card, CardContent } from '../ui/card';
 import { cn } from '../../lib/utils';
 
 const Sparkline = ({ data = [] }) => {
-  if (!data || data.length < 2) return null;
-  const min = Math.min(...data);
-  const max = Math.max(...data);
+  const sparkData = Array.isArray(data) ? data : [];
+  if (sparkData.length < 2) return null;
+  const min = Math.min(...sparkData);
+  const max = Math.max(...sparkData);
   const range = max - min || 1;
   const width = 60;
   const height = 14;
@@ -59,7 +60,7 @@ const MetricStatCard = ({ title, value, unit = null, icon: Icon = null, chip = n
             {trend && (
               <div className={cn(
                 "text-[9px] font-black px-2 py-0.5 rounded-full whitespace-nowrap",
-                trend?.startsWith?.('+') ? "bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400" : "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
+                String(trend).startsWith('+') ? "bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400" : "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
               )}>
                 {trend}
               </div>

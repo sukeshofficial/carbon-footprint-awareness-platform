@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, CardAction } from '../../ui/card';
 import { Button } from '../../ui/button';
 import EffortBadge from './EffortBadge';
@@ -105,6 +106,24 @@ const RecommendationCard = ({
       </CardFooter>
     </Card>
   );
+};
+
+RecommendationCard.propTypes = {
+  recommendation: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    co2SavedEstimate: PropTypes.number.isRequired,
+    moneySavedEstimate: PropTypes.number,
+    effortLevel: PropTypes.string.isRequired,
+    impactScore: PropTypes.number.isRequired,
+    reasonText: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
+    isTopPriority: PropTypes.bool
+  }).isRequired,
+  onAccept: PropTypes.func.isRequired,
+  onDismiss: PropTypes.func.isRequired,
+  className: PropTypes.string
 };
 
 export default RecommendationCard;

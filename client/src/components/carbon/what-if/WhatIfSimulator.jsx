@@ -5,12 +5,20 @@
  */
 
 import React, { useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { Sparkles, Loader2, ChevronLeft, RotateCcw } from 'lucide-react';
 import { useWhatIf } from '../../../store/whatIfStore';
 import ScenarioCard from './ScenarioCard';
 import ScenarioInputPanel from './ScenarioInputPanel';
 import ScenarioResultCard from './ScenarioResultCard';
 import { toast } from 'sonner';
+
+const TYPE_LABELS = {
+  transport: '🚌 Transport',
+  food: '🥗 Food',
+  energy: '⚡ Energy',
+  shopping: '📦 Shopping',
+};
 
 export default function WhatIfSimulator() {
   const {
@@ -62,13 +70,6 @@ export default function WhatIfSimulator() {
     return acc;
   }, {});
 
-  const typeLabels = {
-    transport: '🚌 Transport',
-    food: '🥗 Food',
-    energy: '⚡ Energy',
-    shopping: '📦 Shopping',
-  };
-
   return (
     <div className="w-full bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-slate-100 dark:border-zinc-800 shadow-sm overflow-hidden">
       {/* Header */}
@@ -96,7 +97,7 @@ export default function WhatIfSimulator() {
             {Object.entries(grouped).map(([type, items]) => (
               <div key={type}>
                 <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mb-3">
-                  {typeLabels[type] ?? type}
+                  {TYPE_LABELS[type] ?? type}
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {items.map((template) => (

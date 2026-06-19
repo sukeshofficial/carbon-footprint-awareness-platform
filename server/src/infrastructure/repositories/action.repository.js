@@ -4,6 +4,23 @@ import logger from '../../utils/logger.js';
 
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
+/** Allowlisted status values — prevents arbitrary user-controlled strings in queries. */
+const VALID_STATUSES = new Set(['pending', 'completed', 'skipped']);
+
+/**
+ * Builds a safe status filter.
+ * @param {string|undefined} status
+ * @returns {{ status: string }|{}} - filter fragment, or empty object if no status given
+ */
+function buildStatusFilter(status) {
+  if (!status) return {};
+  const normalised = String(status).toLowerCase();
+  if (!VALID_STATUSES.has(normalised)) {
+    throw new Error(`Invalid status value: "${status}"`);
+  }
+  return { status: normalised };
+}
+
 class ActionRepository {
   async create(actionData) {
     try {
@@ -61,8 +78,7 @@ class ActionRepository {
   async findByUserId(userId, status) {
     try {
       if (!isValidObjectId(userId)) throw new Error('Invalid user ID');
-      const query = { userId };
-      if (status) query.status = String(status);
+      const query = { userId, ...buildStatusFilter(status) };
       return await Action.find(query).sort({ scheduledDate: 1 });
     } catch (error) {
       logger.error('ActionRepository.findByUserId error', { error, userId });

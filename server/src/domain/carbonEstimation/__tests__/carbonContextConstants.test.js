@@ -94,6 +94,6 @@ describe('QUESTIONNAIRE_CONFIG', () => {
 
   test('required steps are travel, diet, and routine', () => {
     const requiredSteps = QUESTIONNAIRE_CONFIG.steps.filter(s => s.required).map(s => s.key);
-    assert.deepStrictEqual(requiredSteps.sort(), ['diet', 'routine', 'travel']);
+    assert.deepStrictEqual(requiredSteps.sort((a, b) => a.localeCompare(b)), ['diet', 'routine', 'travel']);
   });
 });

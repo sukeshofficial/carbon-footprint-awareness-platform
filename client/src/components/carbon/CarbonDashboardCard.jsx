@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
@@ -11,8 +11,7 @@ import { useCarbonEstimation } from '../../store/carbonEstimationStore';
 import ExplanationsPanel from './explanations/ExplanationsPanel';
 import RecommendationReasoning from './explanations/RecommendationReasoning';
 import useExplanationStore from '../../store/explanationStore';
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1';
+import { useCarbonInsightsStream } from '../../hooks/useCarbonInsightsStream';
 
 const COLORS = {
   Transport: '#10b981',
@@ -95,11 +94,8 @@ const CarbonDashboardCard = () => {
   } = useCarbonEstimation();
 
   const [view, setView] = useState('monthly');
-  const [streamedToken, setStreamedToken] = useState('');
-  const [streamedInsights, setStreamedInsights] = useState(null);
-  const [streamError, setStreamError] = useState(false);
-  const [isStreaming, setIsStreaming] = useState(false);
-  const esRef = useRef(null);
+  const { streamedToken, streamedInsights, streamError, isStreaming, resetStream } =
+    useCarbonInsightsStream(estimation);
 
   useEffect(() => {
     if (!estimation) {
@@ -107,77 +103,10 @@ const CarbonDashboardCard = () => {
     }
   }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
 
-  // When estimation is available and no resolved insights, open SSE stream
-  useEffect(() => {
-    if (!estimation) return;
-
-    // Already resolved from cache via stream
-    if (streamedInsights) return;
-
-    const token = localStorage.getItem('accessToken');
-    if (!token) return;
-
-    setIsStreaming(true);
-    setStreamedToken('');
-    setStreamError(false);
-
-    // Use fetch-based SSE to include Authorization header
-    const controller = new AbortController();
-
-    fetch(`${API_BASE}/carbon-estimation/me/insights/stream`, {
-      headers: { Authorization: `Bearer ${token}` },
-      signal: controller.signal,
-    })
-      .then(async (res) => {
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder();
-        let rawBuffer = '';
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          rawBuffer += decoder.decode(value, { stream: true });
-
-          const lines = rawBuffer.split('\n');
-          rawBuffer = lines.pop(); // keep incomplete line
-
-          for (const line of lines) {
-            if (!line.startsWith('data:')) continue;
-            const data = line.slice(5).trim();
-            if (data === '[DONE]') { continue; }
-            try {
-              const parsed = JSON.parse(data);
-              if (parsed.token) {
-                setStreamedToken(prev => prev + parsed.token);
-              }
-              if (parsed.done && parsed.insights) {
-                setStreamedInsights(parsed.insights);
-              }
-              if (parsed.error) {
-                setStreamError(true);
-              }
-            } catch (_) { /* skip */ }
-          }
-        }
-      })
-      .catch((err) => {
-        if (err.name !== 'AbortError') {
-          console.error('Stream error:', err);
-          setStreamError(true);
-        }
-      })
-      .finally(() => setIsStreaming(false));
-
-    esRef.current = controller;
-    return () => controller.abort();
-  }, [estimation]); // eslint-disable-next-line react-hooks/exhaustive-deps
-
   // ── Handlers ──
   const handleRecalculate = async () => {
     try {
-      setStreamedInsights(null);
-      setStreamedToken('');
-      setStreamError(false);
+      resetStream();
       await recalculate();
     } catch (err) {
       console.error('Recalculate failed:', err);
@@ -335,7 +264,7 @@ const CarbonDashboardCard = () => {
               streamedInsights={streamedInsights}
               streamedToken={streamedToken}
               streamError={streamError}
-              resetStream={() => { setStreamError(false); setStreamedInsights(null); setStreamedToken(''); }}
+              resetStream={resetStream}
             />
           </div>
         </div>
@@ -365,10 +294,6 @@ const CarbonDashboardCard = () => {
       </div>
     </div>
   );
-};
-
-CarbonDashboardCard.propTypes = {
-  // Component takes no props, but adding for consistency
 };
 
 export default CarbonDashboardCard;
