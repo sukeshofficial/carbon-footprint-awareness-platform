@@ -74,7 +74,8 @@ const TransportStep = ({ data, onChange }) => {
             className="h-11 rounded-full border-zinc-200 dark:border-zinc-800 bg-background dark:bg-zinc-900/50 focus-visible:ring-primary/20"
             placeholder="e.g. 50"
             value={data.weeklyCommuteDistance || ''}
-            onChange={(e) => onChange({ ...data, weeklyCommuteDistance: parseFloat(e.target.value) || 0 })}
+            // Sonar S2737: use Number.parseFloat instead of global parseFloat
+            onChange={(e) => onChange({ ...data, weeklyCommuteDistance: Number.parseFloat(e.target.value) || 0 })}
           />
         </div>
         <div className="grid gap-2">
@@ -86,7 +87,8 @@ const TransportStep = ({ data, onChange }) => {
             className="h-11 rounded-full border-zinc-200 dark:border-zinc-800 bg-background dark:bg-zinc-900/50 focus-visible:ring-primary/20"
             placeholder="e.g. 2"
             value={data.yearlyFlightFrequency || ''}
-            onChange={(e) => onChange({ ...data, yearlyFlightFrequency: parseInt(e.target.value) || 0 })}
+            // Sonar S2737: use Number.parseInt instead of global parseInt
+            onChange={(e) => onChange({ ...data, yearlyFlightFrequency: Number.parseInt(e.target.value, 10) || 0 })}
           />
         </div>
       </div>

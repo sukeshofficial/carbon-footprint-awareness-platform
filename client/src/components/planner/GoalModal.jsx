@@ -56,7 +56,7 @@ const GoalModal = ({ isOpen, onClose, onSubmit }) => {
       toast.error('Please fill in all required fields');
       return;
     }
-    onSubmit({ ...formData, targetValue: parseFloat(formData.targetValue), startDate: new Date().toISOString() });
+    onSubmit({ ...formData, targetValue: Number.parseFloat(formData.targetValue), startDate: new Date().toISOString() }); /* Sonar: S2737 – use Number.parseFloat */
     onClose();
     setFormData({ title: '', description: '', targetType: 'action_completion_count', targetValue: '' });
   };

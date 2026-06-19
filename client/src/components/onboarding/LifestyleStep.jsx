@@ -43,7 +43,8 @@ const LifestyleStep = ({ data, onChange }) => {
           className="h-11 rounded-full border-zinc-200 dark:border-zinc-800 bg-background dark:bg-zinc-900/50 focus-visible:ring-primary/20"
           placeholder="How many people share your home?"
           value={data.householdSize || ''}
-          onChange={(e) => onChange({ ...data, householdSize: parseInt(e.target.value) || 0 })}
+          // Sonar S2737: use Number.parseInt instead of global parseInt
+          onChange={(e) => onChange({ ...data, householdSize: Number.parseInt(e.target.value, 10) || 0 })}
         />
       </div>
     </div>
