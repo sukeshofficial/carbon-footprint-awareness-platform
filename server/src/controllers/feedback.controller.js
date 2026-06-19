@@ -13,8 +13,8 @@ export const submitFeedback = async (req, res) => {
     if (!name?.trim() || !email?.trim()) {
       return res.status(400).json({ error: "Name and email are required." });
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    const emailRegex = /^[^\s@]{1,64}@[^\s@]{1,255}\.[^\s@]{2,}$/;
+    if (!emailRegex.test(email.slice(0, 320))) {
       return res.status(400).json({ error: "Invalid email address." });
     }
   }

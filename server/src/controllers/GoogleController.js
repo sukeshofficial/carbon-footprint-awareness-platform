@@ -1,3 +1,4 @@
+import { randomInt } from 'crypto';
 import { OAuth2Client } from 'google-auth-library';
 import userRepository from '../infrastructure/repositories/UserRepository.js';
 import authService from '../services/AuthService.js';
@@ -95,7 +96,7 @@ class GoogleController {
         } else {
           // Create new user with generated username
           const baseUsername = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
-          const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+          const randomSuffix = randomInt(1000, 10000);
           const username = `${baseUsername}${randomSuffix}`;
 
           user = await userRepository.create({

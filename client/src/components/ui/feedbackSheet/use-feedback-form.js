@@ -25,7 +25,7 @@ export function useFeedbackForm() {
       if (!form.email.trim()) {
         newErrors.email = "Email address is required.";
         valid = false;
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      } else if (!/^[^\s@]{1,64}@[^\s@]{1,255}\.[^\s@]{2,}$/.test(form.email.slice(0, 320))) {
         newErrors.email = "Enter a valid email address.";
         valid = false;
       }
