@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
+import PropTypes from "prop-types";
 import * as carbonEstimationApi from '../services/carbonEstimationApi';
 
 const CarbonEstimationContext = createContext(null);
@@ -77,24 +84,41 @@ export const CarbonEstimationProvider = ({ children }) => {
     }
   }, []);
 
-  const value = {
-    estimation,
-    history,
-    loading,
-    loadingInsights,
-    error,
-    isFetched,
-    fetchMyEstimation,
-    fetchLatestInsights,
-    recalculate,
-    fetchHistory,
-  };
+  const value = useMemo(
+    () => ({
+      estimation,
+      history,
+      loading,
+      loadingInsights,
+      error,
+      isFetched,
+      fetchMyEstimation,
+      fetchLatestInsights,
+      recalculate,
+      fetchHistory,
+    }),
+    [
+      estimation,
+      history,
+      loading,
+      loadingInsights,
+      error,
+      isFetched,
+      fetchMyEstimation,
+      fetchLatestInsights,
+      fetchHistory,
+    ]
+  );
 
   return (
     <CarbonEstimationContext.Provider value={value}>
       {children}
     </CarbonEstimationContext.Provider>
   );
+};
+
+CarbonEstimationProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export const useCarbonEstimation = () => {

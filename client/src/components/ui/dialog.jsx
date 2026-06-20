@@ -1,16 +1,13 @@
-import * as React from "react"
-import * as DialogPrimitive from "@radix-ui/react-dialog"
-import { X } from "lucide-react"
+import * as React from "react";
+import PropTypes from "prop-types";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
-const Dialog = DialogPrimitive.Root
-
-const DialogTrigger = DialogPrimitive.Trigger
-
-const DialogPortal = DialogPrimitive.Portal
-
-const DialogClose = DialogPrimitive.Close
+const Dialog = DialogPrimitive.Root;
+const DialogTrigger = DialogPrimitive.Trigger;
+const DialogPortal = DialogPrimitive.Portal;
+const DialogClose = DialogPrimitive.Close;
 
 const DialogOverlay = React.forwardRef(
   /**
@@ -18,17 +15,17 @@ const DialogOverlay = React.forwardRef(
    * @param {React.ForwardedRef<HTMLDivElement>} ref
    */
   ({ className, ...props }, ref) => (
-
     <DialogPrimitive.Overlay
       ref={ref}
       className={cn(
-        "fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+        "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
         className
       )}
       {...props}
     />
-  ))
-DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
+  )
+);
+DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef(
   /**
@@ -36,7 +33,6 @@ const DialogContent = React.forwardRef(
    * @param {React.ForwardedRef<HTMLDivElement>} ref
    */
   ({ className, children, ...props }, ref) => (
-
     <DialogPortal>
       <DialogOverlay />
       <DialogPrimitive.Content
@@ -50,13 +46,11 @@ const DialogContent = React.forwardRef(
         {children}
       </DialogPrimitive.Content>
     </DialogPortal>
-  ))
-DialogContent.displayName = DialogPrimitive.Content.displayName
+  )
+);
+DialogContent.displayName = DialogPrimitive.Content.displayName;
 
-const DialogHeader = ({
-  className,
-  ...props
-}) => (
+const DialogHeader = ({ className, ...props }) => (
   <div
     className={cn(
       "flex flex-col space-y-1.5 text-center sm:text-left",
@@ -64,13 +58,10 @@ const DialogHeader = ({
     )}
     {...props}
   />
-)
-DialogHeader.displayName = "DialogHeader"
+);
+DialogHeader.displayName = "DialogHeader";
 
-const DialogFooter = ({
-  className,
-  ...props
-}) => (
+const DialogFooter = ({ className, ...props }) => (
   <div
     className={cn(
       "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
@@ -78,8 +69,8 @@ const DialogFooter = ({
     )}
     {...props}
   />
-)
-DialogFooter.displayName = "DialogFooter"
+);
+DialogFooter.displayName = "DialogFooter";
 
 const DialogTitle = React.forwardRef(
   /**
@@ -87,7 +78,6 @@ const DialogTitle = React.forwardRef(
    * @param {React.ForwardedRef<HTMLDivElement>} ref
    */
   ({ className, ...props }, ref) => (
-
     <DialogPrimitive.Title
       ref={ref}
       className={cn(
@@ -96,8 +86,9 @@ const DialogTitle = React.forwardRef(
       )}
       {...props}
     />
-  ))
-DialogTitle.displayName = DialogPrimitive.Title.displayName
+  )
+);
+DialogTitle.displayName = DialogPrimitive.Title.displayName;
 
 const DialogDescription = React.forwardRef(
   /**
@@ -105,14 +96,32 @@ const DialogDescription = React.forwardRef(
    * @param {React.ForwardedRef<HTMLDivElement>} ref
    */
   ({ className, ...props }, ref) => (
-
     <DialogPrimitive.Description
       ref={ref}
       className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />
-  ))
-DialogDescription.displayName = DialogPrimitive.Description.displayName
+  )
+);
+DialogDescription.displayName = DialogPrimitive.Description.displayName;
+
+// PropTypes
+DialogHeader.propTypes = {
+  className: PropTypes.string,
+};
+
+DialogFooter.propTypes = {
+  className: PropTypes.string,
+};
+
+// Default Props
+DialogHeader.defaultProps = {
+  className: "",
+};
+
+DialogFooter.defaultProps = {
+  className: "",
+};
 
 export {
   Dialog,
@@ -125,4 +134,4 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
-}
+};

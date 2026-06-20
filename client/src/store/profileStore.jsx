@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
+import PropTypes from "prop-types";
 import profileApi from '../services/profileApi';
 
 const ProfileContext = createContext(null);
@@ -76,17 +83,20 @@ export const ProfileProvider = ({ children }) => {
     }
   };
 
-  const value = {
-    profile,
-    loading,
-    isFetched,
-    error,
-    isProfileComplete: !!profile?.isOnboardingCompleted,
-    fetchProfile,
-    saveProfile,
-    updateProfile,
-    patchPreferences,
-  };
+  const value = useMemo(
+    () => ({
+      profile,
+      loading,
+      isFetched,
+      error,
+      isProfileComplete: !!profile?.isOnboardingCompleted,
+      fetchProfile,
+      saveProfile,
+      updateProfile,
+      patchPreferences,
+    }),
+    [profile, loading, isFetched, error, fetchProfile]
+  );
 
   return (
     <ProfileContext.Provider value={value}>
@@ -94,6 +104,10 @@ export const ProfileProvider = ({ children }) => {
     </ProfileContext.Provider>
   );
 };
+
+ProfileProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+}; 
 
 export const useProfile = () => {
   const context = useContext(ProfileContext);

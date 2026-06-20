@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardContent } from '../ui/card';
 import { TONE_PREFERENCES_LIST } from './constants';
 import { cn } from '../../lib/utils';
@@ -26,6 +27,11 @@ const ToneSelector = ({ selected, onChange }) => {
       ))}
     </div>
   );
+};
+
+ToneSelector.propTypes = {
+  selected: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default ToneSelector;

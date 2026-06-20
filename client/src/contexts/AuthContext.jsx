@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import api from '../services/api';
 
 const AuthContext = createContext(null);
@@ -101,19 +102,26 @@ export const AuthProvider = ({ children }) => {
     return updatedUser;
   };
 
-  const value = {
-    user,
-    loading,
-    login,
-    signup,
-    logout,
-    forgotPassword,
-    resetPassword,
-    loginWithGoogle,
-    updateMe,
-  };
+  const value = React.useMemo(
+    () => ({
+      user,
+      loading,
+      login,
+      signup,
+      logout,
+      forgotPassword,
+      resetPassword,
+      loginWithGoogle,
+      updateMe,
+    }),
+    [user, loading]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export const useAuth = () => {

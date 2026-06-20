@@ -10,17 +10,30 @@
 import { SCENARIO_TEMPLATES } from '../../shared/constants/scenarioDefinitions.js';
 
 /**
- * @param {string} templateId - Scenario template ID
+ * @param {string} templateId
  * @returns {'easy'|'medium'|'hard'}
  */
 export function scoreDifficulty(templateId) {
   const template = SCENARIO_TEMPLATES.find((t) => t.id === templateId);
+
   if (template?.difficulty) return template.difficulty;
 
-  // Fallback rules if template is not found
-  const easy = ['reduce_ac_usage', 'reduce_online_orders', 'vegetarian_days'];
-  const medium = ['switch_to_metro', 'switch_to_bus', 'walk_or_bike'];
-  const hard = [];
+  const easy = [
+    'reduce_ac_usage',
+    'reduce_online_orders',
+    'vegetarian_days',
+  ];
+
+  const medium = [
+    'switch_to_metro',
+    'switch_to_bus',
+    'walk_or_bike',
+  ];
+
+  const hard = [
+    'go_car_free',
+    'install_solar'
+  ];
 
   if (easy.includes(templateId)) return 'easy';
   if (medium.includes(templateId)) return 'medium';
@@ -28,3 +41,4 @@ export function scoreDifficulty(templateId) {
 
   return 'medium';
 }
+

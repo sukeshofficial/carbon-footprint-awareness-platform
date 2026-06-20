@@ -3,7 +3,14 @@
  * React Context and hook for What-If Scenario Simulator state management.
  */
 
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
+import PropTypes from "prop-types";
 import * as whatIfApi from '../services/whatIfApi';
 
 const WhatIfContext = createContext(null);
@@ -92,25 +99,48 @@ export const WhatIfProvider = ({ children }) => {
     setInputPayload({});
   }, []);
 
-  const value = {
-    templates,
-    selectedTemplate,
-    inputPayload,
-    previewResult,
-    savedScenarios,
-    loading,
-    previewing,
-    error,
-    fetchTemplates,
-    selectTemplate,
-    updateInput,
-    runPreview,
-    saveCurrentScenario,
-    fetchMyScenarios,
-    clearPreview,
-  };
+  const value = useMemo(
+    () => ({
+      templates,
+      selectedTemplate,
+      inputPayload,
+      previewResult,
+      savedScenarios,
+      loading,
+      previewing,
+      error,
+      fetchTemplates,
+      selectTemplate,
+      updateInput,
+      runPreview,
+      saveCurrentScenario,
+      fetchMyScenarios,
+      clearPreview,
+    }),
+    [
+      templates,
+      selectedTemplate,
+      inputPayload,
+      previewResult,
+      savedScenarios,
+      loading,
+      previewing,
+      error,
+      fetchTemplates,
+      selectTemplate,
+      updateInput,
+      runPreview,
+      saveCurrentScenario,
+      fetchMyScenarios,
+      clearPreview,
+    ]
+  );
 
   return <WhatIfContext.Provider value={value}>{children}</WhatIfContext.Provider>;
+};
+
+WhatIfProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export const useWhatIf = () => {

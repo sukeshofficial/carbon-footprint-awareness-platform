@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import PropTypes from "prop-types";
 import { User as UserIcon, ChevronRight, Leaf, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PROFILE_NUDGES } from '../constants/dashboardConstants';
@@ -68,4 +69,8 @@ export const ProfileNudgeCard = ({ skippedSections }) => {
       </div>
     </div>
   );
+};
+
+ProfileNudgeCard.propTypes = {
+  skippedSections: PropTypes.arrayOf(PropTypes.string),
 };

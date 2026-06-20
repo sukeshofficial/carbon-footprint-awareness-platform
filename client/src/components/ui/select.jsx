@@ -1,32 +1,51 @@
-import * as React from "react"
-import { ChevronDown, Check } from "lucide-react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import PropTypes from "prop-types";
+import { ChevronDown, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const Select = ({ children, value, onValueChange, className }) => {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const containerRef = React.useRef(null)
+  const [isOpen, setIsOpen] = React.useState(false);
+  const containerRef = React.useRef(null);
 
-  const handleToggle = () => setIsOpen(!isOpen)
+  const handleToggle = () => setIsOpen(!isOpen);
 
   const handleSelect = (val) => {
-    onValueChange(val)
-    setIsOpen(false)
-  }
+    onValueChange(val);
+    setIsOpen(false);
+  };
 
   return (
     <div className={cn("relative", className)} ref={containerRef}>
-      {React.Children.map(children, child => {
+      {React.Children.map(children, (child) => {
         if (child.type === SelectTrigger) {
-          return React.cloneElement(child, { onClick: handleToggle, value })
+          return React.cloneElement(child, {
+            onClick: handleToggle,
+            value,
+          });
         }
+
         if (child.type === SelectContent) {
-          return isOpen && React.cloneElement(child, { onSelect: handleSelect, selectedValue: value })
+          return (
+            isOpen &&
+            React.cloneElement(child, {
+              onSelect: handleSelect,
+              selectedValue: value,
+            })
+          );
         }
-        return child
+
+        return child;
       })}
     </div>
-  )
-}
+  );
+};
+
+Select.propTypes = {
+  children: PropTypes.node,
+  value: PropTypes.string,
+  onValueChange: PropTypes.func.isRequired,
+  className: PropTypes.string,
+};
 
 const SelectTrigger = ({ children, value, onClick, className }) => (
   <button
@@ -40,40 +59,70 @@ const SelectTrigger = ({ children, value, onClick, className }) => (
     {children}
     <ChevronDown className="h-4 w-4 opacity-50" />
   </button>
-)
+);
+
+SelectTrigger.propTypes = {
+  children: PropTypes.node,
+  value: PropTypes.string,
+  onClick: PropTypes.func,
+  className: PropTypes.string,
+};
 
 const SelectValue = ({ placeholder, value, children }) => (
-  <span className="truncate">{value || placeholder}</span>
-)
+  <span className="truncate">{value || placeholder || children}</span>
+);
 
-const SelectContent = ({ children, onSelect, selectedValue, className }) => (
-  <div className={cn("absolute top-full z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in-80 zoom-in-95 mt-1 w-full", className)}>
+SelectValue.propTypes = {
+  placeholder: PropTypes.string,
+  value: PropTypes.string,
+  children: PropTypes.node,
+};
+
+const SelectContent = ({
+  children,
+  onSelect,
+  selectedValue,
+  className,
+}) => (
+  <div
+    className={cn(
+      "absolute top-full z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in-80 zoom-in-95 mt-1 w-full",
+      className
+    )}
+  >
     <div className="p-1">
-      {React.Children.map(children, child => {
+      {React.Children.map(children, (child) => {
         if (child.type === SelectItem) {
           return React.cloneElement(child, {
             onClick: () => onSelect(child.props.value),
-            isSelected: child.props.value === selectedValue
-          })
+            isSelected: child.props.value === selectedValue,
+          });
         }
-        return child
+        return child;
       })}
     </div>
   </div>
-)
+);
 
-const SelectItem = ({ children, value, onClick, isSelected, className }) => (
-  <div
-    role="button"
-    tabIndex={0}
+SelectContent.propTypes = {
+  children: PropTypes.node,
+  onSelect: PropTypes.func.isRequired,
+  selectedValue: PropTypes.string,
+  className: PropTypes.string,
+};
+
+const SelectItem = ({
+  children,
+  value,
+  onClick,
+  isSelected,
+  className,
+}) => (
+  <button
+    type="button"
     onClick={onClick}
-    onKeyDown={(e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        onClick(e);
-      }
-    }}
     className={cn(
-      "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 cursor-pointer",
+      "relative flex w-full select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground cursor-pointer",
       isSelected && "bg-accent text-accent-foreground",
       className
     )}
@@ -82,7 +131,21 @@ const SelectItem = ({ children, value, onClick, isSelected, className }) => (
       {isSelected && <Check className="h-4 w-4" />}
     </span>
     {children}
-  </div>
-)
+  </button>
+);
 
-export { Select, SelectTrigger, SelectValue, SelectContent, SelectItem }
+SelectItem.propTypes = {
+  children: PropTypes.node,
+  value: PropTypes.string,
+  onClick: PropTypes.func,
+  isSelected: PropTypes.bool,
+  className: PropTypes.string,
+};
+
+export {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+};

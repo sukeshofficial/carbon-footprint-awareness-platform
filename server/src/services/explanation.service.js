@@ -35,7 +35,7 @@ class ExplanationService {
       categoryExplanationsJson: category_explanations,
       habitExplanationsJson: habit_explanations,
       recommendationReasoningJson: recommendation_reasoning,
-      version: '1.0.0', // Should match some config or versioning strategy
+      version: '1.0.0',
     };
 
     const saved = await explanationRepository.save(explanationData);
@@ -49,10 +49,7 @@ class ExplanationService {
       habit_explanations: data.habitExplanationsJson,
       recommendation_reasoning: data.recommendationReasoningJson,
       confidence: 0.9,
-      source_signals: {
-        // These can be derived from the explanation or stored if needed
-        // For MVP, we just return the saved data
-      },
+      source_signals: {},
     };
   }
 
@@ -76,7 +73,7 @@ class ExplanationService {
   _generateHabitExplanations(inputs) {
     const matchedRules = habitRules.filter(r => r.condition(inputs));
     return matchedRules.map(r => ({
-      habit: r.id.replace(/_/g, ' '),
+      habit: r.id.replaceAll('_', ' '),
       reason: habitTemplates[r.id],
     }));
   }

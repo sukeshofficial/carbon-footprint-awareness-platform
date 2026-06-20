@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo
+} from "react";
+import PropTypes from "prop-types";
 import carbonContextApi from '../services/carbonContextApi';
 
 const CarbonContextContext = createContext(null);
@@ -79,24 +86,31 @@ export const CarbonContextProvider = ({ children }) => {
     }
   };
 
-  const value = {
-    responses,
-    questions,
-    loading,
-    error,
-    fetchQuestions,
-    fetchResponses,
-    updateStep,
-    skipStep,
-    completeOnboarding,
-    isComplete: responses?.draftStatus === 'completed',
-  };
+  const value = useMemo(
+    () => ({
+      responses,
+      questions,
+      loading,
+      error,
+      fetchQuestions,
+      fetchResponses,
+      updateStep,
+      skipStep,
+      completeOnboarding,
+      isComplete: responses?.draftStatus === "completed",
+    }),
+    [responses, questions, loading, error, fetchQuestions, fetchResponses]
+  );
 
   return (
     <CarbonContextContext.Provider value={value}>
       {children}
     </CarbonContextContext.Provider>
   );
+};
+
+CarbonContextProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export const useCarbonContext = () => {

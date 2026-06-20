@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent } from '../ui/card';
+import PropTypes from 'prop-types';
 import { USER_TYPES_LIST } from './constants';
 import { cn } from '../../lib/utils';
 
@@ -23,6 +23,11 @@ const UserTypeCards = ({ selected, onChange }) => {
       ))}
     </div>
   );
+};
+
+UserTypeCards.propTypes = {
+  selected: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default UserTypeCards;

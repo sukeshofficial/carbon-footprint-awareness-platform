@@ -187,7 +187,9 @@ const OnboardingModal = ({ isOpen }) => {
         <div className="bg-primary px-5 py-6 sm:px-8 sm:py-8 text-primary-foreground">
           <div className="max-w-2xl mx-auto space-y-1">
             <h2 className="text-lg sm:text-xl font-black tracking-tight flex items-center gap-2">
-              <span className="w-6 h-6 sm:w-7 sm:h-7 bg-white/20 rounded-full backdrop-blur-sm text-sm"><img src="/android-chrome-192x192.png" alt="" className='rounded-full' /></span>
+              <span className="w-6 h-6 sm:w-7 sm:h-7 bg-white/20 rounded-full backdrop-blur-sm text-sm">
+                <img src="/android-chrome-192x192.png" alt="" className="rounded-full" />
+              </span>{' '}
               ACo2 Setup
             </h2>
             <p className="text-primary-foreground/80 text-[10px] sm:text-xs font-medium">
