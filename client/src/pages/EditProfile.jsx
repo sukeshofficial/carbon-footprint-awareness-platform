@@ -113,8 +113,20 @@ const EditProfile = () => {
               const score = profile?.profileCompletenessScore || 0;
               const segments = 10;
               const filledSegments = Math.round((score / 100) * segments);
-              const label = score >= 100 ? 'Excellent' : score >= 66 ? 'Good' : score >= 33 ? 'Fair' : 'Getting started';
-              const labelColor = score >= 100 ? 'text-emerald-400' : score >= 66 ? 'text-primary-foreground' : score >= 33 ? 'text-yellow-400' : 'text-white/60';
+              let label = 'Getting started';
+              let labelColor = 'text-white/60';
+
+              if (score >= 100) {
+                label = 'Excellent';
+                labelColor = 'text-emerald-400';
+              } else if (score >= 66) {
+                label = 'Good';
+                labelColor = 'text-primary-foreground';
+              } else if (score >= 33) {
+                label = 'Fair';
+                labelColor = 'text-yellow-400';
+              }
+
               return (
                 <div className="bg-white/[0.05] border border-white/[0.08] rounded-2xl p-5 min-w-[260px]">
                   <div className="flex items-center justify-between mb-4">
@@ -126,12 +138,12 @@ const EditProfile = () => {
                   </div>
                   {/* Segmented bar */}
                   <div className="flex gap-1">
-                    {Array.from({ length: segments }).map((_, i) => (
+                    {Array.from({ length: segments }, (_, index) => index).map((index) => (
                       <div
-                        key={i}
-                        className={`h-1.5 flex-1 rounded-full transition-all duration-700 ${i < filledSegments ? 'bg-emerald-400' : 'bg-white/10'
+                        key={`strength-segment-${index}`}
+                        className={`h-1.5 flex-1 rounded-full transition-all duration-700 ${index < filledSegments ? 'bg-emerald-400' : 'bg-white/10'
                           }`}
-                        style={{ transitionDelay: `${i * 60}ms` }}
+                        style={{ transitionDelay: `${index * 60}ms` }}
                       />
                     ))}
                   </div>

@@ -27,7 +27,6 @@ export const sendFeedbackEmail = async ({ name, email, message, anonymous = fals
   });
 
   const displayName = anonymous ? "Anonymous" : name;
-  const displayEmail = anonymous ? "Hidden" : email;
 
   // Badge shown in the email header
   const anonymousBadge = anonymous

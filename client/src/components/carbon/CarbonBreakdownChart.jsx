@@ -26,44 +26,54 @@ const CarbonBreakdownChart = ({ data, loading }) => {
 
   const COLORS = ['#10b981', '#f59e0b', '#3b82f6', '#8b5cf6'];
 
+  let chartContent;
+
+  if (loading) {
+    chartContent = (
+      <div className="h-full flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  } else if (chartData.length > 0) {
+    chartContent = (
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={chartData}
+            cx="50%"
+            cy="50%"
+            innerRadius={60}
+            outerRadius={80}
+            paddingAngle={5}
+            dataKey="value"
+          >
+            {chartData.map((entry) => (
+              <Cell key={`cell-${entry.name}`} fill={COLORS[chartData.indexOf(entry) % COLORS.length]} />
+            ))}
+          </Pie>
+          <Tooltip
+            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+            formatter={(value) => [`${value} kg CO₂`]}
+          />
+          <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '12px', fontWeight: 500 }} />
+        </PieChart>
+      </ResponsiveContainer>
+    );
+  } else {
+    chartContent = (
+      <div className="h-full flex flex-col items-center justify-center text-slate-400">
+        <p className="text-sm">No data available for breakdown</p>
+      </div>
+    );
+  }
+
   return (
     <Card className="h-full border-none shadow-premium bg-white">
       <CardHeader className="pb-0">
         <CardTitle className="text-lg font-bold text-slate-800">Category Split</CardTitle>
       </CardHeader>
       <CardContent className="h-[250px] pt-0">
-        {loading ? (
-          <div className="h-full flex items-center justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-          </div>
-        ) : chartData.length > 0 ? (
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={chartData}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={80}
-                paddingAngle={5}
-                dataKey="value"
-              >
-                {chartData.map((entry) => (
-                  <Cell key={`cell-${entry.name}`} fill={COLORS[chartData.indexOf(entry) % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                formatter={(value) => [`${value} kg CO₂`]}
-              />
-              <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '12px', fontWeight: 500 }} />
-            </PieChart>
-          </ResponsiveContainer>
-        ) : (
-          <div className="h-full flex flex-col items-center justify-center text-slate-400">
-            <p className="text-sm">No data available for breakdown</p>
-          </div>
-        )}
+        {chartContent}
       </CardContent>
     </Card>
   );

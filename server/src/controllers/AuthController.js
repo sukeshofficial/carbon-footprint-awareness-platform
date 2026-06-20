@@ -157,7 +157,7 @@ class AuthController {
       }
     }
 
-    if (update.avatar && update.avatar.startsWith('data:image')) {
+    if (update.avatar?.startsWith('data:image')) {
       const publicId = `user_${req.user.id}`;
       update.avatar = await uploadAvatar(update.avatar, publicId);
     }

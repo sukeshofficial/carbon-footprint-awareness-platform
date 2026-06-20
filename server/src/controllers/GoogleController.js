@@ -1,4 +1,4 @@
-import { randomInt } from 'crypto';
+import { randomInt } from 'node:crypto';
 import { OAuth2Client } from 'google-auth-library';
 import userRepository from '../infrastructure/repositories/UserRepository.js';
 import authService from '../services/AuthService.js';

@@ -217,13 +217,7 @@
     /* Firefox */
   }
 
-  /* .font-mono-tight {
-    @apply font-mono leading-none tracking-tighter uppercase;
-  } */
 
-  .auth-card-light {
-    /* @apply bg-white/80 backdrop-blur-3xl border border-zinc-200/50 shadow-[0_32px_64px_-16px_rgba(0, 0, 0, 0.08)]; */
-  }
 
   .highlight-section {
     position: relative;

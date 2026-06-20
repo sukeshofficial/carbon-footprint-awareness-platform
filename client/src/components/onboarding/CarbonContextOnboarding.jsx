@@ -226,6 +226,23 @@ const CarbonContextOnboarding = ({ isOpen, onOpenChange }) => {
     }
   };
 
+  const getStepIndicatorContent = (index) => {
+    if (currentStepIndex > index) {
+      return <CheckCircle2 className="w-3 h-3" />;
+    }
+    return index + 1;
+  };
+
+  const getStepIndicatorClass = (index) => {
+    if (currentStepIndex > index) {
+      return "bg-green-500 text-white";
+    }
+    if (currentStepIndex === index) {
+      return "bg-primary text-primary-foreground";
+    }
+    return "bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500";
+  };
+
   const renderStep = () => {
     if (isReviewStep) return <CarbonContextReview responses={localData} questions={questions} />;
 
@@ -295,9 +312,9 @@ const CarbonContextOnboarding = ({ isOpen, onOpenChange }) => {
                 >
                   <div className={cn(
                     "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold",
-                    currentStepIndex > i ? "bg-green-500 text-white" : currentStepIndex === i ? "bg-primary text-primary-foreground" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500"
+                    getStepIndicatorClass(i)
                   )}>
-                    {currentStepIndex > i ? <CheckCircle2 className="w-3 h-3" /> : i + 1}
+                    {getStepIndicatorContent(i)}
                   </div>
                   <span className={cn(
                     "text-[11px] font-bold",

@@ -17,7 +17,7 @@ import CarbonContextOnboarding from '../onboarding/CarbonContextOnboarding';
  */
 const OnboardingRedirect = () => {
   const { user } = useAuth();
-  const { profile, fetchProfile, loading: profileLoading, isFetched: profileFetched, isProfileComplete } = useProfile();
+  const { fetchProfile, loading: profileLoading, isFetched: profileFetched, isProfileComplete } = useProfile();
   const { responses, fetchResponses, loading: carbonLoading } = useCarbonContext();
   const [hasFetchedResponses, setHasFetchedResponses] = useState(false);
 

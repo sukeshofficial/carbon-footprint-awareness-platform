@@ -149,8 +149,8 @@ const AuthBranding = () => {
             />
             <div className={STYLES.testimonialContent}>
               <div className={STYLES.stars}>
-                {[...new Array(5)].map((_, i) => (
-                  <Star key={`star-${i}`} className="w-3 h-3 fill-current" />
+                {[1, 2, 3, 4, 5].map((val) => (
+                  <Star key={val} className="w-3 h-3 fill-current" />
                 ))}
               </div>
               <h4 className={STYLES.quoteTitle}>{BrandingData.testimonial.headline}</h4>

@@ -10,6 +10,20 @@ import { Button } from '../ui/button';
 import { cn } from '../../lib/utils';
 import api from '../../services/api';
 
+const SectionHeader = ({ icon: Icon, title }) => (
+  <div className="flex items-center gap-2.5 mb-5">
+    <div className="p-2 bg-primary/10 dark:bg-primary/20 rounded-xl text-primary shadow-sm shadow-primary/5">
+      <Icon className="w-4 h-4" />
+    </div>
+    <h3 className="text-sm font-black text-foreground dark:text-zinc-50 tracking-tight uppercase leading-none">{title}</h3>
+  </div>
+);
+
+SectionHeader.propTypes = {
+  icon: PropTypes.elementType.isRequired,
+  title: PropTypes.string.isRequired,
+};
+
 const AccountTab = () => {
   const { user, updateMe, forgotPassword } = useAuth();
   const { theme, setTheme } = useTheme();
@@ -146,19 +160,12 @@ const AccountTab = () => {
     formData.username !== (user?.username || '') ||
     formData.bio !== (user?.bio || '');
 
-  const SectionHeader = ({ icon: Icon, title }) => (
-    <div className="flex items-center gap-2.5 mb-5">
-      <div className="p-2 bg-primary/10 dark:bg-primary/20 rounded-xl text-primary shadow-sm shadow-primary/5">
-        <Icon className="w-4 h-4" />
-      </div>
-      <h3 className="text-sm font-black text-foreground dark:text-zinc-50 tracking-tight uppercase leading-none">{title}</h3>
-    </div>
-  );
-
-  SectionHeader.propTypes = {
-    icon: PropTypes.elementType.isRequired,
-    title: PropTypes.string.isRequired,
-  };
+  let uploadStatusText = 'Upload a new photo';
+  if (uploading) {
+    uploadStatusText = 'Uploading photo…';
+  } else if (isDragging) {
+    uploadStatusText = 'Drop to upload';
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -169,20 +176,14 @@ const AccountTab = () => {
         <section>
           <SectionHeader icon={Camera} title="Profile Photo" />
           <div className='bg-zinc-50 dark:bg-zinc-950/40 p-4 rounded-4xl border border-zinc-100 dark:border-zinc-800/50'>
-            <div
+            <button
+              type="button"
               className={cn(
-                "flex flex-col sm:flex-row lg:flex-col xl:flex-row items-center gap-6 p-4 rounded-2xl border-dashed border-2 transition-all cursor-pointer group text-center sm:text-left lg:text-center xl:text-left",
+                "w-full text-left font-normal border-none bg-transparent hover:bg-transparent p-0 flex flex-col sm:flex-row lg:flex-col xl:flex-row items-center gap-6 p-4 rounded-2xl border-dashed border-2 transition-all cursor-pointer group text-center sm:text-left lg:text-center xl:text-left focus:outline-none",
                 isDragging ? "border-primary/20 bg-primary/5 dark:bg-primary/10" : "border-transparent hover:bg-zinc-100/50 dark:hover:bg-zinc-800/30",
                 uploading && "opacity-80 cursor-wait"
               )}
-              role="button"
-              tabIndex={0}
               onClick={() => !uploading && fileRef.current?.click()}
-              onKeyDown={(e) => {
-                if ((e.key === "Enter" || e.key === " ") && !uploading) {
-                  fileRef.current?.click();
-                }
-              }}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
@@ -209,31 +210,43 @@ const AccountTab = () => {
               </div>
               <div className="flex-1">
                 <p className="text-sm font-semibold text-foreground">
-                  {uploading ? 'Uploading photo…' : isDragging ? 'Drop to upload' : 'Upload a new photo'}
+                  {uploadStatusText}
                 </p>
                 <p className="text-xs text-muted-foreground mt-0.5">JPG, PNG or WebP · max 5 MB</p>
                 <div className="flex items-center gap-3 mt-1">
                   {avatarPreview && (
-                    <button
+                    <span
+                      role="button"
+                      tabIndex={0}
                       onClick={(e) => {
                         e.stopPropagation();
                         if (avatarUrl) {
-                          // If we just uploaded but haven't saved other changes yet, 
-                          // or it was a local preview, just revert to current saved avatar
                           setAvatarUrl(null);
                           setAvatarPreview(user?.avatar || null);
                         } else {
-                          // If it's the already saved avatar, remove it from DB
                           handleRemoveAvatar();
                         }
                       }}
-                      className="text-xs text-destructive font-semibold hover:underline"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.stopPropagation();
+                          if (avatarUrl) {
+                            setAvatarUrl(null);
+                            setAvatarPreview(user?.avatar || null);
+                          } else {
+                            handleRemoveAvatar();
+                          }
+                        }
+                      }}
+                      className="text-xs text-destructive font-semibold hover:underline cursor-pointer"
                     >
                       Remove
-                    </button>
+                    </span>
                   )}
                   {isGoogleUser && user?.googleAvatar && avatarPreview !== user.googleAvatar && (
-                    <button
+                    <span
+                      role="button"
+                      tabIndex={0}
                       onClick={async (e) => {
                         e.stopPropagation();
                         setUploading(true);
@@ -248,14 +261,30 @@ const AccountTab = () => {
                           setUploading(false);
                         }
                       }}
-                      className="text-xs text-primary font-semibold hover:underline"
+                      onKeyDown={async (e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.stopPropagation();
+                          setUploading(true);
+                          try {
+                            const res = await api.patch('/auth/me', { avatar: user.googleAvatar });
+                            setAvatarUrl(null);
+                            setAvatarPreview(res.data.data.user.avatar);
+                            toast.success('Synced with Google Photo!');
+                          } catch (err) {
+                            toast.error('Failed to sync Google photo');
+                          } finally {
+                            setUploading(false);
+                          }
+                        }
+                      }}
+                      className="text-xs text-primary font-semibold hover:underline cursor-pointer"
                     >
                       Use Google Photo
-                    </button>
+                    </span>
                   )}
                 </div>
               </div>
-            </div>
+            </button>
           </div>
         </section>
 

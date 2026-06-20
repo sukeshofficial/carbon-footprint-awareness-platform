@@ -307,14 +307,14 @@ class CarbonContextService {
         profileUpdates.householdSize = context.lifestyleContext.householdSize;
         changed = true;
       }
-      if (context.lifestyleContext.cityType && (!profileUpdates.lifestyleContext || !profileUpdates.lifestyleContext.cityType)) {
+      if (context.lifestyleContext.cityType && !profileUpdates.lifestyleContext?.cityType) {
         if (!profileUpdates.lifestyleContext) profileUpdates.lifestyleContext = {};
         profileUpdates.lifestyleContext.cityType = context.lifestyleContext.cityType;
         changed = true;
       }
     }
 
-    if (context.workRoutine?.type && (!profileUpdates.workRoutine || !profileUpdates.workRoutine.type)) {
+    if (context.workRoutine?.type && !profileUpdates.workRoutine?.type) {
       if (!profileUpdates.workRoutine) profileUpdates.workRoutine = {};
       profileUpdates.workRoutine.type = context.workRoutine.type;
       changed = true;

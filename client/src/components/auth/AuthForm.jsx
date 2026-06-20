@@ -51,6 +51,12 @@ export const AuthForm = ({ type = 'login', onSubmit, isLoading }) => {
     }),
   });
 
+  const buttonText = isLoading
+    ? 'Processing...'
+    : type === 'signup'
+    ? 'Sign up'
+    : 'Sign in';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -119,7 +125,7 @@ export const AuthForm = ({ type = 'login', onSubmit, isLoading }) => {
             )}
           </div>
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? 'Processing...' : type === 'signup' ? 'Sign up' : 'Sign in'}
+            {buttonText}
           </Button>
         </form>
 

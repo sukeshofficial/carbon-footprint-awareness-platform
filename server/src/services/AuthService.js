@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import userRepository from '../infrastructure/repositories/UserRepository.js';
 import sessionRepository from '../infrastructure/repositories/SessionRepository.js';
 import passwordService from '../security/PasswordService.js';

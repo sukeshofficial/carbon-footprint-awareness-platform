@@ -8,7 +8,7 @@ class CandidateGenerator {
     for (const action of RECOMMENDATION_CATALOG) {
       const rule = RECOMMENDATION_RULES[action.key];
 
-      if (rule && rule(context, estimation)) {
+      if (rule?.(context, estimation)) {
         candidates.push({
           ...action,
           // You can add more dynamic data here if needed

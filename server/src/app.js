@@ -18,12 +18,16 @@ app.set('trust proxy', 1);
 // Global Middlewares
 
 // 2. Refined CORS configuration (Migrated from production-hardened Seyal patterns)
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  "http://localhost:5173",
-  "https://aco2.forgegrid.in",
-  "https://www.aco2.forgegrid.in",
-].filter(Boolean).map(origin => origin.replace(/\/$/, "")); // Normalize trailing slashes
+const allowedOrigins = new Set(
+  [
+    process.env.FRONTEND_URL,
+    "http://localhost:5173",
+    "https://aco2.forgegrid.in",
+    "https://www.aco2.forgegrid.in",
+  ]
+    .filter(Boolean)
+    .map(origin => origin.replace(/\/$/, "")) // Normalize trailing slashes
+);
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -34,10 +38,10 @@ const corsOptions = {
 
     // Debug log for CORS matching in development/debug mode
     if (process.env.NODE_ENV === "development" || process.env.DEBUG === "true") {
-      console.log(`[CORS] Request Origin: ${origin}, Allowed: ${allowedOrigins.includes(normalizedOrigin)}`);
+      console.log(`[CORS] Request Origin: ${origin}, Allowed: ${allowedOrigins.has(normalizedOrigin)}`);
     }
 
-    if (allowedOrigins.includes(normalizedOrigin) || process.env.NODE_ENV === "development") {
+    if (allowedOrigins.has(normalizedOrigin) || process.env.NODE_ENV === "development") {
       callback(null, true);
     } else {
       callback(new Error(`Not allowed by CORS: ${origin}`));

@@ -26,11 +26,6 @@ class CarbonContextRepository {
   }
 
   async updateStep(userId, stepKey, stepData, completionStep) {
-    const update = {
-      [`${stepKey}Profile`]: stepData,
-      completionStep,
-      lastAnsweredAt: new Date(),
-    };
 
     // Special handling for workRoutine which is not suffixed with 'Profile' in the model for some reason?
     // Looking at the model: transportProfile, foodProfile, energyProfile, shoppingProfile, workRoutine, lifestyleContext, wasteProfile.

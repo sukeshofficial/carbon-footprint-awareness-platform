@@ -15,7 +15,6 @@ export default function ScenarioResultCard({ result, onSave, isSaving }) {
   if (!result) return null;
 
   const {
-    title,
     baselineCO2,
     projectedCO2,
     co2Saved,
@@ -25,7 +24,6 @@ export default function ScenarioResultCard({ result, onSave, isSaving }) {
     difficultyLevel,
     confidenceScore,
     explanationText,
-    comparisonSummary,
   } = result;
 
   return (

@@ -162,13 +162,13 @@ const WeeklyPlanner = ({ onOpenGoal }) => {
         </div>
 
         <div className="divide-y">
-          {weekDays.map((day, index) => {
+          {weekDays.map((day) => {
             const dayActions = getActionsForDay(day);
             const isToday = isSameDay(day, new Date());
 
             return (
               <div
-                key={index}
+                key={day.toISOString()}
                 className={cn(
                   'p-6 flex flex-col md:flex-row gap-6',
                   isToday && 'bg-primary/5'

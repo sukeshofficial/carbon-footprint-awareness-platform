@@ -3,7 +3,7 @@ import { useTheme } from 'next-themes';
 import { toast } from 'sonner';
 
 export const useThemeShortcut = () => {
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
 
   useEffect(() => {
     const handleKeyDown = (e) => {

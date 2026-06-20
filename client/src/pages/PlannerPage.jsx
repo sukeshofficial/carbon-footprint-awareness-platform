@@ -7,7 +7,7 @@ import { Plus, Calendar as CalendarIcon, Map } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
 
 const PlannerPage = () => {
-  const { fetchInitialData, createGoal, activeGoal } = usePlannerStore();
+  const { fetchInitialData, createGoal } = usePlannerStore();
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
 
   useEffect(() => {
