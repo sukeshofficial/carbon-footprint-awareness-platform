@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardContent } from '../ui/card';
 import { HOUSEHOLD_TYPES_LIST } from './constants';
 import { cn } from '../../lib/utils';
@@ -23,6 +24,18 @@ const HouseholdSelector = ({ selected, onChange }) => {
       ))}
     </div>
   );
+};
+
+HouseholdSelector.propTypes = {
+  selected: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+  onChange: PropTypes.func.isRequired,
+};
+
+HouseholdSelector.defaultProps = {
+  selected: null,
 };
 
 export default HouseholdSelector;

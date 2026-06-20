@@ -1,11 +1,6 @@
-import React, { useState } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from '../ui/dialog';
+import React, { useState, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { Dialog, DialogContent } from '../ui/dialog';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
@@ -16,7 +11,6 @@ import { useProfile } from '../../store/profileStore';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { Loader2, ChevronRight, ChevronLeft } from 'lucide-react';
-import { useRef, useEffect } from 'react';
 
 const OnboardingModal = ({ isOpen }) => {
   const { saveProfile, updateProfile, profile, loading } = useProfile();
@@ -527,7 +521,8 @@ const OnboardingModal = ({ isOpen }) => {
             <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
               <div className="text-center py-4 bg-primary/5 rounded-2xl border border-primary/10">
                 <h3 className="text-base font-bold tracking-tight">
-                  Set Your Coaching Vibe <span className="text-destructive">*</span>
+                  Set Your Coaching Vibe{' '}
+                  <span className="text-destructive">*</span>
                 </h3>
                 <p className="text-muted-foreground text-xs px-4">
                   AI adapts its tone based on your preference.
@@ -557,9 +552,9 @@ const OnboardingModal = ({ isOpen }) => {
 
             {/* Step Indicators */}
             <div className="hidden sm:flex items-center gap-1 ml-2">
-              {[...Array(8)].map((_, i) => (
+              {[...new Array(8)].map((_, i) => (
                 <div
-                  key={i}
+                  key={`step-indicator-${i + 1}`}
                   className={cn(
                     "w-1.5 h-1.5 rounded-full",
                     step === i + 1 ? "bg-primary" : "bg-muted"
@@ -602,6 +597,10 @@ const OnboardingModal = ({ isOpen }) => {
       </DialogContent>
     </Dialog>
   );
+};
+
+OnboardingModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
 };
 
 export default OnboardingModal;

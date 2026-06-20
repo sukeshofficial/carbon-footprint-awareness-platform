@@ -1,12 +1,23 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import usePlannerStore from '../../store/plannerStore';
 import ActionCard from './ActionCard';
 import StreakBadge from './StreakBadge';
 import GoalProgress from './GoalProgress';
 import { Button } from '../ui/button';
-import { Calendar, ChevronLeft, ChevronRight, Plus, RefreshCw } from 'lucide-react';
-import { format, addDays, startOfWeek, isSameDay } from 'date-fns';
-import { Skeleton } from '../ui/skeleton';
+import {
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  RefreshCw,
+} from 'lucide-react';
+import {
+  format,
+  addDays,
+  startOfWeek,
+  isSameDay,
+} from 'date-fns';
 import { cn } from '../../lib/utils';
 
 const WeeklyPlanner = ({ onOpenGoal }) => {
@@ -19,22 +30,27 @@ const WeeklyPlanner = ({ onOpenGoal }) => {
     fetchActions,
     completeAction,
     skipAction,
-    generatePlan
+    generatePlan,
   } = usePlannerStore();
 
-  const [currentWeekStart, setCurrentWeekStart] = useState(startOfWeek(new Date()));
+  const [currentWeekStart, setCurrentWeekStart] = useState(
+    startOfWeek(new Date())
+  );
 
   useEffect(() => {
     if (activeGoal) {
       fetchActions();
     }
-  }, [activeGoal]);
+  }, [activeGoal, fetchActions]);
 
-  const weekDays = Array.from({ length: 7 }).map((_, i) => addDays(currentWeekStart, i));
+  const weekDays = Array.from({ length: 7 }).map((_, index) =>
+    addDays(currentWeekStart, index)
+  );
 
-  const getActionsForDay = (day) => {
-    return actions.filter(action => isSameDay(new Date(action.scheduledDate), day));
-  };
+  const getActionsForDay = (day) =>
+    actions.filter((action) =>
+      isSameDay(new Date(action.scheduledDate), day)
+    );
 
   const handleGeneratePlan = async () => {
     if (activeGoal) {
@@ -48,9 +64,15 @@ const WeeklyPlanner = ({ onOpenGoal }) => {
         <Plus className="w-12 h-12 text-muted-foreground mb-4" />
         <h2 className="text-2xl font-bold">No Active Goal</h2>
         <p className="text-muted-foreground mt-2 max-w-sm">
-          Set a sustainability goal first to generate a personalized weekly plan.
+          Set a sustainability goal first to generate a personalized weekly
+          plan.
         </p>
-        <Button onClick={onOpenGoal} className="mt-6 rounded-full px-8">Set Your First Goal</Button>
+        <Button
+          onClick={onOpenGoal}
+          className="mt-6 rounded-full px-8"
+        >
+          Set Your First Goal
+        </Button>
       </div>
     );
   }
@@ -61,7 +83,8 @@ const WeeklyPlanner = ({ onOpenGoal }) => {
         <Calendar className="w-12 h-12 text-blue-500 mb-4" />
         <h2 className="text-2xl font-bold">Your Planner is Empty</h2>
         <p className="text-muted-foreground mt-2 max-w-sm">
-          Generate a 7-day plan based on your recommendations to start making progress.
+          Generate a 7-day plan based on your recommendations to start making
+          progress.
         </p>
         <Button
           onClick={handleGeneratePlan}
@@ -78,13 +101,13 @@ const WeeklyPlanner = ({ onOpenGoal }) => {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
-          <GoalProgress goal={activeGoal} analytics={analytics} className="" />
+          <GoalProgress goal={activeGoal} analytics={analytics} />
         </div>
+
         <div className="bg-white p-6 rounded-2xl border flex flex-col items-center justify-center gap-4">
           <StreakBadge
             currentStreak={streak?.currentStreak || 0}
             longestStreak={streak?.longestStreak || 0}
-            className=""
           />
         </div>
       </div>
@@ -96,48 +119,88 @@ const WeeklyPlanner = ({ onOpenGoal }) => {
               <Calendar className="w-5 h-5 text-primary" />
               Weekly Roadmap
             </h2>
+
             <div className="flex items-center bg-muted rounded-full p-1">
-              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" onClick={() => setCurrentWeekStart(addDays(currentWeekStart, -7))}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 rounded-full"
+                onClick={() =>
+                  setCurrentWeekStart(addDays(currentWeekStart, -7))
+                }
+              >
                 <ChevronLeft className="w-4 h-4" />
               </Button>
+
               <span className="px-3 text-xs font-bold min-w-[140px] text-center">
-                {format(weekDays[0], 'MMM d')} – {format(weekDays[6], 'MMM d, yyyy')}
+                {format(weekDays[0], 'MMM d')} –{' '}
+                {format(weekDays[6], 'MMM d, yyyy')}
               </span>
-              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" onClick={() => setCurrentWeekStart(addDays(currentWeekStart, 7))}>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 rounded-full"
+                onClick={() =>
+                  setCurrentWeekStart(addDays(currentWeekStart, 7))
+                }
+              >
                 <ChevronRight className="w-4 h-4" />
               </Button>
             </div>
           </div>
-          <Button variant="outline" size="sm" onClick={handleGeneratePlan} className="rounded-full gap-2">
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleGeneratePlan}
+            className="rounded-full gap-2"
+          >
             <RefreshCw className="w-3.5 h-3.5" />
             Regenerate Plan
           </Button>
         </div>
 
         <div className="divide-y">
-          {weekDays.map((day, idx) => {
+          {weekDays.map((day, index) => {
             const dayActions = getActionsForDay(day);
             const isToday = isSameDay(day, new Date());
 
             return (
-              <div key={idx} className={cn(
-                "p-6 flex flex-col md:flex-row gap-6",
-                isToday && "bg-primary/5"
-              )}>
+              <div
+                key={index}
+                className={cn(
+                  'p-6 flex flex-col md:flex-row gap-6',
+                  isToday && 'bg-primary/5'
+                )}
+              >
                 <div className="md:w-32 flex-shrink-0">
-                  <div className={cn(
-                    "inline-flex flex-col items-center justify-center w-14 h-14 rounded-2xl border-2 transition-all",
-                    isToday ? "border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "border-muted bg-white text-muted-foreground"
-                  )}>
-                    <span className="text-[10px] font-bold uppercase tracking-widest">{format(day, 'EEE')}</span>
-                    <span className="text-lg font-black">{format(day, 'd')}</span>
+                  <div
+                    className={cn(
+                      'inline-flex flex-col items-center justify-center w-14 h-14 rounded-2xl border-2 transition-all',
+                      isToday
+                        ? 'border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/20'
+                        : 'border-muted bg-white text-muted-foreground'
+                    )}
+                  >
+                    <span className="text-[10px] font-bold uppercase tracking-widest">
+                      {format(day, 'EEE')}
+                    </span>
+                    <span className="text-lg font-black">
+                      {format(day, 'd')}
+                    </span>
                   </div>
-                  {isToday && <p className="text-[10px] font-black text-primary uppercase mt-2 ml-1">Today</p>}
+
+                  {isToday && (
+                    <p className="text-[10px] font-black text-primary uppercase mt-2 ml-1">
+                      Today
+                    </p>
+                  )}
                 </div>
 
                 <div className="flex-1 space-y-4">
                   {dayActions.length > 0 ? (
-                    dayActions.map(action => (
+                    dayActions.map((action) => (
                       <ActionCard
                         key={action._id}
                         action={action}
@@ -158,6 +221,10 @@ const WeeklyPlanner = ({ onOpenGoal }) => {
       </div>
     </div>
   );
+};
+
+WeeklyPlanner.propTypes = {
+  onOpenGoal: PropTypes.func.isRequired,
 };
 
 export default WeeklyPlanner;

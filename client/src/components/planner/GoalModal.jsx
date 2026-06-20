@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../ui/dialog';
+import PropTypes from 'prop-types';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from '../ui/dialog';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
@@ -35,30 +41,56 @@ const TARGET_TYPES = [
   },
 ];
 
+const INITIAL_FORM_DATA = {
+  title: '',
+  description: '',
+  targetType: 'action_completion_count',
+  targetValue: '',
+};
+
 const GoalModal = ({ isOpen, onClose, onSubmit }) => {
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    targetType: 'action_completion_count',
-    targetValue: '',
-  });
+  const [formData, setFormData] = useState(INITIAL_FORM_DATA);
 
-  const selected = TARGET_TYPES.find(t => t.value === formData.targetType);
+  const selected = TARGET_TYPES.find(
+    (target) => target.value === formData.targetType
+  );
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleTargetTypeChange = (targetType) => {
+    setFormData((previous) => ({
+      ...previous,
+      targetType,
+    }));
+  };
+
+  const resetForm = () => {
+    setFormData(INITIAL_FORM_DATA);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
     if (!formData.title.trim() || !formData.targetValue) {
       toast.error('Please fill in all required fields');
       return;
     }
-    onSubmit({ ...formData, targetValue: Number.parseFloat(formData.targetValue), startDate: new Date().toISOString() }); /* Sonar: S2737 – use Number.parseFloat */
+
+    onSubmit({
+      ...formData,
+      targetValue: Number.parseFloat(formData.targetValue),
+      startDate: new Date().toISOString(),
+    });
+
     onClose();
-    setFormData({ title: '', description: '', targetType: 'action_completion_count', targetValue: '' });
+    resetForm();
   };
 
   return (
@@ -71,7 +103,9 @@ const GoalModal = ({ isOpen, onClose, onSubmit }) => {
               <Target className="w-5 h-5 text-white" />
             </div>
             <div>
-              <DialogTitle className="text-xl font-black text-white">New Sustainability Goal</DialogTitle>
+              <DialogTitle className="text-xl font-black text-white">
+                New Sustainability Goal
+              </DialogTitle>
               <DialogDescription className="text-white/70 text-xs font-medium mt-0.5">
                 Your actions will be scheduled around this goal
               </DialogDescription>
@@ -82,7 +116,10 @@ const GoalModal = ({ isOpen, onClose, onSubmit }) => {
         <form onSubmit={handleSubmit} className="px-8 py-6 space-y-6">
           {/* Goal Title */}
           <div className="space-y-2">
-            <Label htmlFor="title" className="text-xs font-black uppercase tracking-widest text-muted-foreground">
+            <Label
+              htmlFor="title"
+              className="text-xs font-black uppercase tracking-widest text-muted-foreground"
+            >
               Goal Title *
             </Label>
             <Input
@@ -101,38 +138,57 @@ const GoalModal = ({ isOpen, onClose, onSubmit }) => {
             <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground">
               Goal Type *
             </Label>
+
             <div className="grid grid-cols-3 gap-2">
               {TARGET_TYPES.map((type) => {
                 const Icon = type.icon;
                 const isActive = formData.targetType === type.value;
+
                 return (
                   <button
                     key={type.value}
                     type="button"
-                    onClick={() => setFormData(prev => ({ ...prev, targetType: type.value }))}
+                    onClick={() => handleTargetTypeChange(type.value)}
                     className={cn(
-                      "flex flex-col items-center gap-2 p-3 rounded-2xl border-2 text-center transition-all duration-200 cursor-pointer",
+                      'flex flex-col items-center gap-2 p-3 rounded-2xl border-2 text-center transition-all duration-200 cursor-pointer',
                       isActive
-                        ? "border-primary bg-primary/5 text-primary"
-                        : "border-slate-100 bg-white text-muted-foreground hover:border-primary/30 hover:text-foreground"
+                        ? 'border-primary bg-primary/5 text-primary'
+                        : 'border-slate-100 bg-white text-muted-foreground hover:border-primary/30 hover:text-foreground'
                     )}
                   >
-                    <Icon className={cn("w-5 h-5", isActive ? "text-primary" : "text-muted-foreground")} />
-                    <span className="text-[10px] font-black uppercase tracking-wider leading-tight">{type.label}</span>
+                    <Icon
+                      className={cn(
+                        'w-5 h-5',
+                        isActive ? 'text-primary' : 'text-muted-foreground'
+                      )}
+                    />
+                    <span className="text-[10px] font-black uppercase tracking-wider leading-tight">
+                      {type.label}
+                    </span>
                   </button>
                 );
               })}
             </div>
+
             {selected && (
-              <p className="text-xs text-muted-foreground font-medium pl-1">{selected.description}</p>
+              <p className="text-xs text-muted-foreground font-medium pl-1">
+                {selected.description}
+              </p>
             )}
           </div>
 
           {/* Target Value */}
           <div className="space-y-2">
-            <Label htmlFor="targetValue" className="text-xs font-black uppercase tracking-widest text-muted-foreground">
-              Target Value * <span className="normal-case font-medium">({selected?.unit})</span>
+            <Label
+              htmlFor="targetValue"
+              className="text-xs font-black uppercase tracking-widest text-muted-foreground"
+            >
+              Target Value *{' '}
+              <span className="normal-case font-medium">
+                ({selected?.unit})
+              </span>
             </Label>
+
             <Input
               id="targetValue"
               name="targetValue"
@@ -147,9 +203,13 @@ const GoalModal = ({ isOpen, onClose, onSubmit }) => {
 
           {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-xs font-black uppercase tracking-widest text-muted-foreground">
+            <Label
+              htmlFor="description"
+              className="text-xs font-black uppercase tracking-widest text-muted-foreground"
+            >
               Notes <span className="normal-case font-medium">(optional)</span>
             </Label>
+
             <Textarea
               id="description"
               name="description"
@@ -170,6 +230,7 @@ const GoalModal = ({ isOpen, onClose, onSubmit }) => {
             >
               Cancel
             </Button>
+
             <Button
               type="submit"
               className="flex-1 rounded-full h-12 font-bold shadow-lg shadow-primary/20"
@@ -181,6 +242,12 @@ const GoalModal = ({ isOpen, onClose, onSubmit }) => {
       </DialogContent>
     </Dialog>
   );
+};
+
+GoalModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default GoalModal;

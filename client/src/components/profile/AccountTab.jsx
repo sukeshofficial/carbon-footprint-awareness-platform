@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'sonner';
 import { Camera, User, AtSign, Mail, Lock, ShieldCheck, Loader2, CheckCircle2, Moon, Sun, Monitor, Palette } from 'lucide-react';
@@ -153,6 +154,11 @@ const AccountTab = () => {
       <h3 className="text-sm font-black text-foreground dark:text-zinc-50 tracking-tight uppercase leading-none">{title}</h3>
     </div>
   );
+
+  SectionHeader.propTypes = {
+    icon: PropTypes.elementType.isRequired,
+    title: PropTypes.string.isRequired,
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">

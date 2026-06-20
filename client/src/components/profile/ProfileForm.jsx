@@ -1,5 +1,5 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -24,7 +24,6 @@ import {
   DIET_TYPES,
   FREQUENCY_OPTIONS,
   AC_USAGE_OPTIONS,
-  WASTE_HABIT_OPTIONS,
   RECYCLING_HABITS,
   WASTE_SEGREGATION_LEVELS,
   PLASTIC_USAGE_LEVELS,
@@ -81,6 +80,85 @@ const profileSchema = z.object({
   }).optional(),
 });
 
+const SectionHeader = ({ icon: Icon, title }) => (
+  <div className="flex items-center gap-2 border-b pb-2 mb-4 sm:mb-6">
+    <div className="p-1.5 sm:p-2 bg-primary/10 rounded-lg text-primary">
+      <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+    </div>
+    <h3 className="text-base sm:text-lg font-bold tracking-tight">{title}</h3>
+  </div>
+);
+
+SectionHeader.propTypes = {
+  icon: PropTypes.elementType.isRequired,
+  title: PropTypes.string.isRequired,
+};
+
+const CustomSelect = ({ label, register, options, disabled }) => {
+  const [subIsOpen, setSubIsOpen] = useState(false);
+
+  return (
+    <div className="grid gap-2">
+      {label && <Label>{label}</Label>}
+      <div className="relative">
+        <select
+          {...register}
+          className="flex appearance-none h-10 sm:h-11 w-full rounded-full border border-input bg-background px-4 py-2 pr-10 text-sm ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+          disabled={disabled}
+          onBlur={() => setSubIsOpen(false)}
+          onFocus={() => setSubIsOpen(true)}
+        >
+          {options.map((opt) => (
+            <option key={opt.id} value={opt.id}>
+              {opt.title}
+            </option>
+          ))}
+        </select>
+
+        <div
+          className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-muted-foreground/60 transition-transform duration-300"
+          style={{
+            perspective: "1000px",
+            transform: subIsOpen ? "rotateX(-180deg)" : "rotateY(0deg)",
+          }}
+        >
+          <svg
+            className="h-4 w-4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+CustomSelect.propTypes = {
+  label: PropTypes.string,
+  register: PropTypes.object.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  disabled: PropTypes.bool,
+};
+
+CustomSelect.defaultProps = {
+  label: '',
+  disabled: false,
+};
+
 const ProfileForm = ({ initialData, onSubmit, isLoading, buttonText = 'Save Profile' }) => {
   const {
     register,
@@ -135,64 +213,6 @@ const ProfileForm = ({ initialData, onSubmit, isLoading, buttonText = 'Save Prof
       },
     },
   });
-
-
-  const SectionHeader = ({ icon: Icon, title }) => (
-    <div className="flex items-center gap-2 border-b pb-2 mb-4 sm:mb-6">
-      <div className="p-1.5 sm:p-2 bg-primary/10 rounded-lg text-primary">
-        <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
-      </div>
-      <h3 className="text-base sm:text-lg font-bold tracking-tight">{title}</h3>
-    </div>
-  );
-
-  const CustomSelect = ({ label, register, options, disabled }) => {
-    const [subIsOpen, setSubIsOpen] = useState(false);
-
-    return (
-      <div className="grid gap-2">
-        {label && <Label>{label}</Label>}
-        <div className="relative">
-          <select
-            {...register}
-            className="flex appearance-none h-10 sm:h-11 w-full rounded-full border border-input bg-background px-4 py-2 pr-10 text-sm ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-primary/20 transition-all font-medium"
-            disabled={disabled}
-            onBlur={() => setSubIsOpen(false)}
-            onFocus={() => setSubIsOpen(true)}
-          >
-            {options.map((opt) => (
-              <option key={opt.id} value={opt.id}>
-                {opt.title}
-              </option>
-            ))}
-          </select>
-
-          <div
-            className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-muted-foreground/60 transition-transform duration-300"
-            style={{
-              perspective: "1000px",
-              transform: subIsOpen ? "rotateX(-180deg)" : "rotateY(0deg)",
-            }}
-          >
-            <svg
-              className="h-4 w-4"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </div>
-        </div>
-      </div>
-    );
-  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
@@ -472,6 +492,19 @@ const ProfileForm = ({ initialData, onSubmit, isLoading, buttonText = 'Save Prof
       </Button>
     </form>
   );
+};
+
+ProfileForm.propTypes = {
+  initialData: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool,
+  buttonText: PropTypes.string,
+};
+
+ProfileForm.defaultProps = {
+  initialData: null,
+  isLoading: false,
+  buttonText: 'Save Profile',
 };
 
 export default ProfileForm;
