@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import useExplanationStore from '../../../store/explanationStore';
 import ExplanationSummaryCard from './ExplanationSummaryCard';
 import CategoryExplanationCard from './CategoryExplanationCard';

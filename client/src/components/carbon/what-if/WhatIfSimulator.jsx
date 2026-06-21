@@ -5,7 +5,6 @@
  */
 
 import React, { useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { Sparkles, Loader2, ChevronLeft, RotateCcw } from 'lucide-react';
 import { useWhatIf } from '../../../store/whatIfStore';
 import ScenarioCard from './ScenarioCard';
@@ -88,31 +87,7 @@ export default function WhatIfSimulator() {
       </div>
 
       <div className="p-8 md:p-10">
-        {!selectedTemplate ? (
-          /* Template browser */
-          <div className="space-y-6">
-            <p className="text-sm text-muted-foreground">
-              Pick a scenario to simulate. We'll estimate how much CO₂ you could save before you make any real change.
-            </p>
-            {Object.entries(grouped).map(([type, items]) => (
-              <div key={type}>
-                <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mb-3">
-                  {TYPE_LABELS[type] ?? type}
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {items.map((template) => (
-                    <ScenarioCard
-                      key={template.id}
-                      template={template}
-                      isSelected={selectedTemplate?.id === template.id}
-                      onClick={handleSelectTemplate}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
+        {selectedTemplate ? (
           /* Selected scenario workspace */
           <div className="space-y-5">
             {/* Back button */}
@@ -176,6 +151,31 @@ export default function WhatIfSimulator() {
               />
             )}
           </div>
+        ) : (
+          /* Template browser */
+          <div className="space-y-6">
+            <p className="text-sm text-muted-foreground">
+              Pick a scenario to simulate. We'll estimate how much CO₂ you could save before you make any real change.
+            </p>
+            {Object.entries(grouped).map(([type, items]) => (
+              <div key={type}>
+                <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mb-3">
+                  {TYPE_LABELS[type] ?? type}
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {items.map((template) => (
+                    <ScenarioCard
+                      key={template.id}
+                      template={template}
+                      isSelected={selectedTemplate?.id === template.id}
+                      onClick={handleSelectTemplate}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
         )}
       </div>
     </div>

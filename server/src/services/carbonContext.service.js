@@ -153,7 +153,10 @@ class CarbonContextService {
     if (profileData.householdSize !== undefined || profileData.lifestyleContext?.cityType) {
       updates.lifestyleContext = {
         ...context.lifestyleContext,
-        householdSize: profileData.householdSize !== undefined ? context.lifestyleContext?.householdSize : profileData.householdSize,
+        householdSize:
+          profileData.householdSize !== undefined
+            ? profileData.householdSize
+            : context.lifestyleContext?.householdSize,
         cityType: profileData.lifestyleContext?.cityType || context.lifestyleContext?.cityType
       };
     }

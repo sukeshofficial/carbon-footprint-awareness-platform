@@ -101,7 +101,7 @@ const AccountTab = () => {
     if (uploading) return;
 
     const file = e.dataTransfer.files?.[0];
-    if (file && file.type.startsWith('image/')) {
+    if (file?.type?.startsWith('image/')) {
       processFile(file);
     } else if (file) {
       toast.error('Please drop an image file.');
@@ -186,15 +186,50 @@ const AccountTab = () => {
     uploadStatusText = 'Drop to upload';
   }
 
+  let passwordResetContent;
 
-  let verificationStatus = 'Unverified';
-  let verificationClass =
-    'bg-yellow-100 text-yellow-700';
+  if (resetSent) {
+    passwordResetContent = (
+      <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
+        <CheckCircle2 className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
+        <div>
+          <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-300">
+            Reset link sent
+          </p>
+          <p className="text-xs text-emerald-700/80 dark:text-emerald-400 mt-0.5">
+            Check your inbox at <strong>{user?.email}</strong> and follow the link
+            to set a new password.
+          </p>
+        </div>
+      </div>
+    );
+  } else {
+    passwordResetContent = (
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-5 rounded-[2rem] border border-zinc-100 dark:border-zinc-800/50 bg-zinc-50 dark:bg-zinc-950/40">
+        <div>
+          <p className="text-sm font-black text-foreground dark:text-zinc-50 italic">
+            Change your password
+          </p>
+          <p className="text-[11px] text-muted-foreground mt-1 font-medium italic">
+            We'll send a secure reset link to <strong>{user?.email}</strong>.
+          </p>
+        </div>
 
-  if (user?.isVerified) {
-    verificationStatus = 'Verified';
-    verificationClass =
-      'bg-emerald-100 text-emerald-700';
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handlePasswordReset}
+          disabled={resetLoading}
+          className="shrink-0 gap-2 font-semibold"
+        >
+          {resetLoading && (
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          )}
+          Send Reset Link
+        </Button>
+      </div>
+    );
   }
 
   return (
@@ -245,9 +280,8 @@ const AccountTab = () => {
                 <p className="text-xs text-muted-foreground mt-0.5">JPG, PNG or WebP · max 5 MB</p>
                 <div className="flex items-center gap-3 mt-1">
                   {avatarPreview && (
-                    <span
-                      role="button"
-                      tabIndex={0}
+                    <button
+                      type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         if (avatarUrl) {
@@ -257,21 +291,10 @@ const AccountTab = () => {
                           handleRemoveAvatar();
                         }
                       }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.stopPropagation();
-                          if (avatarUrl) {
-                            setAvatarUrl(null);
-                            setAvatarPreview(user?.avatar || null);
-                          } else {
-                            handleRemoveAvatar();
-                          }
-                        }
-                      }}
                       className="text-xs text-destructive font-semibold hover:underline cursor-pointer"
                     >
                       Remove
-                    </span>
+                    </button>
                   )}
                   {isGoogleUser &&
                     user?.googleAvatar &&
@@ -415,33 +438,9 @@ const AccountTab = () => {
                 <p className="text-xs text-muted-foreground mt-0.5">You signed in with Google. Password login is not available for this account.</p>
               </div>
             </div>
-          ) : resetSent ? (
-            <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
-              <div>
-                <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-300">Reset link sent</p>
-                <p className="text-xs text-emerald-700/80 dark:text-emerald-400 mt-0.5">Check your inbox at <strong>{user?.email}</strong> and follow the link to set a new password.</p>
-              </div>
-            </div>
-          ) : (
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-5 rounded-[2rem] border border-zinc-100 dark:border-zinc-800/50 bg-zinc-50 dark:bg-zinc-950/40">
-              <div>
-                <p className="text-sm font-black text-foreground dark:text-zinc-50 italic">Change your password</p>
-                <p className="text-[11px] text-muted-foreground mt-1 font-medium italic">We'll send a secure reset link to <strong>{user?.email}</strong>.</p>
-              </div>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={handlePasswordReset}
-                disabled={resetLoading}
-                className="shrink-0 gap-2 font-semibold"
-              >
-                {resetLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                Send Reset Link
-              </Button>
-            </div>
-          )}
+          ) : <div>
+            {passwordResetContent}
+          </div>}
         </section>
 
         {/* ── Save ── */}
