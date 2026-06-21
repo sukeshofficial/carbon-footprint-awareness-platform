@@ -8,8 +8,8 @@ import {
   Activity,
   Copy
 } from 'lucide-react';
+import PropTypes from 'prop-types';
 import { cn } from '../../lib/utils';
-import { Link } from 'react-router-dom';
 
 const MetricCard = ({ icon: Icon, label, value, colorClass }) => (
   <motion.div
@@ -29,6 +29,13 @@ const MetricCard = ({ icon: Icon, label, value, colorClass }) => (
     </div>
   </motion.div>
 );
+
+MetricCard.propTypes = {
+  icon: PropTypes.elementType.isRequired,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  colorClass: PropTypes.string.isRequired,
+};
 
 const DashboardFooter = () => {
   const metrics = [
@@ -68,14 +75,6 @@ const DashboardFooter = () => {
       value: '6.3%',
       colorClass: 'text-rose-500'
     },
-  ];
-
-  const navLinks = [
-    // { label: 'Dashboard', href: '/' },
-    // { label: 'Analytics', href: '#overview' },
-    // { label: 'Security', href: '#' },
-    // { label: 'Reports', href: '#' },
-    // { label: 'Contact', href: '#' },
   ];
 
   return (
