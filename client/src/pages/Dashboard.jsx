@@ -15,6 +15,7 @@ import CoachingTipsCard from '../components/carbon/CoachingTipsCard';
 import ExplanationsPanel from '../components/carbon/explanations/ExplanationsPanel';
 import WeeklyMonthlyToggle from '../components/carbon/WeeklyMonthlyToggle';
 import CurrentDevelopmentCard from '../components/ui/CurrentDevelopmentCard';
+import DashboardFooter from '../components/layout/DashboardFooter';
 import WhatIfSimulator from '../components/carbon/what-if/WhatIfSimulator';
 import RecommendationsPanel from '../components/carbon/recommendations/RecommendationsPanel';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
@@ -273,6 +274,8 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      <DashboardFooter />
 
       <GoalModal
         isOpen={isPlannerGoalModalOpen}
