@@ -25,13 +25,14 @@ class AnalyticsService {
 
     // Calculate goal achievement percent
     let goalAchievementPercent = 0;
+
     if (goal.targetType === 'action_completion_count') {
-      goalAchievementPercent = goal.targetValue > 0 ? (completedActionsCount / goal.targetValue) * 100 : 0;
+      goalAchievementPercent =
+        goal.targetValue > 0
+          ? (completedActionsCount / goal.targetValue) * 100
+          : 0;
     } else if (goal.targetType === 'footprint_reduction_percent') {
-      // For MVP, simplified: 1kg saved = 0.1% progress? No, we need a better mapping or just use co2 targets.
-      // Let's assume targetValue is in percentage of reduction.
-      // This would require baseline footprint.
-      goalAchievementPercent = 0; // Placeholder for more advanced logic
+      // Placeholder for more advanced logic
     }
 
     // Weekly performance (last 7 days)

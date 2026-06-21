@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Leaf, Users, Globe2, ArrowUpRight, Star } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 const BrandingData = {
   hero: {

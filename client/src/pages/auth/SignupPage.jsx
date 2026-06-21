@@ -14,7 +14,6 @@ import { FormError } from '../../components/auth/FormMessages';
 import { GoogleButton } from '../../components/auth/GoogleButton';
 import { Loader2, User, Mail, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
 import { extractServerError } from '../../utils/extractServerError';
 
 const signupSchema = z.object({
@@ -26,7 +25,7 @@ const signupSchema = z.object({
     .min(8, 'Password must be at least 8 characters')
     .regex(/[A-Z]/, 'Must contain at least one uppercase letter')
     .regex(/[a-z]/, 'Must contain at least one lowercase letter')
-    .regex(/[0-9]/, 'Must contain at least one number')
+    .regex(/d/, 'Must contain at least one number')
     .regex(/[^A-Za-z0-9]/, 'Must contain at least one special character'),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {

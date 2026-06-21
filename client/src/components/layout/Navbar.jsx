@@ -9,10 +9,8 @@ import {
   LogOut,
   ChevronDown,
   LayoutDashboard,
-  UserCircle,
   CalendarCheck
 } from 'lucide-react';
-import { Button } from '../ui/button';
 import { cn } from '../../lib/utils';
 
 const Navbar = () => {

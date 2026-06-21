@@ -13,7 +13,7 @@
  * @returns {object} Modified clone of baseline inputs
  */
 export function applyScenario(baseline, templateId, inputPayload) {
-  const modified = JSON.parse(JSON.stringify(baseline)); // Deep clone
+  const modified = structuredClone(baseline);
 
   switch (templateId) {
     case 'switch_to_metro':

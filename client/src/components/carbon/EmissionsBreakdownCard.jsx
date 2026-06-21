@@ -2,8 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent } from '../ui/card';
 import {
-  PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend,
-  BarChart, Bar, XAxis, YAxis, AreaChart, Area, CartesianGrid
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  Legend,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis
 } from 'recharts';
 import { Info, PieChart as PieIcon, BarChart3, TrendingUp } from 'lucide-react';
 import { cn } from '../../lib/utils';
@@ -14,6 +22,12 @@ const COLORS = {
   Energy: '#3b82f6',
   Shopping: '#8b5cf6',
 };
+
+const legendFormatter = (value) => (
+  <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748b' }}>
+    {value}
+  </span>
+);
 
 const ChartView = ({ activeView, chartData, COLORS }) => {
   if (chartData.length === 0 && activeView !== 'trends') {
@@ -109,7 +123,7 @@ const ChartView = ({ activeView, chartData, COLORS }) => {
               layout="horizontal"
               iconType="circle"
               iconSize={8}
-              formatter={(value) => <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748b' }}>{value}</span>}
+              formatter={legendFormatter}
             />
           </PieChart>
         </ResponsiveContainer>

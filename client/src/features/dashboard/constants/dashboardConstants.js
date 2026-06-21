@@ -14,7 +14,7 @@ export const DEV_STATUS_DATA = {
   title: '🚧 In Development',
   description:
     'Building a profile system to personalize carbon insights, benchmarks, coaching tone, and recommendations based on user lifestyle and preferences.',
-  phase: 'Phase 6 / 7',
+  phase: 'Phase 7 / 7',
   status: 'Active Development',
   nextMilestone: 'Completed ✅',
   updatedAt: '5 hours ago',

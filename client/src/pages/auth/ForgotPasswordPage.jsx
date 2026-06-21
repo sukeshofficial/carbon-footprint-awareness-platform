@@ -12,7 +12,6 @@ import { AuthLayout } from '../../components/auth/AuthLayout';
 import { FormError } from '../../components/auth/FormMessages';
 import { Loader2, ArrowLeft, Mail, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
 
 const forgotPasswordSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -62,7 +61,34 @@ const ForgotPasswordPage = () => {
         : "Get back into the ACo2 ecosystem"}
     >
       <div className="space-y-6">
-        {!isSent ? (
+        {isSent ? (
+          <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
+            <div className="bg-green-50 dark:bg-green-500/10 p-6 rounded-[2rem] border border-green-100 dark:border-green-500/20 flex flex-col items-center text-center">
+              <div className="h-16 w-16 rounded-2xl bg-white dark:bg-zinc-900 shadow-lg shadow-green-500/10 border border-green-100 dark:border-zinc-800 flex items-center justify-center mb-4">
+                <Mail className="h-8 w-8 text-green-600 dark:text-green-400" />
+              </div>
+              <h3 className="text-xl font-extrabold text-green-950 dark:text-zinc-50 mb-2">Link Sent!</h3>
+              <p className="text-xs font-medium text-green-700/60 dark:text-green-400/80 leading-relaxed max-w-xs">
+                We've sent a recovery link to your inbox. Please check your spam if you don't see it.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Button
+                variant="outline"
+                className="w-full h-12 rounded-full font-bold border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                onClick={() => setIsSent(false)}
+              >
+                RESEND LINK
+              </Button>
+              <Link to="/login" className="block text-center">
+                <span className="font-mono-tight text-[10px] font-bold text-zinc-400 hover:text-green-600 transition-colors">
+                  Back to Sign in
+                </span>
+              </Link>
+            </div>
+          </div>
+        ) : (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="space-y-1.5">
               <Label htmlFor="email" className="font-mono-tight text-[10px] text-zinc-400 font-bold ml-1">Email address</Label>
@@ -109,33 +135,6 @@ const ForgotPasswordPage = () => {
               </Link>
             </div>
           </form>
-        ) : (
-          <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
-            <div className="bg-green-50 dark:bg-green-500/10 p-6 rounded-[2rem] border border-green-100 dark:border-green-500/20 flex flex-col items-center text-center">
-              <div className="h-16 w-16 rounded-2xl bg-white dark:bg-zinc-900 shadow-lg shadow-green-500/10 border border-green-100 dark:border-zinc-800 flex items-center justify-center mb-4">
-                <Mail className="h-8 w-8 text-green-600 dark:text-green-400" />
-              </div>
-              <h3 className="text-xl font-extrabold text-green-950 dark:text-zinc-50 mb-2">Link Sent!</h3>
-              <p className="text-xs font-medium text-green-700/60 dark:text-green-400/80 leading-relaxed max-w-xs">
-                We've sent a recovery link to your inbox. Please check your spam if you don't see it.
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <Button
-                variant="outline"
-                className="w-full h-12 rounded-full font-bold border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
-                onClick={() => setIsSent(false)}
-              >
-                RESEND LINK
-              </Button>
-              <Link to="/login" className="block text-center">
-                <span className="font-mono-tight text-[10px] font-bold text-zinc-400 hover:text-green-600 transition-colors">
-                  Back to Sign in
-                </span>
-              </Link>
-            </div>
-          </div>
         )}
       </div>
     </AuthLayout>

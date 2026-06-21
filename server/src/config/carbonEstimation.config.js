@@ -21,7 +21,7 @@ export const DIET_FACTORS = {
   vegetarian: 5.5,    // kg CO2 per day
   eggetarian: 6.5,    // kg CO2 per day
   mixed_diet: 8.5,    // kg CO2 per day
-  non_vegetarian: 12.0, // kg CO2 per day (High meat consumption)
+  non_vegetarian: 12, // kg CO2 per day (High meat consumption)
 };
 
 export const ENERGY_FACTORS = {

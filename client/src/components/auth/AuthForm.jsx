@@ -18,7 +18,7 @@ const signupSchema = z.object({
     .min(8, 'Password must be at least 8 characters')
     .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .regex(/[0-9]/, 'Password must contain at least one number')
+    .regex(/\d/, 'Password must contain at least one number')
     .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
 });
 
@@ -51,11 +51,15 @@ export const AuthForm = ({ type = 'login', onSubmit, isLoading }) => {
     }),
   });
 
-  const buttonText = isLoading
-    ? 'Processing...'
-    : type === 'signup'
-    ? 'Sign up'
-    : 'Sign in';
+  let buttonText;
+
+  if (isLoading) {
+    buttonText = 'Processing...';
+  } else if (type === 'signup') {
+    buttonText = 'Sign up';
+  } else {
+    buttonText = 'Sign in';
+  }
 
   return (
     <motion.div

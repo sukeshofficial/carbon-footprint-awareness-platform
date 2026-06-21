@@ -11,7 +11,7 @@ class PasswordService {
       const salt = await bcrypt.genSalt(10);
       return await bcrypt.hash(password, salt);
     } catch (error) {
-      throw new Error('Error hashing password');
+      throw new Error('Error hashing password', { cause: error });
     }
   }
 
@@ -25,7 +25,7 @@ class PasswordService {
     try {
       return await bcrypt.compare(password, hash);
     } catch (error) {
-      throw new Error('Error verifying password');
+      throw new Error('Error verifying password', { cause: error });
     }
   }
 }

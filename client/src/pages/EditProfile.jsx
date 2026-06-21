@@ -5,10 +5,8 @@ import ProfileSummaryCard from '../components/profile/ProfileSummaryCard';
 import AccountTab from '../components/profile/AccountTab';
 import { Card } from '../components/ui/card';
 import { toast } from 'sonner';
-import { Link } from 'react-router-dom';
-import { Loader2, Settings, User, Car, Utensils, Zap, ShoppingBag, Palette, ArrowLeft } from 'lucide-react';
+import { Loader2, Settings, User, Car, Utensils, Zap, ShoppingBag, Palette } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { Button } from '../components/ui/button';
 
 const TABS = [
   { id: 'account', label: 'Account' },
@@ -18,7 +16,7 @@ const TABS = [
 const EditProfile = () => {
   const { profile, updateProfile, fetchProfile, loading } = useProfile();
   const [activeTab, setActiveTab] = useState('account');
-  const [scrolled, setScrolled] = useState(false);
+  const [, setScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,6 +54,24 @@ const EditProfile = () => {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+  let profileContent;
+
+  if (profile) {
+    profileContent = (
+      <ProfileForm
+        initialData={profile}
+        onSubmit={handleSubmit}
+        isLoading={loading}
+        buttonText="Update Carbon Profile"
+      />
+    );
+  } else {
+    profileContent = (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-10 h-10 animate-spin text-primary/30" />
       </div>
     );
   }
@@ -220,18 +236,10 @@ const EditProfile = () => {
               <div className="bg-white dark:bg-zinc-900 px-6 py-8 md:px-10 md:py-12 rounded-3xl">
                 {activeTab === 'account' ? (
                   <AccountTab />
-                ) : profile ? (
-                  <ProfileForm
-                    initialData={profile}
-                    onSubmit={handleSubmit}
-                    isLoading={loading}
-                    buttonText="Update Carbon Profile"
-                  />
-                ) : (
-                  <div className="flex items-center justify-center py-20">
-                    <Loader2 className="w-10 h-10 animate-spin text-primary/30" />
-                  </div>
-                )}
+                ) : <div>
+                  {profileContent}
+                </div>
+                }
               </div>
             </Card>
 

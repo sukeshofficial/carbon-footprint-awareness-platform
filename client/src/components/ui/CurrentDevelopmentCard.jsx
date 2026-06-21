@@ -150,10 +150,10 @@ const CurrentDevelopmentCard = ({
         </div>
 
         <div className="relative w-full">
-          <progress
+          <div
             className="h-2 w-full rounded-full overflow-hidden border border-zinc-100 dark:border-zinc-800"
-            value={progressPercent}
-            max={100}
+            data-value={progressPercent}
+            data-max={100}
             aria-label={`Project completion ${progressPercent}%`}
           />
 

@@ -7,12 +7,11 @@
  * This keeps calculations consistent with the main estimation engine.
  */
 
-import { TRANSPORT_CONVERSION_FACTORS } from '../../config/carbonEstimation.config.js';
 import { estimateTransport } from '../carbonEstimation/transportEstimator.js';
 import { estimateFood } from '../carbonEstimation/foodEstimator.js';
 import { estimateEnergy } from '../carbonEstimation/energyEstimator.js';
 import { estimateShopping } from '../carbonEstimation/shoppingEstimator.js';
-import { DIET_FACTORS, ENERGY_FACTORS, SHOPPING_FACTORS } from '../../config/carbonEstimation.config.js';
+import { DIET_FACTORS, ENERGY_FACTORS, TRANSPORT_CONVERSION_FACTORS } from '../../config/carbonEstimation.config.js';
 
 /**
  * @param {object} baselineInputs   - Original normalized inputs

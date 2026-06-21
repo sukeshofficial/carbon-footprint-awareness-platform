@@ -554,7 +554,7 @@ const OnboardingModal = ({ isOpen }) => {
 
             {/* Step Indicators */}
             <div className="hidden sm:flex items-center gap-1 ml-2">
-              {[...new Array(8)].map((_, i) => (
+              {Array.from({ length: 8 }).map((_, i) => (
                 <div
                   key={`step-indicator-${i + 1}`}
                   className={cn(

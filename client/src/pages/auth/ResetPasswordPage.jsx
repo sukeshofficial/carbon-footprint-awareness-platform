@@ -12,7 +12,6 @@ import { AuthLayout } from '../../components/auth/AuthLayout';
 import { FormError } from '../../components/auth/FormMessages';
 import { Loader2, ArrowLeft, CheckCircle2, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
 
 const resetPasswordSchema = z.object({
   password: z
@@ -20,7 +19,7 @@ const resetPasswordSchema = z.object({
     .min(8, 'Password must be at least 8 characters')
     .regex(/[A-Z]/, 'Must contain at least one uppercase letter')
     .regex(/[a-z]/, 'Must contain at least one lowercase letter')
-    .regex(/[0-9]/, 'Must contain at least one number')
+    .regex(/d/, 'Must contain at least one number')
     .regex(/[^A-Za-z0-9]/, 'Must contain at least one special character'),
   confirmPassword: z.string().min(1, 'Please confirm your password'),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -76,7 +75,25 @@ const ResetPasswordPage = () => {
         : "Secure your ACo2 access with a new password"}
     >
       <div className="space-y-6">
-        {!isSuccess ? (
+        {isSuccess ? (
+          <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
+            <div className="bg-green-50 dark:bg-green-500/10 p-6 rounded-[2rem] border border-green-100 dark:border-green-500/20 flex flex-col items-center text-center">
+              <div className="h-16 w-16 rounded-2xl bg-white dark:bg-zinc-900 shadow-lg shadow-green-500/10 border border-green-100 dark:border-zinc-800 flex items-center justify-center mb-4">
+                <CheckCircle2 className="h-8 w-8 text-green-600 dark:text-green-400" />
+              </div>
+              <h3 className="text-xl font-extrabold text-green-950 dark:text-zinc-50 mb-2">All set!</h3>
+              <p className="text-xs font-medium text-green-700/60 dark:text-green-400/80 leading-relaxed max-w-xs">
+                Your password has been successfully reset. You will be redirected shortly.
+              </p>
+            </div>
+
+            <Link to="/login" className="block">
+              <Button className="h-12 w-full rounded-full bg-green-600 text-white hover:bg-green-700 font-bold shadow-md">
+                GO TO SIGN IN
+              </Button>
+            </Link>
+          </div>
+        ) : (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="space-y-1.5">
               <Label htmlFor="password" name="password" className="font-mono-tight text-[10px] text-zinc-400 font-bold ml-1">New Password</Label>
@@ -135,24 +152,6 @@ const ResetPasswordPage = () => {
               </Link>
             </div>
           </form>
-        ) : (
-          <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
-            <div className="bg-green-50 dark:bg-green-500/10 p-6 rounded-[2rem] border border-green-100 dark:border-green-500/20 flex flex-col items-center text-center">
-              <div className="h-16 w-16 rounded-2xl bg-white dark:bg-zinc-900 shadow-lg shadow-green-500/10 border border-green-100 dark:border-zinc-800 flex items-center justify-center mb-4">
-                <CheckCircle2 className="h-8 w-8 text-green-600 dark:text-green-400" />
-              </div>
-              <h3 className="text-xl font-extrabold text-green-950 dark:text-zinc-50 mb-2">All set!</h3>
-              <p className="text-xs font-medium text-green-700/60 dark:text-green-400/80 leading-relaxed max-w-xs">
-                Your password has been successfully reset. You will be redirected shortly.
-              </p>
-            </div>
-
-            <Link to="/login" className="block">
-              <Button className="h-12 w-full rounded-full bg-green-600 text-white hover:bg-green-700 font-bold shadow-md">
-                GO TO SIGN IN
-              </Button>
-            </Link>
-          </div>
         )}
       </div>
     </AuthLayout>

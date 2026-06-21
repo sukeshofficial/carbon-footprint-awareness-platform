@@ -5,6 +5,11 @@ export const getHealth = async (req, res) => {
     const healthStatus = await healthService.getHealth();
     res.json(healthStatus);
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("Health check failed:", error);
+
+    res.status(500).json({
+      error: "Internal Server Error",
+      message: error.message
+    });
   }
 };

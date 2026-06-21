@@ -43,6 +43,7 @@ class TokenService {
     try {
       return jwt.verify(token, this.accessSecret);
     } catch (error) {
+      console.error('Access token verification failed:', error.message);
       return null;
     }
   }
@@ -56,6 +57,7 @@ class TokenService {
     try {
       return jwt.verify(token, this.refreshSecret);
     } catch (error) {
+      console.error('Refresh token verification failed:', error.message);
       return null;
     }
   }

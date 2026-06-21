@@ -69,7 +69,7 @@ class AuthService {
     const validated = loginSchema.shape.body.parse({ email, password });
 
     const user = await userRepository.findByEmail(validated.email);
-    if (!user || !user.password) {
+    if (!user?.password) {
       throw new Error('Invalid email or password');
     }
 
@@ -218,7 +218,16 @@ class AuthService {
         const daysAgo = Math.floor(
           (Date.now() - new Date(entry.changedAt).getTime()) / (1000 * 60 * 60 * 24)
         );
-        const timeText = daysAgo === 0 ? 'today' : `${daysAgo} day${daysAgo === 1 ? '' : 's'} ago`;
+        
+        let timeText;
+
+        if (daysAgo === 0) {
+          timeText = 'today';
+        } else {
+          const suffix = daysAgo === 1 ? '' : 's';
+          timeText = `${daysAgo} day${suffix} ago`;
+        }
+
         throw new Error(
           `You have already used this password. You last changed to this password ${timeText}.`
         );

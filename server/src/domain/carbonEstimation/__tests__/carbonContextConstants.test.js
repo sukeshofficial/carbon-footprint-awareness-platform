@@ -60,7 +60,7 @@ describe('STEP_ORDER', () => {
   });
 
   test('waste is the last step', () => {
-    assert.strictEqual(STEP_ORDER[STEP_ORDER.length - 1], 'waste');
+    assert.strictEqual(STEP_ORDER.at(-1), 'waste');
   });
 
   test('contains all expected keys', () => {

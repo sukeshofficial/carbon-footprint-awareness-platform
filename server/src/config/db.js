@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
 // Module-level cache — survives across serverless warm invocations
-let cached = global._mongooseCache;
+let cached = globalThis._mongooseCache;
 
 if (!cached) {
-  cached = global._mongooseCache = { conn: null, promise: null };
+  cached = globalThis._mongooseCache = { conn: null, promise: null };
 }
 
 const connectDB = async () => {

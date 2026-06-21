@@ -134,14 +134,14 @@ export const SCENARIO_TEMPLATES = [
  */
 export const SAVINGS_MULTIPLIERS = {
   transport: {
-    car_to_metro: 8.0,   // ₹ saved per km (fuel + maintenance - ticket)
-    bike_to_metro: 2.0,  // ₹ saved per km
-    cab_to_metro: 15.0,  // ₹ saved per km
+    car_to_metro: 8,   // ₹ saved per km (fuel + maintenance - ticket)
+    bike_to_metro: 2,  // ₹ saved per km
+    cab_to_metro: 15,  // ₹ saved per km
   },
   energy: {
-    ac_per_hour: 12.0,   // ₹ saved per hour (avg 1.5 ton AC @ ₹8/unit)
+    ac_per_hour: 12,   // ₹ saved per hour (avg 1.5 ton AC @ ₹8/unit)
   },
   food: {
-    meat_to_veg_per_meal: 50.0,  // ₹ saved per meal
+    meat_to_veg_per_meal: 50,  // ₹ saved per meal
   },
 };

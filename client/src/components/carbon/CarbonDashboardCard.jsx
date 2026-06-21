@@ -85,6 +85,12 @@ AICoachingContent.propTypes = {
   resetStream: PropTypes.func
 };
 
+const LegendFormatter = (value) => (
+  <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748b' }}>
+    {value}
+  </span>
+);
+
 const CarbonDashboardCard = () => {
   const {
     estimation,
@@ -242,7 +248,7 @@ const CarbonDashboardCard = () => {
                   layout="vertical"
                   iconType="circle"
                   iconSize={8}
-                  formatter={(value) => <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748b' }}>{value}</span>}
+                  formatter={LegendFormatter}
                 />
               </PieChart>
             </ResponsiveContainer>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { AuthLayout } from '../../components/auth/AuthLayout';
 import { Button } from '../../components/ui/button';
-import { Loader2, CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '../../services/api';
 

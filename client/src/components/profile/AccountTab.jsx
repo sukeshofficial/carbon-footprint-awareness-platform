@@ -33,6 +33,7 @@ const AccountTab = () => {
     username: user?.username || '',
     bio: user?.bio || '',
   });
+
   const [avatarPreview, setAvatarPreview] = useState(user?.avatar || null);
   const [avatarUrl, setAvatarUrl] = useState(null);   // final Cloudinary URL
   const [uploading, setUploading] = useState(false);  // uploading state
@@ -40,6 +41,7 @@ const AccountTab = () => {
   const [resetSent, setResetSent] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+
   const fileRef = useRef(null);
 
   const processFile = async (file) => {
@@ -109,7 +111,7 @@ const AccountTab = () => {
   const handleRemoveAvatar = async () => {
     setUploading(true);
     try {
-      const res = await api.patch('/auth/me', { avatar: null });
+      await api.patch('/auth/me', { avatar: null });
       setAvatarUrl(null);
       setAvatarPreview(null);
       toast.success('Photo removed!');
@@ -153,6 +155,23 @@ const AccountTab = () => {
       setResetLoading(false);
     }
   };
+  const syncGooglePhoto = async () => {
+    setUploading(true);
+
+    try {
+      const { data } = await api.patch('/auth/me', {
+        avatar: user?.googleAvatar
+      });
+
+      setAvatarUrl(null);
+      setAvatarPreview(data?.data?.user?.avatar);
+      toast.success('Synced with Google Photo!');
+    } catch (error) {
+      toast.error(error?.response?.data?.message ?? 'Failed to sync Google photo');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const isGoogleUser = !!(user?.googleId);
   const isChanged =
@@ -165,6 +184,17 @@ const AccountTab = () => {
     uploadStatusText = 'Uploading photo…';
   } else if (isDragging) {
     uploadStatusText = 'Drop to upload';
+  }
+
+
+  let verificationStatus = 'Unverified';
+  let verificationClass =
+    'bg-yellow-100 text-yellow-700';
+
+  if (user?.isVerified) {
+    verificationStatus = 'Verified';
+    verificationClass =
+      'bg-emerald-100 text-emerald-700';
   }
 
   return (
@@ -243,45 +273,17 @@ const AccountTab = () => {
                       Remove
                     </span>
                   )}
-                  {isGoogleUser && user?.googleAvatar && avatarPreview !== user.googleAvatar && (
-                    <span
-                      role="button"
-                      tabIndex={0}
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        setUploading(true);
-                        try {
-                          const res = await api.patch('/auth/me', { avatar: user.googleAvatar });
-                          setAvatarUrl(null); // Clear pending upload since we just saved
-                          setAvatarPreview(res.data.data.user.avatar);
-                          toast.success('Synced with Google Photo!');
-                        } catch (err) {
-                          toast.error('Failed to sync Google photo');
-                        } finally {
-                          setUploading(false);
-                        }
-                      }}
-                      onKeyDown={async (e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.stopPropagation();
-                          setUploading(true);
-                          try {
-                            const res = await api.patch('/auth/me', { avatar: user.googleAvatar });
-                            setAvatarUrl(null);
-                            setAvatarPreview(res.data.data.user.avatar);
-                            toast.success('Synced with Google Photo!');
-                          } catch (err) {
-                            toast.error('Failed to sync Google photo');
-                          } finally {
-                            setUploading(false);
-                          }
-                        }
-                      }}
-                      className="text-xs text-primary font-semibold hover:underline cursor-pointer"
-                    >
-                      Use Google Photo
-                    </span>
-                  )}
+                  {isGoogleUser &&
+                    user?.googleAvatar &&
+                    avatarPreview !== user?.googleAvatar && (
+                      <button
+                        type="button"
+                        onClick={syncGooglePhoto}
+                        className="text-xs text-primary font-semibold hover:underline"
+                      >
+                        Use Google Photo
+                      </button>
+                    )}
                 </div>
               </div>
             </button>

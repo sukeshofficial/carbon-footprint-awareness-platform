@@ -22,7 +22,7 @@ const localStorageMock = (() => {
     clear: vi.fn(() => { store = {}; }),
   };
 })();
-Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+Object.defineProperty(globalThis, 'localStorage', { value: localStorageMock });
 
 const TestComponent = () => {
   const { user, loading, login, logout } = useAuth();
@@ -49,7 +49,7 @@ describe('AuthContext', () => {
 
   it('checks auth on mount and sets user if token exists', async () => {
     localStorageMock.setItem('accessToken', 'fake-token');
-    api.get.mockResolvedValueOnce({
+    vi.mocked(api.get).mockResolvedValueOnce({
       data: { data: { user: { id: '1', name: 'John Doe', email: 'john@example.com' } } }
     });
 
@@ -69,7 +69,7 @@ describe('AuthContext', () => {
   });
 
   it('performs login and updates state', async () => {
-    api.post.mockResolvedValueOnce({
+    vi.mocked(api.post).mockResolvedValueOnce({
       data: { data: { user: { id: '1', name: 'Jane Doe' }, accessToken: 'new-token' } }
     });
 
@@ -102,7 +102,7 @@ describe('AuthContext', () => {
   it('performs logout and clears state', async () => {
     // Initial logged in state
     localStorageMock.setItem('accessToken', 'existing-token');
-    api.get.mockResolvedValueOnce({
+    vi.mocked(api.get).mockResolvedValueOnce({
       data: { data: { user: { id: '1', name: 'John Doe' } } }
     });
 

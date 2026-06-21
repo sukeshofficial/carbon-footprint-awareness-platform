@@ -109,7 +109,9 @@ class AIService {
       // Try to parse the complete buffer as JSON insights
       const parsed = JSON.parse(buffer);
       res.write(`data: ${JSON.stringify({ done: true, insights: parsed })}\n\n`);
-    } catch (_) {
+    } catch (error) {
+      console.warn('Failed to parse stream chunk:', error.message);
+
       // If it's not JSON (e.g. partial or plain text), just signal completion
       res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
     }

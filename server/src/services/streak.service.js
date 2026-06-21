@@ -24,10 +24,7 @@ class StreakService {
     let longestStreak = streak.longestStreak;
     const lastDate = streak.lastLoginDate;
 
-    if (!lastDate) {
-      // First ever login
-      currentStreak = 1;
-    } else {
+    if (lastDate) {
       const lastStr = toUTCDateString(new Date(lastDate));
 
       if (lastStr === todayStr) {
@@ -53,6 +50,9 @@ class StreakService {
         // Missed one or more days — reset
         currentStreak = 1;
       }
+    } else {
+      // First ever login
+      currentStreak = 1;
     }
 
     if (currentStreak > longestStreak) {

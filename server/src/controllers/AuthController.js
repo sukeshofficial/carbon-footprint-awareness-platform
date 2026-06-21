@@ -1,7 +1,5 @@
 import authService from '../services/AuthService.js';
-import tokenService from '../security/TokenService.js';
 import userRepository from '../infrastructure/repositories/UserRepository.js';
-import sessionRepository from '../infrastructure/repositories/SessionRepository.js';
 import streakService from '../services/streak.service.js';
 import { uploadAvatar } from '../services/cloudinary.service.js';
 import catchAsync from '../utils/catchAsync.js';

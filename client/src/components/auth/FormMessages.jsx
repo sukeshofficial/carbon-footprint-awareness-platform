@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils';
 export const FormError = ({ message, className = "" }) => {
   if (!message) return null;
 
-  // Final Fail-safe: Try to parse message if it looks like JSON
   let cleanMessage = message;
   if (typeof message === 'string' && (message?.startsWith?.('{') || message?.startsWith?.('['))) {
     try {
@@ -16,8 +15,8 @@ export const FormError = ({ message, className = "" }) => {
       } else if (typeof parsed === 'object' && parsed !== null) {
         cleanMessage = parsed.message || parsed.msg || message;
       }
-    } catch (e) {
-      // Keep original message if parsing fails
+    } catch (error) {
+      console.warn('Failed to parse form message:', error);
     }
   } else if (Array.isArray(message)) {
     cleanMessage = message[0]?.message || message[0]?.msg || JSON.stringify(message);

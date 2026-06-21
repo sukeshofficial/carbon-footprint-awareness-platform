@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { User as UserIcon, ChevronRight } from 'lucide-react';
-import { Leaf, Loader2, RefreshCw, Activity, TrendingUp, BarChart3, Lightbulb, Zap, Map, CalendarCheck } from 'lucide-react';
+import { Leaf, RefreshCw, Activity, TrendingUp, BarChart3, Lightbulb, Zap, Map, CalendarCheck } from 'lucide-react';
 
 import { toast } from 'sonner';
 import { useAuth } from '../contexts/AuthContext';
@@ -27,7 +26,7 @@ import GoalProgress from '../components/planner/GoalProgress';
 import WeeklyPlanner from '../components/planner/WeeklyPlanner';
 import GoalModal from '../components/planner/GoalModal';
 
-import { PROFILE_NUDGES, DEV_STATUS_DATA } from '../features/dashboard/constants/dashboardConstants';
+import { DEV_STATUS_DATA } from '../features/dashboard/constants/dashboardConstants';
 
 import {
   DashboardLoadingSpinner,

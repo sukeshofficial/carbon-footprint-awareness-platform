@@ -4,7 +4,6 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
-import dotenv from "dotenv";
 import apiRoutes from "./routes/index.js";
 import connectDB from "./config/db.js";
 import AppError from "./utils/appError.js";
@@ -81,8 +80,8 @@ app.use(async (req, res, next) => {
   try {
     await connectDB();
     next();
-  } catch (err) {
-    next(new AppError('Database connection failed', 500));
+  } catch (error) {
+    next(new AppError(`Database connection failed: ${error.message}`, 500));
   }
 });
 

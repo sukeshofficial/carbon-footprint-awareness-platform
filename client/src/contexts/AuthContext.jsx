@@ -81,8 +81,9 @@ export const AuthProvider = ({ children }) => {
       if (response.data.url) {
         const targetUrl = response.data.url;
         const isInternal = targetUrl.startsWith('/') || targetUrl.startsWith(globalThis.location.origin);
+        const isGoogleAuth = targetUrl.startsWith('https://accounts.google.com');
 
-        if (isInternal) {
+        if (isInternal || isGoogleAuth) {
           globalThis.location.href = targetUrl;
         } else {
           // Blocked unsafe redirect — redirect to safe default

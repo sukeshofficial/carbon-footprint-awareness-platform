@@ -27,7 +27,7 @@ export function estimateMoneySavings(templateId, modifiedInputs, inputPayload) {
         bike: SAVINGS_MULTIPLIERS.transport.bike_to_metro,
         cab: SAVINGS_MULTIPLIERS.transport.cab_to_metro,
       };
-      const ratePerKm = modesWithSavings[oldMode] ?? 2.0;
+      const ratePerKm = modesWithSavings[oldMode] ?? 2;
       return Number.parseFloat((monthlyDist * fraction * ratePerKm).toFixed(2));
     }
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useCarbonContext } from '../../store/carbonContextStore';
-import { useAuth } from '../../contexts/AuthContext';
 import { useProfile } from '../../store/profileStore';
 import {
   Dialog,
@@ -41,8 +40,7 @@ const CarbonContextOnboarding = ({ isOpen, onOpenChange }) => {
     skipStep,
     completeOnboarding
   } = useCarbonContext();
-  const { user } = useAuth();
-  const { profile, isProfileComplete } = useProfile();
+  const { profile } = useProfile();
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [localData, setLocalData] = useState({});
@@ -151,7 +149,8 @@ const CarbonContextOnboarding = ({ isOpen, onOpenChange }) => {
         await completeOnboarding();
         toast.success("Carbon context ready!");
         onOpenChange(false);
-      } catch (err) {
+      } catch (error) {
+        console.error("Onboarding completion failed:", error);
         toast.error("Failed to complete onboarding");
       }
       return;
@@ -184,7 +183,8 @@ const CarbonContextOnboarding = ({ isOpen, onOpenChange }) => {
       await skipStep(currentStep.key);
       setCurrentStepIndex(prev => prev + 1);
       toast.info("Section skipped.");
-    } catch (err) {
+    } catch (error) {
+      console.error("Skip section failed:", error);
       toast.error("Failed to skip section");
     }
   };
