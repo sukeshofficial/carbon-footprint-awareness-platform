@@ -71,6 +71,7 @@ class AuthController {
           googleId: user.googleId,
           bio: user.bio,
           role: user.role,
+          isVerified: user.isVerified,
         },
         accessToken,
       },
@@ -108,6 +109,14 @@ class AuthController {
     });
   });
 
+  resendVerification = catchAsync(async (req, res, next) => {
+    await authService.resendVerification(req.user.id);
+    res.status(200).json({
+      status: 'success',
+      message: 'Verification email sent successfully.',
+    });
+  });
+
   logout = catchAsync(async (req, res, next) => {
     const refreshToken = req.cookies.refreshToken;
     if (refreshToken) {
@@ -140,6 +149,7 @@ class AuthController {
           googleId: user.googleId,
           bio: user.bio,
           role: user.role,
+          isVerified: user.isVerified,
         },
       },
     });
@@ -180,6 +190,7 @@ class AuthController {
             googleId: user.googleId,
             bio: user.bio,
             role: user.role,
+            isVerified: user.isVerified,
           },
         },
       });

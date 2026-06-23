@@ -103,6 +103,10 @@ export const AuthProvider = ({ children }) => {
     return updatedUser;
   };
 
+  const resendVerification = async () => {
+    await api.post('/auth/resend-verification');
+  };
+
   const value = React.useMemo(
     () => ({
       user,
@@ -114,6 +118,7 @@ export const AuthProvider = ({ children }) => {
       resetPassword,
       loginWithGoogle,
       updateMe,
+      resendVerification,
     }),
     [user, loading]
   );

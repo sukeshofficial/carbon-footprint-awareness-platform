@@ -193,7 +193,7 @@ const StatCard = ({ title, value, icon: Icon, color }) => (
     whileHover={{ y: -5 }}
     className="bg-white dark:bg-zinc-900 rounded-[2rem] p-6 border border-slate-100 dark:border-zinc-800 shadow-sm flex items-center gap-5"
   >
-    <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg", color)}>
+    <div className={cn("w-12 h-12 rounded-full flex items-center justify-center text-white", color)}>
       <Icon size={24} />
     </div>
     <div>

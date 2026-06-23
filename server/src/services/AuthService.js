@@ -63,6 +63,30 @@ class AuthService {
   }
 
   /**
+   * Resends verification email.
+   */
+  async resendVerification(userId) {
+    const user = await userRepository.findById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    if (user.isVerified) {
+      throw new Error('Email is already verified');
+    }
+
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+    const hashedVerificationToken = crypto.createHash('sha256').update(verificationToken).digest('hex');
+
+    await userRepository.update(user._id, {
+      verificationToken: hashedVerificationToken,
+      verificationTokenExpires: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
+    });
+
+    await emailService.sendVerificationEmail(user.email, user.name, verificationToken);
+  }
+
+  /**
    * Handles user login.
    */
   async login(email, password, userAgent, ipAddress) {
@@ -218,7 +242,7 @@ class AuthService {
         const daysAgo = Math.floor(
           (Date.now() - new Date(entry.changedAt).getTime()) / (1000 * 60 * 60 * 24)
         );
-        
+
         let timeText;
 
         if (daysAgo === 0) {

@@ -25,7 +25,7 @@ SectionHeader.propTypes = {
 };
 
 const AccountTab = () => {
-  const { user, updateMe, forgotPassword } = useAuth();
+  const { user, updateMe, forgotPassword, resendVerification } = useAuth();
   const { theme, setTheme } = useTheme();
 
   const [formData, setFormData] = useState({
@@ -420,7 +420,34 @@ const AccountTab = () => {
                   {user?.isVerified ? 'Verified' : 'Unverified'}
                 </span>
               </div>
-              <p className="text-[11px] text-muted-foreground">Email cannot be changed here. Contact support if needed.</p>
+              {!user?.isVerified && (
+                <div className="mt-3 flex items-center justify-between p-4 rounded-2xl bg-yellow-100 dark:bg-yellow-900/10 border border-yellow-100 dark:border-yellow-900/30">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-yellow-200 dark:bg-yellow-900/50 flex items-center justify-center text-yellow-600 dark:text-yellow-400">
+                      <Mail className="w-4 h-4" />
+                    </div>
+                    <p className="text-xs font-bold text-yellow-800 dark:text-yellow-400/80">
+                      Verify your email to secure your account.
+                    </p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 rounded-full text-[10px] font-black uppercase tracking-widest border-yellow-200 dark:border-yellow-900/50 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400"
+                    onClick={async () => {
+                      try {
+                        await resendVerification();
+                        toast.success('Verification link sent!');
+                      } catch (err) {
+                        toast.error(err.response?.data?.message || 'Failed to send link.');
+                      }
+                    }}
+                  >
+                    Resend Link
+                  </Button>
+                </div>
+              )}
+              <p className="text-[11px] text-muted-foreground mt-2 font-medium">Email cannot be changed here. Contact support if needed.</p>
             </div>
           </div>
         </section>
