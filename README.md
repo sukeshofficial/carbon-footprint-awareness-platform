@@ -1,26 +1,29 @@
-# ACo2 — Carbon Footprint Awareness Platform
+# ACo₂ — Carbon Footprint Awareness Platform
 
-ACo2 is a high-performance carbon footprint awareness platform designed to help users understand, track, and reduce their personal environmental impact. It combines rule-based estimation with AI-driven guidance to deliver a personalized **Carbon Coach** experience that transforms abstract emissions data into actionable insights.
+ACo₂ is a high-performance carbon footprint awareness platform that helps users understand, track, and reduce their personal environmental impact. It combines rule-based estimation with AI-driven guidance to deliver a personalized **Carbon Coach** experience, turning abstract emissions data into clear, actionable insights.
 
----
-
-## Challenge Vertical
-
-**Vertical:** Sustainability & Social Impact
-**Persona:** **Carbon Conscious Explorer** — individuals seeking to measure and reduce their environmental impact through data-driven decisions.
+> **Built by SUKESH | Gemini | Antigravity**  
+> A premium sustainability platform engineered with modern full-stack best practices.
 
 ---
 
-## Problem Statement Alignment
+## Challenge Overview
 
-Carbon footprints are often difficult to measure accurately without complex tools, making sustainability efforts harder to personalize.
+**Vertical:** Sustainability & Social Impact  
+**Persona:** **Carbon Conscious Explorer** — individuals who want to measure and reduce their environmental impact through data-driven decisions.
 
-ACo2 solves this by:
+---
 
-* Simplifying lifestyle data collection through guided onboarding
-* Translating habits into measurable carbon emissions
-* Visualizing category-wise impact with trends and breakdowns
-* Delivering AI-powered suggestions and simulations for better decision-making
+## Problem Statement
+
+Carbon footprints are often difficult to measure accurately without complex tools, which makes sustainability efforts hard to personalize.
+
+ACo₂ solves this by:
+
+- Simplifying lifestyle data collection through guided onboarding
+- Translating everyday habits into measurable carbon emissions
+- Visualizing category-wise impact with trends and breakdowns
+- Delivering AI-powered suggestions and scenario simulations for better decisions
 
 The platform bridges the gap between awareness and action.
 
@@ -29,178 +32,146 @@ The platform bridges the gap between awareness and action.
 ## Core Features
 
 ### Carbon Footprint Estimation Engine
+A rule-based engine estimates emissions across:
 
-A rule-based engine estimates carbon emissions across:
+- Transport
+- Food
+- Energy
+- Shopping
+- Waste
 
-* Transport
-* Food
-* Energy
-* Shopping
-* Waste
-
-Built using localized emission factors for more realistic calculations.
-
----
+It uses localized emission factors to produce more realistic calculations.
 
 ### AI Carbon Coach
-
 An intelligent sustainability assistant that provides:
 
-* Personalized carbon reduction tips
-* Real-time coaching insights
-* Behavioral recommendations based on footprint patterns
-
-Powered through streaming responses for a dynamic experience.
-
----
+- Personalized carbon reduction tips
+- Real-time coaching insights
+- Behavioral recommendations based on footprint patterns
 
 ### What-If Scenario Simulator
+Users can explore the impact of lifestyle changes such as:
 
-Allows users to simulate changes such as:
+- Switching to electric vehicles
+- Reducing meat consumption
+- Lowering electricity usage
+- Changing commuting methods
 
-* Switching to electric vehicles
-* Reducing meat consumption
-* Lowering electricity usage
-* Changing commuting methods
-
-This helps users evaluate impact before changing habits.
-
----
+This helps users compare outcomes before changing habits.
 
 ### Transparent Explanations
+Each emission category includes rule-based reasoning that explains:
 
-Each emission category includes rule-based reasoning to explain:
-
-* Why it contributes significantly
-* Which habits increase emissions most
-* Where users can optimize
-
----
+- Why it contributes significantly
+- Which habits increase emissions the most
+- Where users can optimize
 
 ### Secure Authentication
+Authentication includes:
 
-Authentication system includes:
-
-* JWT access tokens
-* Secure refresh token rotation
-* Google OAuth
-* Email verification
-
----
+- JWT access tokens
+- Secure refresh token rotation
+- Google OAuth
+- Email verification
 
 ### Analytics Dashboard
+An interactive dashboard provides:
 
-Interactive dashboard providing:
-
-* Emission trends
-* Category breakdowns
-* Comparative analytics
-* Dark mode support
-* Mobile responsiveness
+- Emission trends
+- Category breakdowns
+- Comparative analytics
+- Dark mode support
+- Mobile responsiveness
 
 ---
 
 ## Tech Stack
 
 ### Frontend
-
-* React 19
-* Vite
-* Tailwind CSS 4
-* shadcn/ui
-* Framer Motion
-* Recharts
-* Zustand
+- React 19
+- Vite
+- Tailwind CSS 4
+- shadcn/ui
+- Framer Motion
+- Recharts
+- Zustand
 
 ### Backend
-
-* Node.js 24
-* Express 5
-* MongoDB
-* Mongoose
-* Zod Validation
+- Node.js 24
+- Express 5
+- MongoDB
+- Mongoose
+- Zod Validation
 
 ### Security
-
-* Helmet
-* Express Rate Limit
-* JWT Authentication
-* HTTP-only Cookies
+- Helmet
+- Express Rate Limit
+- JWT Authentication
+- HTTP-only Cookies
 
 ### Testing
-
-* Node.js Core Test Runner
+- Node.js Core Test Runner
 
 ---
 
 ## Architecture Overview
 
-ACo2 follows a modular Service-Repository architecture.
+ACo₂ follows a modular **Service-Repository** architecture.
 
 ### Backend
 
 #### Controllers
-
 Responsible for:
 
-* Request handling
-* Response formatting
-* Validation orchestration
+- Request handling
+- Response formatting
+- Validation orchestration
 
 #### Services
+Contain:
 
-Contains:
-
-* Carbon estimation logic
-* AI integration logic
-* Business rules
+- Carbon estimation logic
+- AI integration logic
+- Business rules
 
 #### Repositories
+Handle:
 
-Handles:
-
-* Database operations
-* Query abstraction
+- Database operations
+- Query abstraction
 
 #### Utilities
+Include:
 
-Includes:
-
-* Error handling
-* Token generation
-* Helper functions
-
----
+- Error handling
+- Token generation
+- Helper functions
 
 ### Frontend
 
 #### Pages
-
-Route-level UI structure
+Route-level UI structure.
 
 #### Components
-
-Reusable UI and feature modules
+Reusable UI and feature modules.
 
 #### Store
-
-Global state management using Context + Zustand
+Global state management using Context + Zustand.
 
 #### Services
-
-API abstraction layer
+API abstraction layer.
 
 ---
 
 ## How It Works
 
-1. User completes guided onboarding.
+1. The user completes guided onboarding.
 2. Lifestyle habits are processed by the estimation engine.
 3. CO₂ emissions are categorized and calculated.
 4. Results are visualized on the analytics dashboard.
 5. AI Carbon Coach provides personalized sustainability recommendations.
-6. What-If Simulator recalculates alternative scenarios.
-7. Users make informed decisions to reduce emissions.
+6. The What-If Simulator recalculates alternative scenarios.
+7. Users make informed decisions to reduce their footprint.
 
 ---
 
@@ -208,88 +179,91 @@ API abstraction layer
 
 Security is implemented at multiple layers:
 
-* HTTP-only refresh tokens prevent XSS token theft
-* Secure cookies with SameSite policies
-* Strict schema validation using Zod
-* Rate limiting for brute-force prevention
-* Helmet for secure HTTP headers
-* Centralized production-safe error handling
-* Environment-based secrets management
+- HTTP-only refresh tokens prevent XSS token theft
+- Secure cookies with SameSite policies
+- Strict schema validation using Zod
+- Rate limiting for brute-force prevention
+- Helmet for secure HTTP headers
+- Centralized production-safe error handling
+- Environment-based secrets management
 
 ---
 
 ## Performance & Efficiency
 
-ACo2 is optimized for performance:
+ACo₂ is optimized for performance:
 
-* Lightweight architecture
-* Efficient MongoDB queries
-* Server-Sent Events for low-overhead streaming
-* Memoized frontend computations
-* Optimized chart rendering
-* Modular API calls to reduce redundant requests
+- Lightweight architecture
+- Efficient MongoDB queries
+- Server-Sent Events for low-overhead streaming
+- Memoized frontend computations
+- Optimized chart rendering
+- Modular API calls to reduce redundant requests
 
 ---
 
 ## Accessibility
 
-Accessibility improvements include:
+Accessibility is built into the experience with:
 
-* Semantic HTML structure
-* Keyboard navigable UI
-* Proper ARIA labels
-* Focus-visible states
-* Responsive layouts
-* Contrast-compliant themes
-* Screen-reader friendly form inputs
+- Semantic HTML structure
+- Keyboard-navigable UI
+- Proper ARIA labels
+- Focus-visible states
+- Responsive layouts
+- Contrast-compliant themes
+- Screen-reader-friendly form inputs
 
 ---
 
-### Testing
+## Testing
 
-Backend tests use Node.js built-in test runner for zero-dependency testing.
+Backend tests use the Node.js built-in test runner for zero-dependency testing.
 
 ### Run Tests
 
 ```bash
 cd server
 npm test
-```
+````
 
-Coverage includes:
+### Test Coverage
 
-* Estimation services (Transport, Food, Energy, Shopping, Aggregation)
-* What-If Scenario Simulations
-* Recommendation Scoring & Ranking
-* Auth & Validation (Zod)
-* Edge case handling (NaN-safety, Zero-values)
+* Estimation services
 
-Total tests: **88** 🟢
+  * Transport
+  * Food
+  * Energy
+  * Shopping
+  * Aggregation
+* What-If scenario simulations
+* Recommendation scoring and ranking
+* Authentication and validation (Zod)
+* Edge case handling
+
+  * NaN safety
+  * Zero values
+
+**Total tests: 88** 🟢
 
 ---
 
 ## Code Quality & Continuous Monitoring
 
-ACo2 maintains extremely high software engineering standards. The codebase is continuously analyzed for security vulnerabilities, reliability issues, and maintainability debt.
+ACo₂ maintains strong software engineering standards. The codebase is continuously analyzed for security vulnerabilities, reliability issues, and maintainability debt.
 
 ### SonarQube Metrics Summary
-| Metric | Status |
-| :--- | :--- |
-| **Quality Gate** | Passed ✅ |
-| **Security Rating** | A |
-| **Reliability Rating** | A |
-| **Maintainability Rating** | A |
-| **Open Issues** | 0 |
-| **Duplications** | 6.3% |
 
-*Code quality is continuously monitored to ensure production-grade stability and security.*
+| Metric                 | Status   |
+| :--------------------- | :------- |
+| Quality Gate           | Passed ✅ |
+| Security Rating        | A        |
+| Reliability Rating     | A        |
+| Maintainability Rating | A        |
+| Open Issues            | 0        |
+| Duplications           | 6.3%     |
 
----
-
-## Technical Signature
-
-**Built by SUKESH | Gemini | Antigravity**  
-*A premium sustainability platform engineered with modern full-stack best practices.*
+Code quality is continuously monitored to support production-grade stability and security.
 
 ---
 
@@ -301,16 +275,12 @@ ACo2 maintains extremely high software engineering standards. The codebase is co
 * MongoDB (local or cloud)
 * Google OAuth credentials (optional)
 
----
-
 ### Clone Repository
 
 ```bash
 git clone <your-repository-url>
 cd ACo2
 ```
-
----
 
 ### Install Dependencies
 
@@ -324,13 +294,11 @@ cd ../server
 npm install
 ```
 
----
-
 ### Environment Variables
 
-Create `.env` files.
+Create `.env` files for both client and server as needed.
 
-#### server/.env
+#### `server/.env`
 
 ```env
 PORT=5000
@@ -364,7 +332,7 @@ npm run dev
 ## Project Structure
 
 ```text
-ACo2/
+ACo₂/
 ├── client/
 │   └── src/
 │       ├── components/
@@ -400,7 +368,7 @@ ACo2/
 
 ## Evaluation Alignment
 
-This project was built specifically to align with challenge evaluation criteria:
+This project is designed to align with the evaluation criteria:
 
 | Criteria          | Alignment                                                             |
 | ----------------- | --------------------------------------------------------------------- |
@@ -409,16 +377,14 @@ This project was built specifically to align with challenge evaluation criteria:
 | Efficiency        | Optimized rendering, lightweight APIs, streaming architecture         |
 | Testing           | Core service unit tests                                               |
 | Accessibility     | Semantic UI, ARIA, keyboard support                                   |
-| Problem Alignment | Strong sustainability-focused user problem solving                    |
-
----
-
-## Project Owner
-
-**Sukesh**
+| Problem Alignment | Strong sustainability-focused problem solving                         |
 
 ---
 
 ## Vision
 
-ACo2 aims to make sustainability measurable, understandable, and actionable by empowering users with personalized carbon intelligence.
+ACo₂ aims to make sustainability measurable, understandable, and actionable by empowering users with personalized carbon intelligence.
+
+---
+
+built by **Sukesh**
