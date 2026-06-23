@@ -10,6 +10,7 @@ import whatIfScenarioRoutes from "./whatIfScenario.routes.js";
 import recommendationRoutes from "./recommendation.routes.js";
 import goalRoutes from "./goal.routes.js";
 import plannerRoutes from "./planner.routes.js";
+import adminRoutes from "./adminRoutes.js";
 
 const router = express.Router();
 
@@ -24,6 +25,6 @@ router.use("/what-if", whatIfScenarioRoutes);
 router.use("/recommendations", recommendationRoutes);
 router.use("/goals", goalRoutes);
 router.use("/planner", plannerRoutes);
+router.use("/admin", adminRoutes);
 
 export default router;
-

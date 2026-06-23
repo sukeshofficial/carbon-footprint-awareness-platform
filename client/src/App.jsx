@@ -22,6 +22,7 @@ import GoogleCallback from "./pages/auth/GoogleCallback";
 import Dashboard from "./pages/Dashboard";
 import EditProfile from "./pages/EditProfile";
 import PlannerPage from "./pages/PlannerPage";
+import SuperAdminPage from "./pages/SuperAdminPage";
 
 // Layout
 import Navbar from "./components/layout/Navbar";
@@ -87,6 +88,14 @@ function App() {
                             element={
                               <main id="main-content" tabIndex={-1} className="outline-none">
                                 <PlannerPage />
+                              </main>
+                            }
+                          />
+                          <Route
+                            path="/super-admin"
+                            element={
+                              <main id="main-content" tabIndex={-1} className="outline-none">
+                                <SuperAdminPage />
                               </main>
                             }
                           />

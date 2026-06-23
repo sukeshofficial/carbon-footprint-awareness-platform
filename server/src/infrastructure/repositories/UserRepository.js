@@ -96,6 +96,15 @@ class UserRepository {
       throw error;
     }
   }
+
+  async findAll() {
+    try {
+      return await User.find().sort({ createdAt: -1 });
+    } catch (error) {
+      logger.error('UserRepository.findAll error', { error });
+      throw error;
+    }
+  }
 }
 
 export default new UserRepository();

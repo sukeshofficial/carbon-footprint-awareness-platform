@@ -9,7 +9,8 @@ import {
   LogOut,
   ChevronDown,
   LayoutDashboard,
-  CalendarCheck
+  CalendarCheck,
+  ShieldCheck
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
@@ -36,6 +37,10 @@ const Navbar = () => {
     { label: 'Action Planner', path: '/planner', icon: CalendarCheck },
     { label: 'Carbon Profile', path: '/profile/edit', icon: Leaf },
   ];
+
+  if (user?.email === import.meta.env.VITE_SUPER_ADMIN_EMAIL) {
+    navItems.push({ label: 'Super Admin', path: '/super-admin', icon: ShieldCheck });
+  }
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md">
